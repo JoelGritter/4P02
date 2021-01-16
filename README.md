@@ -1,6 +1,6 @@
 # 4P02 Project: COSC LMS (Learning Management System)
 
-## The Team
+## The Team :family:
 
 * Tennyson Demchuk - td16qg@brocku.ca (6190532)
 * Mutaz Fattal - mf17lg@brocku.ca (6362156)
@@ -9,43 +9,43 @@
 * Aditya Rajyaguru - ar18xp@brocku.ca (6582282)
 * Daniel Sokic - ds16sz@brocku.ca (6164545)
 
-## Project Proposal
+## Project Proposal :ring:
 
-### Base level description
+### Base level description :thought_balloon:
 
 A web platform for computer science students to take tests, submit programming assignments, with automated testing and compiling to aid TA marking.
 
-### Why this matters
+### Why this matters :question:
 
 A platform like this would streamline assignment submission and marking, increasing the marking efficiency for TAs and professors, which reduces turnaround time for handing back marks and could allow for larger class sizes. Containerization of submission allows for decoupling of technologies used in courses with the technologies supported by sandcastle. Current submission platforms do not adapt to modern technology and computer science needs, such as integrated code compilation, our platform provides the foundation to support the ever growing department needs. This platform will also be able to support online learning a lot better than existing methods.
 
-### Core components/features
+### Core components/features :gear:
 
 - Web interface for submitting coding assignments (as opposed to ssh'ing into sandcastle or submitting a ZIP to Sakai)
 - Automated testing - allows students to see some of the tests that they are being tested against, and TAs to get a quick understanding of the performance of the code.
 - Automatic compiling - the code is compiled and a web interface with a terminal is provided to TAs, meaning that TAs don't need to manually copy-paste over all the code from Sakai into sandcastle
 - Submission templates - Custom docker images can be provided by instructors for any kind of submission, and they will be able to select from preset templates, such as Java code submissions.
 
-### Potential extra features
+### Potential extra features :gift:
 
 - Plagiarism detection (potentially Turnitin integration)
 - Online code editing: Ability to just edit and run within the web interface. Eliminating complexity of different installations, reducing the need for labs.
 - Ability to create examinations with coding questions, students can use the above online code editor with predefined starter code and compile/run bindings that can be customized by the test maker. Presets for popular languages like Java, Python, C++ can be included. Test cases for marking can be supported similar to assignments.    
 - Customizable layout for a course landing page: Allows professors to prioritize certain tabs, functions, and provide custom buttons (i.e. A button that directly takes students to a specific test or assignment) 
 
-### Target users:
+### Target users :man:
 
 - COSC students
 - Marker-graders / TAs
 - COSC professors / instructors
 
-### Skills used:
+### Skills used :hammer:
 - UI/UX
 - Full-Stack development
 - Containerization
 - Storage management
 
-### Technologies proposed to be used (subject to change):
+### Technologies proposed to be used (subject to change) :iphone:
 - React
 - Express
 - MongoDB
@@ -54,7 +54,7 @@ A platform like this would streamline assignment submission and marking, increas
 - Docker
 - Kubernetes
 
-### Timeline
+### Timeline :alarm_clock:
 
 _(Weekly meetings, rough bi-weekly goals)_
 
@@ -96,7 +96,7 @@ __Sunday, March 7, 2021 - Mandatory Report 1__
 
 __Saturday, April 3, 2021 - Mandatory Report 2__
 
-__Sunday, April 4, 2021 - Sunday, April 25, 2021__
+Sunday, April 4, 2021 - Sunday, April 25, 2021
 - Refactoring, cleanup, documentation, potentially implement stretch goals
 
 __Monday, April 26, 2021 -> Friday, April 30, 2021 - Final Demonstration + Presentation + Report__
