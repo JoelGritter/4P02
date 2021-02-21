@@ -22,23 +22,15 @@ export default function App() {
     <Router>
       <AppBar position="static">
         <Toolbar>
-          {/* <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton> */}
-          <Link to="/">
-            <Button variant="text">Home</Button>
-          </Link>
-          <Link to="/about">
-            <Button variant="text">about</Button>
-          </Link>
-          <Link to="/users">
-            <Button variant="text">users</Button>
-          </Link>
+          <Button variant="text" component={Link} to="/" color="inherit">
+            Home
+          </Button>
+          <Button variant="text" component={Link} to="/about" color="inherit">
+            about
+          </Button>
+          <Button variant="text" component={Link} to="/users" color="inherit">
+            users
+          </Button>
         </Toolbar>
       </AppBar>
       <div className={classes.root}>
