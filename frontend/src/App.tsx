@@ -7,11 +7,18 @@ import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
+import Login from "./pages/login";
+import AddCourse from "./pages/addCourse";
+import Assignments from "./pages/assignments";
+import Courses from "./pages/courses";
+import Home from "./pages/home";
+import Profile from "./pages/profile";
+import Tests from "./pages/tests";
 
 const useStyles = makeStyles({
   root: {
-    backgroundColor: "black",
-    color: "white",
+    // backgroundColor: "black",
+    // color: "white",
   },
 });
 
@@ -20,52 +27,31 @@ export default function App() {
 
   return (
     <Router>
-      <AppBar position="static">
-        <Toolbar>
-          {/* <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="inherit"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton> */}
-          <Link to="/">
-            <Button variant="text">Home</Button>
-          </Link>
-          <Link to="/about">
-            <Button variant="text">about</Button>
-          </Link>
-          <Link to="/users">
-            <Button variant="text">users</Button>
-          </Link>
-        </Toolbar>
-      </AppBar>
-      <div className={classes.root}>
+      <div>
         <Switch>
-          <Route path="/about">
-            <About />
+          <Route path="/login" component={Login}>
+            <Login />
           </Route>
-          <Route path="/users">
-            <Users />
+          <Route path="/addCourse" component={AddCourse}>
+            <AddCourse />
           </Route>
-          <Route path="/">
+          <Route path="/assignments" component={Assignments}>
+            <Assignments />
+          </Route>
+          <Route path="/courses" component={Courses}>
+            <Courses />
+          </Route>
+          <Route path="/home" component={Home}>
             <Home />
+          </Route>
+          <Route path="/profile" component={Profile}>
+            <Profile />
+          </Route>
+          <Route path="/tests" component={Tests}>
+            <Tests />
           </Route>
         </Switch>
       </div>
     </Router>
   );
-}
-
-function Home() {
-  return <h2>Home</h2>;
-}
-
-function About() {
-  return <h2>About</h2>;
-}
-
-function Users() {
-  return <h2>Users</h2>;
 }
