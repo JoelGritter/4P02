@@ -48,11 +48,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function Login() {
+export default function LoginPage() {
+  const classes = useStyles();
+
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  console.log(username);
-  const classes = useStyles();
+
   return (
     <Grid container component="main" className={classes.root}>
       <Grid item xs={false} sm={4} md={7} />
@@ -85,7 +86,6 @@ export default function Login() {
             className={classes.passwordInput}
           />
           <Link to="/home" className={classes.loginLink}>
-            {/* <Button variant="text">Login</Button> */}
             <Button className={classes.loginButton}>login</Button>
           </Link>
         </div>

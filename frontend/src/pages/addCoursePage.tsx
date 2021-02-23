@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 
-export default function addCourse() {
+export default function AddCoursePage() {
   return (
     <div>
       <Link to="/courses">

@@ -1,6 +1,6 @@
 import React from "react";
 
-export default function assignments() {
+export default function AssignmentsPage() {
   return (
     <div>
       <h1>assignments</h1>
