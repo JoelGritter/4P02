@@ -8,13 +8,13 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 
-import LoginPage from "./pages/loginPage";
-import AddCoursePage from "./pages/addCoursePage";
-import AssignmentsPage from "./pages/assignmentsPage";
-import CoursesPage from "./pages/coursesPage";
-import HomePage from "./pages/homePage";
-import ProfilePage from "./pages/profilePage";
-import TestsPage from "./pages/testsPage";
+import LoginPage from "./pages/LoginPage";
+import AddCoursePage from "./pages/AddCoursePage";
+import AssignmentsPage from "./pages/AssignmentsPage";
+import CoursesPage from "./pages/CoursesPage";
+import HomePage from "./pages/HomePage";
+import ProfilePage from "./pages/ProfilePage";
+import TestsPage from "./pages/TestsPage";
 
 const useStyles = makeStyles({
   root: {},
