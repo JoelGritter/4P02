@@ -1,0 +1,47 @@
+service: uassign-api
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment:
+    NODE_ENV: dev
+
+plugins:
+  - serverless-plugin-typescript 
+  - serverless-offline
+
+package:
+  include:
+    - .env
+
+functions:
+  addNote:
+    handler: app/handler.addNote
+    events:
+      - http:
+          path: notes
+          method: post
+  updateNote:
+    handler: app/handler.updateNote
+    events:
+      - http:
+          path: notes/{id}
+          method: put
+  deleteNote:
+    handler: app/handler.deleteNote
+    events:
+      - http:
+          path: notes/{id}
+          method: delete
+  getNote:
+    handler: app/handler.getNote
+    events:
+      - http:
+          path: notes/{id}
+          method: get
+  getAllNotes:
+    handler: app/handler.getAllNotes
+    events:
+      - http:
+          path: notes
+          method: get
