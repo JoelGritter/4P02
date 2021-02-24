@@ -1,1 +1,1 @@
-cat in.txt | ./subexe
+(cat in.txt | ./subexe) > out.txt

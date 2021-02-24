@@ -1,1 +1,1 @@
-cat in.txt | java Main
+(cat in.txt | java Main) > out.txt
