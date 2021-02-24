@@ -9,7 +9,7 @@ Student code should be programmed in such a way that multiple test cases in the 
 ## Input - Target Code
 Input target code should be provided at the following filepaths on the same folder level as the Dockerfile:
 - c++: `main.cpp`
-- Java: `main.java`
+- Java: `Main.java`
 
 ## Output - Code Output
 The output of the code will be provided on the same folder, as `out.txt`.
