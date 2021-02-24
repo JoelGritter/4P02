@@ -24,5 +24,6 @@ jobs:
         touch .env 
         echo "DB=${{ secrets.DB_DEV }}" > .env
         npm install -g serverless
+        npm install
         serverless config credentials --provider aws --key ${{ secrets.KIAUELLLUXG3R4ADV7A }} --secret ${{ secrets.MoGVN8pOErJ1hCmHJIFdBHXajgnLsk0CtSmMKbuY }}
         serverless deploy
