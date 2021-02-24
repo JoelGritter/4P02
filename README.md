@@ -1,5 +1,12 @@
 # 4P02 Project: COSC LMS (Learning Management System)
 
+## Enviornments
+
+### Dev
+
+Frontend: https://cosc4p02-lms.web.app/
+API: https://qbtmtcwon0.execute-api.us-east-1.amazonaws.com/dev/
+
 ## The Team :family:
 
 * Tennyson Demchuk - td16qg@brocku.ca (6190532)
