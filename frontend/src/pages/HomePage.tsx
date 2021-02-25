@@ -100,7 +100,7 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-export default function MiniDrawer() {
+export default function HomePage() {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);

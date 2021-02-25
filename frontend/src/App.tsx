@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import AddCoursePage from "./pages/AddCoursePage";
@@ -9,11 +9,20 @@ import ProfilePage from "./pages/ProfilePage";
 import TestsPage from "./pages/TestsPage";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
+import red from "@material-ui/core/colors/red";
 
 export default function App() {
+  const [darkMode, setDarkMode] = useState(false);
+
   const theme = createMuiTheme({
     palette: {
-      type: "dark",
+      type: darkMode ? "dark" : "light",
+      primary: {
+        main: red[800],
+      },
+      secondary: {
+        main: red[500],
+      },
     },
   });
 

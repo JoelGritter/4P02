@@ -28,7 +28,12 @@ export default function CourseCard() {
             title="Contemplative Reptile"
           />
           <CardContent>
-            <Typography gutterBottom variant="h5" component="h5">
+            <Typography
+              gutterBottom
+              variant="h5"
+              color="primary"
+              component="h5"
+            >
               Course name
             </Typography>
             <Typography variant="h6" color="textSecondary" component="h6">
