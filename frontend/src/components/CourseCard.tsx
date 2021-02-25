@@ -8,9 +8,7 @@ import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles({
-  root: {
-    textDecoration: "none",
-  },
+  root: {},
 });
 
 export default function CourseCard() {

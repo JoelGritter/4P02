@@ -12,7 +12,7 @@ import { Paper } from "@material-ui/core";
 import red from "@material-ui/core/colors/red";
 
 export default function App() {
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode] = useState(false);
 
   const theme = createMuiTheme({
     palette: {
