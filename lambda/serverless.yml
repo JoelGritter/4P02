@@ -107,6 +107,27 @@ functions:
           path: user/prof
           method: delete
           cors: true
+  addFile:
+    handler: app/handler.addFile
+    events:
+      - http:
+          path: files
+          method: post
+          cors: true
+  getFile:
+    handler: app/handler.getFile
+    events:
+      - http:
+          path: files/{uuid}
+          method: get
+          cors: true
+  deleteFile:
+    handler: app/handler.deleteFile
+    events:
+      - http:
+          path: files/{id}
+          method: delete
+          cors: true
 
 resources:
   Resources:
