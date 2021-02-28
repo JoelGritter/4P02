@@ -1,25 +1,7 @@
+import { connectToDatabase } from './util/mongo';
 import { APIGatewayProxyEvent } from "aws-lambda";
-import mongoose from "mongoose";
-import NoteSchema, { Note } from "./schemas/note.schema";
-import dotenv from "dotenv";
+import NoteSchema, { Note } from "./schemas/note.model";
 
-dotenv.config({
-  path: ".env",
-});
-
-let isConnected;
-
-const connectToDatabase = () => {
-  if (isConnected) {
-    console.log("=> using existing database connection");
-    return Promise.resolve();
-  }
-
-  console.log("=> using new database connection");
-  return mongoose.connect(process.env.DB as string).then((db) => {
-    isConnected = db.connections[0].readyState;
-  });
-};
 
 function jsonError(err, message = "Operation failed") {
   console.error(err);
