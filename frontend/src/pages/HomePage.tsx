@@ -120,6 +120,25 @@ export default function ResponsiveDrawer(props: Props) {
     </div>
   );
 
+  const courseData = [
+    {
+      name: "firstcourse",
+      instructor: "notme",
+    },
+    {
+      name: "sec",
+      instructor: "2",
+    },
+    {
+      name: "third",
+      instructor: "sadfasdf",
+    },
+    {
+      name: "fourth",
+      instructor: "asdfasdfasdfasdf",
+    },
+  ];
+
   const container =
     window !== undefined ? () => window().document.body : undefined;
 
@@ -183,15 +202,13 @@ export default function ResponsiveDrawer(props: Props) {
             spacing={1}
             className={classes.coursesContainer}
           >
-            <Grid item xs={4}>
-              <CourseCard />
-            </Grid>
-            <Grid item xs={4}>
-              <CourseCard />
-            </Grid>
-            <Grid item xs={4}>
-              <CourseCard />
-            </Grid>
+            {courseData.map((data, index) => {
+              return (
+                <Grid item xs={12}>
+                  <CourseCard name={data.name} instructor={data.instructor} />
+                </Grid>
+              );
+            })}
           </Grid>
           <Grid
             container
@@ -207,7 +224,7 @@ export default function ResponsiveDrawer(props: Props) {
                 color="primary"
                 component="h5"
               >
-                Calender
+                Deadlines
               </Typography>
             </Grid>
           </Grid>

@@ -4,27 +4,24 @@ import { makeStyles } from "@material-ui/core/styles";
 import Card from "@material-ui/core/Card";
 import CardActionArea from "@material-ui/core/CardActionArea";
 import CardContent from "@material-ui/core/CardContent";
-import CardMedia from "@material-ui/core/CardMedia";
 import Typography from "@material-ui/core/Typography";
 
 const useStyles = makeStyles({
   root: {},
 });
 
-export default function CourseCard() {
+interface CourseCardProps {
+  name: string;
+  instructor: string;
+}
+
+const CourseCard: React.FC<CourseCardProps> = ({ name, instructor }) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.root}>
       <Link to="/courses" style={{ textDecoration: "none" }}>
         <CardActionArea>
-          <CardMedia
-            component="img"
-            alt="Contemplative Reptile"
-            height="140"
-            image="https://picsum.photos/200"
-            title="Contemplative Reptile"
-          />
           <CardContent>
             <Typography
               gutterBottom
@@ -32,14 +29,16 @@ export default function CourseCard() {
               color="primary"
               component="h5"
             >
-              Course name
+              {name}
             </Typography>
             <Typography variant="h6" color="textSecondary" component="h6">
-              Instructor
+              {instructor}
             </Typography>
           </CardContent>
         </CardActionArea>
       </Link>
     </Card>
   );
-}
+};
+
+export default CourseCard;
