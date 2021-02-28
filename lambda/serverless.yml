@@ -45,3 +45,21 @@ functions:
       - http:
           path: notes
           method: get
+  addFile:
+    handler: app/handler.addFile
+    events:
+      - http:
+          path: files
+          method: post
+  getFile:
+    handler: app/handler.getFile
+    events:
+      - http:
+          path: files/{uuid}
+          method: get
+  deleteFile:
+    handler: app/handler.deleteFile
+    events:
+      - http:
+          path: files/{id}
+          method: delete

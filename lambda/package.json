@@ -16,7 +16,8 @@
   ],
   "dependencies": {
     "dotenv": "^8.2.0",
-    "mongoose": "^5.9.10"
+    "mongoose": "^5.9.10",
+    "mongoose-gridfs": "^1.2.48"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.51",
