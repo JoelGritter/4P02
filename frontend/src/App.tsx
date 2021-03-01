@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import AddCoursePage from "./pages/AddCoursePage";
 import AssignmentsPage from "./pages/AssignmentsPage";
@@ -8,12 +8,13 @@ import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import TestsPage from "./pages/TestsPage";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { Paper } from "@material-ui/core";
+import { CssBaseline, Paper } from "@material-ui/core";
 import red from "@material-ui/core/colors/red";
 
 import Amplify, { Auth } from "aws-amplify";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import AdminHome from "./pages/admin/AdminHome";
+import Nav from "./components/Nav";
 
 const awsConfig = {
   aws_project_region: "us-east-1",
@@ -49,40 +50,39 @@ export const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline />
       <Paper style={{ height: "100vh" }}>
-        <Router>
-          <div>
-            <Switch>
-              <Route path="/login">
-                <LoginPage />
-              </Route>
-              <Route path="/addCourse">
-                <AddCoursePage />
-              </Route>
-              <Route path="/assignments">
-                <AssignmentsPage />
-              </Route>
-              <Route path="/courses">
-                <CoursesPage />
-              </Route>
-              <Route path="/profile">
-                <ProfilePage />
-              </Route>
-              <Route path="/tests">
-                <TestsPage />
-              </Route>
-              <Route path="/admin">
-                <AdminHome />
-              </Route>
-              <Route path="/home">
-                <HomePage />
-              </Route>
-              <Route path="/">
-                <HomePage />
-              </Route>
-            </Switch>
-          </div>
-        </Router>
+        <Nav>
+          <Switch>
+            <Route path="/login">
+              <LoginPage />
+            </Route>
+            <Route path="/addCourse">
+              <AddCoursePage />
+            </Route>
+            <Route path="/assignments">
+              <AssignmentsPage />
+            </Route>
+            <Route path="/courses">
+              <CoursesPage />
+            </Route>
+            <Route path="/profile">
+              <ProfilePage />
+            </Route>
+            <Route path="/tests">
+              <TestsPage />
+            </Route>
+            <Route path="/admin">
+              <AdminHome />
+            </Route>
+            <Route path="/home">
+              <HomePage />
+            </Route>
+            <Route path="/">
+              <HomePage />
+            </Route>
+          </Switch>
+        </Nav>
       </Paper>
     </ThemeProvider>
   );
