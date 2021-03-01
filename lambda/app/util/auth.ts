@@ -1,4 +1,4 @@
-import { AuthPayload } from './../types/index';
+import { AuthPayload } from "./../types/index";
 import request from "request";
 import jwkToPem from "jwk-to-pem";
 import jwt from "jsonwebtoken";
@@ -24,20 +24,20 @@ export function validateToken(
       function (error, response, body) {
         if (!error && response.statusCode === 200) {
           const pems = {};
-          var keys = body["keys"];
-          for (var i = 0; i < keys.length; i++) {
+          const keys = body["keys"];
+          for (let i = 0; i < keys.length; i++) {
             //Convert each key to PEM
-            var key_id = keys[i].kid;
-            var modulus = keys[i].n;
-            var exponent = keys[i].e;
-            var key_type = keys[i].kty;
-            var jwk = { kty: key_type, n: modulus, e: exponent };
-            var pem = jwkToPem(jwk);
+            const key_id = keys[i].kid;
+            const modulus = keys[i].n;
+            const exponent = keys[i].e;
+            const key_type = keys[i].kty;
+            const jwk = { kty: key_type, n: modulus, e: exponent };
+            const pem = jwkToPem(jwk);
             pems[key_id] = pem;
           }
           //validate the token
           token = token.split(" ")[1];
-          var decodedJwt = jwt.decode(token, { complete: true });
+          const decodedJwt = jwt.decode(token, { complete: true });
 
           if (!decodedJwt) {
             return resolve({
@@ -46,8 +46,8 @@ export function validateToken(
             });
           }
 
-          var kid = decodedJwt.header.kid;
-          var pem = pems[kid];
+          const kid = decodedJwt.header.kid;
+          const pem = pems[kid];
           if (!pem) {
             return resolve({
               valid: false,

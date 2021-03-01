@@ -2,7 +2,7 @@ import { Schema, model, Document } from "mongoose";
 
 export type Role = "student" | "admin" | "prof";
 
-export interface User {
+export interface User extends Document{
   name: string;
   email: string;
   cognitoId: string;
@@ -12,7 +12,7 @@ export interface User {
 
 const UserModel = model(
   "User",
-  new Schema<Document<User>>({
+  new Schema<User>({
     name: String,
     email: String,
     cognitoId: String,

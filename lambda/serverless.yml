@@ -52,6 +52,18 @@ functions:
       - http:
           path: user
           method: get
+  addAdmin:
+    handler: app/handlers/user.addAdmin
+    events:
+      - http:
+        path: user/admin
+        method: post
+  removeAdmin:
+    handler: app/handlers/user.removeAdmin
+    events:
+      - http:
+        path: user/admin 
+        method: delete
 
 resources:
   Resources:
