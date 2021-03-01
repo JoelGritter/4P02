@@ -1,0 +1,83 @@
+import request from "request";
+import jwkToPem from "jwk-to-pem";
+import jwt from "jsonwebtoken";
+import fetch from "node-fetch";
+global.fetch = fetch;
+
+const poolData = {
+  UserPoolId: "us-east-1_51fOKcMLJ", // Your user pool id here
+  ClientId: "1r3ud66e8i4pind576t3ob1eco", // Your client id here
+};
+const pool_region = "us-east-1";
+
+// https://medium.com/@prasadjay/amazon-cognito-user-pools-in-nodejs-as-fast-as-possible-22d586c5c8ec
+export function validateToken(
+  token: string
+): Promise<{ valid: boolean; message?: string; payload?: any }> {
+  return new Promise((resolve) => {
+    request(
+      {
+        url: `https://cognito-idp.${pool_region}.amazonaws.com/${poolData.UserPoolId}/.well-known/jwks.json`,
+        json: true,
+      },
+      function (error, response, body) {
+        if (!error && response.statusCode === 200) {
+          const pems = {};
+          var keys = body["keys"];
+          for (var i = 0; i < keys.length; i++) {
+            //Convert each key to PEM
+            var key_id = keys[i].kid;
+            var modulus = keys[i].n;
+            var exponent = keys[i].e;
+            var key_type = keys[i].kty;
+            var jwk = { kty: key_type, n: modulus, e: exponent };
+            var pem = jwkToPem(jwk);
+            pems[key_id] = pem;
+          }
+          //validate the token
+          token = token.split(" ")[1];
+          var decodedJwt = jwt.decode(token, { complete: true });
+
+          if (!decodedJwt) {
+            return resolve({
+              valid: false,
+              message: "Invalid token 1",
+            });
+          }
+
+          var kid = decodedJwt.header.kid;
+          var pem = pems[kid];
+          if (!pem) {
+            return resolve({
+              valid: false,
+              message: "Invalid token 2",
+            });
+          }
+
+          jwt.verify(token, pem, function (err, payload) {
+            if (err) {
+              return resolve({
+                valid: false,
+                message: "Invalid token 3",
+              });
+            } else {
+              return resolve({
+                valid: true,
+                payload,
+              });
+            }
+          });
+        } else {
+          return resolve({
+            valid: false,
+            message: "Download error",
+          });
+        }
+      }
+    );
+  });
+}
+
+export async function authorizer(event) {
+  return await validateToken(event?.headers?.Authorization);
+}

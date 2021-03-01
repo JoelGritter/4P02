@@ -105,7 +105,7 @@ export async function getNote(event: APIGatewayProxyEvent) {
   }
 }
 
-export async function getAllNotes() {
+export async function getAllNotes(event) {
   try {
     await connectToDatabase();
 
@@ -119,6 +119,7 @@ export async function getAllNotes() {
       body: JSON.stringify({
         success: true,
         data: res,
+        event
       }),
     };
   } catch (err) {

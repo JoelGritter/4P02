@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "lint": "tslint -p tsconfig.json -c tslint.json",
-    "local": "serverless offline --skipCacheInvalidation --ignoreJWTSignature --noAuth",
+    "local": "serverless offline --skipCacheInvalidation",
     "start": "npm run local",
     "deploy": "serverless deploy",
     "test": "cross-env NODE_ENV=dev mocha -r ts-node/register tests/*.test.ts --exit",
@@ -15,8 +15,14 @@
     "lint"
   ],
   "dependencies": {
+    "amazon-cognito-identity-js": "^4.5.12",
+    "aws-sdk": "^2.853.0",
     "dotenv": "^8.2.0",
-    "mongoose": "^5.9.10"
+    "jsonwebtoken": "^8.5.1",
+    "jwk-to-pem": "^2.0.4",
+    "mongoose": "^5.9.10",
+    "node-fetch": "^2.6.1",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.51",

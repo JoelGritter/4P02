@@ -6,19 +6,6 @@ provider:
   environment:
     NODE_ENV: dev
     DOMAIN_SUFFIX: space
-  httpApi:
-    authorizers:
-      serviceAuthorizer:
-        identitySource: $request.header.Authorization
-        issuerUrl: 
-          Fn::Join:
-          - ''
-          - - 'https://cognito-idp.'
-            - '${opt:region, self:provider.region}'
-            - '.amazonaws.com/'
-            - Ref: serviceUserPool
-        audience:
-          - Ref: serviceUserPoolClient
 
 plugins:
   - serverless-plugin-typescript 
@@ -59,25 +46,15 @@ functions:
       - http:
           path: notes
           method: get
-  getProfileInfo:
-    handler: app/handlers/user.get
+  isAdmin:
+    handler: app/handlers/user.isAdmin 
     events:
       - http:
-            method: GET
-            path: /user
-            authorizer: serviceAuthorizer
-  createProfileInfo:
-    handler: app/handlers/user.post
-    events:
-      - http:
-            method: POST
-            path: /user
-            authorizer: serviceAuthorizer
+          path: user/isAdmin 
+          method: get 
 
 resources:
   Resources:
-    HttpApi:
-      DependsOn: serviceUserPool
     serviceUserPool:
       Type: AWS::Cognito::UserPool
       Properties:
