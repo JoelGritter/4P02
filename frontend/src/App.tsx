@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import AddCoursePage from "./pages/AddCoursePage";
@@ -11,7 +11,20 @@ import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { Paper } from "@material-ui/core";
 import red from "@material-ui/core/colors/red";
 
-export default function App() {
+import Amplify, { Auth } from "aws-amplify";
+import { withAuthenticator } from "@aws-amplify/ui-react";
+import AdminHome from "./pages/admin/AdminHome";
+
+const awsConfig = {
+  aws_project_region: "us-east-1",
+  aws_cognito_region: "us-east-1",
+  aws_user_pools_id: "us-east-1_rxv5ynpIW",
+  aws_user_pools_web_client_id: "1etk2iv3214e73cfeiveinsfkn",
+};
+
+Amplify.configure(awsConfig);
+
+export const App = () => {
   const [darkMode] = useState(false);
 
   const theme = createMuiTheme({
@@ -25,6 +38,14 @@ export default function App() {
       },
     },
   });
+
+  useEffect(() => {
+    (async () => {
+      const data = await Auth.currentSession();
+      const jwtToken = data.getIdToken().getJwtToken();
+      localStorage.setItem("jwtToken", "Bearer " + jwtToken);
+    })();
+  }, []);
 
   return (
     <ThemeProvider theme={theme}>
@@ -50,6 +71,9 @@ export default function App() {
               <Route path="/tests">
                 <TestsPage />
               </Route>
+              <Route path="/admin">
+                <AdminHome />
+              </Route>
               <Route path="/home">
                 <HomePage />
               </Route>
@@ -62,4 +86,6 @@ export default function App() {
       </Paper>
     </ThemeProvider>
   );
-}
+};
+
+export default withAuthenticator(App);
