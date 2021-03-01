@@ -5,7 +5,7 @@ import { internalServerError, unauthorized } from "./rest";
 import UserModel, { User } from "../schemas/user.model";
 import { authorizer } from "../util/auth";
 
-export const lambdaWrapper: (c: LambdaCallback) => LambdaCallback = (
+export const lambda: (c: LambdaCallback) => LambdaCallback = (
   callback: LambdaCallback
 ) => {
   const options = {};
@@ -35,14 +35,14 @@ export const auth: (c: LambdaCallback) => LambdaCallback = (
 
       if (userDoc) {
         options.userDoc = userDoc;
-        return callback(event, context, options);
+        return await callback(event, context, options);
       } else {
         const userDoc = await UserModel.create({
           cognitoId: payload["cognito:username"],
           email: payload.email,
         });
         options.userDoc = userDoc;
-        return callback(event, context, options);
+        return await callback(event, context, options);
       }
     }
   };
@@ -64,7 +64,8 @@ export const roleAuth: (roles: Role[], c: LambdaCallback) => LambdaCallback = (
     }
 
     if (allowed) {
-      callback(event, context, options);
+      const res =  await callback(event, context, options);
+      return res;
     } else {
       return unauthorized();
     }
