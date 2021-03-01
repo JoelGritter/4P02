@@ -51,7 +51,25 @@ functions:
     events:
       - http:
           path: user
+          method: post
+  getAllUsers:
+    handler: app/handlers/user.getAll 
+    events:
+      - http:
+          path: user
           method: get
+  getMe:
+    handler: app/handlers/user.me 
+    events:
+      - http:
+          path: user/me
+          method: get
+  updateMe:
+    handler: app/handlers/user.updateMe 
+    events:
+      - http:
+          path: user/me
+          method: patch
   addAdmin:
     handler: app/handlers/user.addAdmin 
     events:

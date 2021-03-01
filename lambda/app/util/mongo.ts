@@ -1,9 +1,5 @@
-import dotenv from "dotenv";
 import mongoose from "mongoose";
-
-dotenv.config({
-  path: ".env",
-});
+import {DB} from "./env";
 
 let isConnected;
 
@@ -14,7 +10,7 @@ export const connectToDatabase = () => {
   }
 
   console.log("=> using new database connection");
-  return mongoose.connect(process.env.DB as string).then((db) => {
+  return mongoose.connect(DB as string).then((db) => {
     isConnected = db.connections[0].readyState;
   });
 };

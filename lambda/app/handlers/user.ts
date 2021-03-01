@@ -1,22 +1,44 @@
 import { roleAuth } from "./../util/wrappers";
 import UserModel, { User } from "./../schemas/user.model";
-import { badRequest, internalServerError, parseBody } from "../util/rest";
+import { badRequest, parseBody } from "../util/rest";
 import { success } from "../util/rest";
 import { lambda, auth } from "../util/wrappers";
 
-export const get = lambda(
+export const getAll = lambda(roleAuth(['admin'], async (event) => {
+  const users = await UserModel.find();
+  return success(users);
+}));
+
+export const get = lambda(roleAuth(['admin'], async (event) => {
+  const query = parseBody<any>(event);
+
+  const res = await UserModel.findOne(query);
+
+  if(res) {
+    return success(res);
+  } else {
+    return badRequest("User not found!");
+  }
+}));
+
+
+export const me = lambda(
   auth(async (event, context, { userDoc }) => {
     return success(userDoc);
   })
 );
 
-export const update = lambda(
+export const updateMe = lambda(
   auth(async (event, context, { userDoc }) => {
-    const user = parseBody<User>(event);
+    const reqUser = userDoc as User;
+    const newUser = parseBody<User>(event);
     const { cognitoId } = userDoc;
-    if (user.roles) delete user.roles; // Prohibit updating this field
+    // Prohibit updating some fields
+    if(newUser.cognitoId) delete newUser.cognitoId;
+    if (newUser.email) delete newUser.email;
+    if (newUser.roles) delete newUser.roles; 
     // TODO: Add some kinda validation
-    const updatedUser = await UserModel.updateOne({ cognitoId }, user, {
+    const updatedUser = await UserModel.findOneAndUpdate({ cognitoId }, {...(reqUser.toObject()), ...newUser}, {
       new: true,
     });
     return success(updatedUser);

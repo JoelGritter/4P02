@@ -3,11 +3,12 @@ import request from "request";
 import jwkToPem from "jwk-to-pem";
 import jwt from "jsonwebtoken";
 import fetch from "node-fetch";
+import { USER_POOL_CLIENT_ID, USER_POOL_ID } from "./env";
 global.fetch = fetch;
 
 const poolData = {
-  UserPoolId: "us-east-1_51fOKcMLJ", // Your user pool id here
-  ClientId: "1r3ud66e8i4pind576t3ob1eco", // Your client id here
+  UserPoolId: USER_POOL_ID, // Your user pool id here
+  ClientId: USER_POOL_CLIENT_ID, // Your client id here
 };
 const pool_region = "us-east-1";
 

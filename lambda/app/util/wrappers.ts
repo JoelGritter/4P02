@@ -48,6 +48,19 @@ export const auth: (c: LambdaCallback) => LambdaCallback = (
   };
 };
 
+// Any of the roles being true would return yes
+export function checkRole(roles: Role[], user: User) {
+  let isRole = false;
+
+  for (let role of roles) {
+    if (user.roles.includes(role)) {
+      isRole = true;
+    }
+  }
+
+  return isRole;
+}
+
 export const roleAuth: (roles: Role[], c: LambdaCallback) => LambdaCallback = (
   roles,
   callback: LambdaCallback
@@ -55,15 +68,7 @@ export const roleAuth: (roles: Role[], c: LambdaCallback) => LambdaCallback = (
   return auth(async (event, context, options) => {
     const user = options.userDoc as User;
 
-    let allowed = false;
-
-    for (let role of roles) {
-      if (user.roles.includes(role)) {
-        allowed = true;
-      }
-    }
-
-    if (allowed) {
+    if (checkRole(roles, user)) {
       const res =  await callback(event, context, options);
       return res;
     } else {
