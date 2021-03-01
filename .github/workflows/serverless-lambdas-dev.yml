@@ -24,7 +24,7 @@ jobs:
         touch .env 
         echo "DB=${{ secrets.DB_DEV }}" >> .env
         echo "USER_POOL_ID=${{ secrets.USER_POOL_ID }}" >> .env
-        echo "USER_POOL_CLIENT_ID=${{ USER_POOL_CLIENT_ID }}" >> .env
+        echo "USER_POOL_CLIENT_ID=${{ secrets.USER_POOL_CLIENT_ID }}" >> .env
         npm install -g serverless
         npm install
         serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
