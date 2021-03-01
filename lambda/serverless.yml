@@ -22,78 +22,91 @@ functions:
       - http:
           path: notes
           method: post
+          cors: true
   updateNote:
     handler: app/handler.updateNote
     events:
       - http:
           path: notes/{id}
           method: put
+          cors: true
   deleteNote:
     handler: app/handler.deleteNote
     events:
       - http:
           path: notes/{id}
           method: delete
+          cors: true
   getNote:
     handler: app/handler.getNote
     events:
       - http:
           path: notes/{id}
           method: get
+          cors: true
   getAllNotes:
     handler: app/handler.getAllNotes
     events:
       - http:
           path: notes
           method: get
+          cors: true
   getUser:
     handler: app/handlers/user.get 
     events:
       - http:
           path: user
           method: post
+          cors: true
   getAllUsers:
     handler: app/handlers/user.getAll 
     events:
       - http:
           path: user
           method: get
+          cors: true
   getMe:
     handler: app/handlers/user.me 
     events:
       - http:
           path: user/me
           method: get
+          cors: true
   updateMe:
     handler: app/handlers/user.updateMe 
     events:
       - http:
           path: user/me
           method: patch
+          cors: true
   addAdmin:
     handler: app/handlers/user.addAdmin 
     events:
       - http:
           path: user/admin
           method: post
+          cors: true
   removeAdmin:
     handler: app/handlers/user.removeAdmin 
     events:
       - http:
           path: user/admin
           method: delete
+          cors: true
   addProf:
     handler: app/handlers/user.addProf 
     events:
       - http:
           path: user/prof
           method: post
+          cors: true
   removeProf:
     handler: app/handlers/user.removeProf 
     events:
       - http:
           path: user/prof
           method: delete
+          cors: true
 
 resources:
   Resources:
