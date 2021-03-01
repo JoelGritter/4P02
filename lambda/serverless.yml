@@ -46,12 +46,12 @@ functions:
       - http:
           path: notes
           method: get
-  isAdmin:
-    handler: app/handlers/user.isAdmin 
+  getUser:
+    handler: app/handlers/user.get 
     events:
       - http:
-          path: user/isAdmin 
-          method: get 
+          path: user
+          method: get
 
 resources:
   Resources:

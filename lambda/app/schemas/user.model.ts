@@ -7,6 +7,7 @@ export interface User {
   email: string;
   cognitoId: string;
   roles: Role[];
+  initialized: boolean; // Indicates if signup process has been completed or not
 }
 
 const UserModel = model(
@@ -16,6 +17,7 @@ const UserModel = model(
     email: String,
     cognitoId: String,
     roles: [String],
+    initialized: Boolean
   })
 );
 

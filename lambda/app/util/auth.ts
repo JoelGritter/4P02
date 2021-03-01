@@ -1,3 +1,4 @@
+import { AuthPayload } from './../types/index';
 import request from "request";
 import jwkToPem from "jwk-to-pem";
 import jwt from "jsonwebtoken";
@@ -13,7 +14,7 @@ const pool_region = "us-east-1";
 // https://medium.com/@prasadjay/amazon-cognito-user-pools-in-nodejs-as-fast-as-possible-22d586c5c8ec
 export function validateToken(
   token: string
-): Promise<{ valid: boolean; message?: string; payload?: any }> {
+): Promise<{ valid: boolean; message?: string; payload?: AuthPayload }> {
   return new Promise((resolve) => {
     request(
       {
