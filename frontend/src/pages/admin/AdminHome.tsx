@@ -34,7 +34,7 @@ export default function AdminHome() {
   const { users } = useUsers();
   return (
     <>
-      {users.map((user) => (
+      {users?.map((user) => (
         <UserCard user={user} key={user.cognitoId}></UserCard>
       ))}
     </>

@@ -10,11 +10,11 @@ import TestsPage from "./pages/TestsPage";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { CssBaseline, Paper } from "@material-ui/core";
 import red from "@material-ui/core/colors/red";
-
+import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
 import Amplify, { Auth } from "aws-amplify";
-import { withAuthenticator } from "@aws-amplify/ui-react";
 import AdminHome from "./pages/admin/AdminHome";
 import Nav from "./components/Nav";
+import { AmplifyAuthenticator, AmplifySignUp } from "@aws-amplify/ui-react";
 
 const awsConfig = {
   aws_project_region: "us-east-1",
@@ -88,4 +88,35 @@ export const App = () => {
   );
 };
 
-export default withAuthenticator(App);
+function AuthWrapper() {
+  const [authState, setAuthState] = React.useState();
+  const [user, setUser] = React.useState();
+
+  React.useEffect(() => {
+    return onAuthUIStateChange((nextAuthState: any, authData: any) => {
+      setAuthState(nextAuthState);
+      setUser(authData);
+    });
+  }, []);
+
+  return authState === AuthState.SignedIn && user ? (
+    <App />
+  ) : (
+    <AmplifyAuthenticator>
+      <AmplifySignUp
+        slot="sign-up"
+        usernameAlias="email"
+        formFields={[
+          {
+            type: "email",
+          },
+          {
+            type: "password",
+          },
+        ]}
+      />
+    </AmplifyAuthenticator>
+  );
+}
+
+export default AuthWrapper;
