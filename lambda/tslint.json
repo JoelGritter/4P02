@@ -10,5 +10,8 @@
     "exclude": [
       "tests/*books.mock.ts"
     ]
+  },
+  "rules": {
+    "prefer-const": true
   }
 }

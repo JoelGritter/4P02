@@ -15,8 +15,14 @@
     "lint"
   ],
   "dependencies": {
+    "amazon-cognito-identity-js": "^4.5.12",
+    "aws-sdk": "^2.853.0",
     "dotenv": "^8.2.0",
-    "mongoose": "^5.9.10"
+    "jsonwebtoken": "^8.5.1",
+    "jwk-to-pem": "^2.0.4",
+    "mongoose": "^5.9.10",
+    "node-fetch": "^2.6.1",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.51",
@@ -33,6 +39,7 @@
     "lambda-tester": "^4.0.1",
     "mocha": "^7.1.2",
     "nyc": "^15.0.1",
+    "serverless": "^2.28.0",
     "serverless-offline": "^5.12.1",
     "serverless-plugin-typescript": "^1.1.9",
     "sinon": "^9.0.2",

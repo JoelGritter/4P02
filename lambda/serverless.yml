@@ -5,6 +5,7 @@ provider:
   runtime: nodejs12.x
   environment:
     NODE_ENV: dev
+    DOMAIN_SUFFIX: space
 
 plugins:
   - serverless-plugin-typescript 
@@ -45,3 +46,91 @@ functions:
       - http:
           path: notes
           method: get
+  getUser:
+    handler: app/handlers/user.get 
+    events:
+      - http:
+          path: user
+          method: post
+  getAllUsers:
+    handler: app/handlers/user.getAll 
+    events:
+      - http:
+          path: user
+          method: get
+  getMe:
+    handler: app/handlers/user.me 
+    events:
+      - http:
+          path: user/me
+          method: get
+  updateMe:
+    handler: app/handlers/user.updateMe 
+    events:
+      - http:
+          path: user/me
+          method: patch
+  addAdmin:
+    handler: app/handlers/user.addAdmin 
+    events:
+      - http:
+          path: user/admin
+          method: post
+  removeAdmin:
+    handler: app/handlers/user.removeAdmin 
+    events:
+      - http:
+          path: user/admin
+          method: delete
+  addProf:
+    handler: app/handlers/user.addProf 
+    events:
+      - http:
+          path: user/prof
+          method: post
+  removeProf:
+    handler: app/handlers/user.removeProf 
+    events:
+      - http:
+          path: user/prof
+          method: delete
+
+resources:
+  Resources:
+    serviceUserPool:
+      Type: AWS::Cognito::UserPool
+      Properties:
+        UserPoolName: service-user-pool-${opt:stage, self:provider.stage}
+        UsernameAttributes:
+          - email
+        AutoVerifiedAttributes:
+          - email
+    serviceUserPoolClient:
+      Type: AWS::Cognito::UserPoolClient
+      Properties:
+        ClientName: service-user-pool-client-${opt:stage, self:provider.stage}
+        AllowedOAuthFlows:
+          - implicit
+        AllowedOAuthFlowsUserPoolClient: true
+        AllowedOAuthScopes:
+          - phone
+          - email
+          - openid
+          - profile
+          - aws.cognito.signin.user.admin
+        UserPoolId:
+          Ref: serviceUserPool
+        CallbackURLs: 
+          - https://localhost:3000
+        ExplicitAuthFlows:
+          - ALLOW_USER_SRP_AUTH
+          - ALLOW_REFRESH_TOKEN_AUTH
+        GenerateSecret: false
+        SupportedIdentityProviders: 
+          - COGNITO
+    serviceUserPoolDomain:
+      Type: AWS::Cognito::UserPoolDomain 
+      Properties:
+        UserPoolId: 
+          Ref: serviceUserPool
+        Domain: service-user-pool-domain-${opt:stage, self:provider.stage}-${self:provider.environment.DOMAIN_SUFFIX}
