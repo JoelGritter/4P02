@@ -119,7 +119,6 @@ export async function getAllNotes(event) {
       body: JSON.stringify({
         success: true,
         data: res,
-        event
       }),
     };
   } catch (err) {
