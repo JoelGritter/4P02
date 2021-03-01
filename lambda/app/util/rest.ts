@@ -4,6 +4,8 @@ export function internalServerError(message = "Operation failed") {
     statusCode: 500,
     headers: {
       "Content-Type": "application/json",
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
     },
     body: JSON.stringify({ success: false, message }),
   };
@@ -14,6 +16,8 @@ export function success(data?: any, message?: string) {
     statusCode: 200,
     headers: {
       "Content-Type": "application/json",
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
     },
     body: JSON.stringify({
       success: true,
@@ -28,6 +32,8 @@ export function created(data: any, message?: string) {
     statusCode: 201,
     headers: {
       "Content-Type": "application/json",
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
     },
     body: JSON.stringify({
       success: true,
@@ -47,6 +53,8 @@ export function unauthorized(message = "Unauthorized") {
     statusCode: 401,
     headers: {
       "Content-Type": "application/json",
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
     },
     body: JSON.stringify({
       success: false,
@@ -60,6 +68,8 @@ export function badRequest(message = "Bad Request") {
     statusCode: 400,
     headers: {
       "Content-Type": "application/json",
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true,
     },
     body: JSON.stringify({
       success: false,
