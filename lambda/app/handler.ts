@@ -2,17 +2,10 @@ import { connectToDatabase } from './util/mongo';
 import { APIGatewayProxyEvent } from "aws-lambda";
 import { createReadStream  } from "fs";
 import fs from "fs";
-import mongoose from "mongoose";
-import NoteSchema, { Note } from "./schemas/note.schema";
-import FileSchema, { File } from "./schemas/file.schemea";
-import dotenv from "dotenv";
+import NoteSchema, { Note } from "./schemas/note.model";
+import { File } from "./schemas/file.model";
 import { createModel } from "mongoose-gridfs";
 
-dotenv.config({
-  path: ".env",
-});
-
-let isConnected;
 let curFile;
 
 function callBack(err, result) {
@@ -143,8 +136,28 @@ export async function getAllNotes(event) {
   }
 }
 
-function delay(ms: number) {
-  return new Promise( resolve => setTimeout(resolve, ms) );
+function readFile(stream: any) {
+  const read = new Promise((resolve) => 
+    {stream.on('data', (file) => {
+      curFile = (stream.s.file);
+      fs.writeFile("./" + curFile.metadata, file, null, null);
+      resolve(curFile);
+    });
+  });
+
+  return read.then((res) => callBack(null,res))
+}
+
+function writeFile(attachment: any, fileOpts: any, rStream: any){
+  const write = new Promise((resolve) => 
+    {attachment.write(fileOpts, rStream, (error, file) => {
+      curFile = file;
+      resolve(curFile)
+    })
+    });
+
+  return write.then((res) => callBack(null,res))
+
 }
 
 export async function addFile(event: APIGatewayProxyEvent) {
@@ -155,14 +168,7 @@ export async function addFile(event: APIGatewayProxyEvent) {
     const Attachment = createModel();
     const readStream = createReadStream(fileOptns.metadata);
 
-    await Attachment.write(fileOptns, readStream, (error, file) => {
-      curFile = file;
-    })
-
-    //TODO: Find out better way to wait for this
-    while(curFile == undefined){
-      await delay(300);
-    }
+    await writeFile(Attachment, fileOptns, readStream);
 
     return {
       statusCode: 201,
@@ -187,18 +193,7 @@ export async function getFile(event: APIGatewayProxyEvent) {
 
     const readStream = await Attachment.read({ filename: event.pathParameters.uuid });
 
-    let fileName;
-
-    await readStream.on('data', (file) => {
-      fileName = (readStream.s.file.metadata)
-      fs.writeFile("./" + fileName, file, null, null)
-    });
-
-    //TODO: Find out better way to wait for this
-    while(fileName == undefined){
-      await delay(300);
-    }
-    
+    await readFile(readStream);
 
     return {
       statusCode: 200,
@@ -207,7 +202,7 @@ export async function getFile(event: APIGatewayProxyEvent) {
       },
       body: JSON.stringify({
         success: true,
-        message: "Downloaded file " + fileName,
+        message: "Downloaded file " + curFile.metadata,
       }),
     };
   } catch (err) {
