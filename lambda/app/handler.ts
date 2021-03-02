@@ -3,10 +3,10 @@ import { APIGatewayProxyEvent } from "aws-lambda";
 import { createReadStream  } from "fs";
 import fs from "fs";
 import NoteSchema, { Note } from "./schemas/note.model";
-import { File } from "./schemas/file.model";
+import { Readable } from "stream";
 import { createModel } from "mongoose-gridfs";
-
-let curFile;
+import { v4 as uuidv4 } from 'uuid';
+import mongoose from 'mongoose';
 
 function callBack(err, result) {
   console.log(err)
@@ -136,48 +136,34 @@ export async function getAllNotes(event) {
   }
 }
 
-function readFile(stream: any) {
-  const read = new Promise((resolve) => 
-    {stream.on('data', (file) => {
-      curFile = (stream.s.file);
-      fs.writeFile("./" + curFile.metadata, file, null, null);
-      resolve(curFile);
-    });
-  });
-
-  return read.then((res) => callBack(null,res))
-}
-
-function writeFile(attachment: any, fileOpts: any, rStream: any){
-  const write = new Promise((resolve) => 
-    {attachment.write(fileOpts, rStream, (error, file) => {
-      curFile = file;
-      resolve(curFile)
-    })
-    });
-
-  return write.then((res) => callBack(null,res))
-
-}
-
-export async function addFile(event: APIGatewayProxyEvent) {
+export async function addFile(event: any) {
   try {
     await connectToDatabase();
 
-    const fileOptns : File = JSON.parse(event.body as string); 
-    const Attachment = createModel();
-    const readStream = createReadStream(fileOptns.metadata);
+    const fileContent = event.body;
+    const fileType = event.multiValueHeaders['Content-Type'][0]
+    const fileName = uuidv4().split("-").join("");
+    const fileId = new mongoose.Types.ObjectId();
 
-    await writeFile(Attachment, fileOptns, readStream);
+    const fileOptns = {_id: fileId, filename: fileName, contentType: fileType}; 
+    const Attachment = createModel();
+    const readStream = Readable.from(fileContent)
+
+    await Attachment.write(fileOptns, readStream, (error, file) => {
+      callBack(error, file);
+    })
 
     return {
       statusCode: 201,
       headers: {
         "Content-Type": "application/json",
-        Location: "/files/" + curFile.filename,
-        Delete: "/files/" + curFile._id,
+        Location: "/files/" + fileName,
+        Delete: "/files/" + fileId,
       },
-      body: JSON.stringify(curFile),
+      body: JSON.stringify({
+        success: true,
+        message: "Successfully uploaded file"
+      }),
     };
 
   } catch (err) {
@@ -193,7 +179,9 @@ export async function getFile(event: APIGatewayProxyEvent) {
 
     const readStream = await Attachment.read({ filename: event.pathParameters.uuid });
 
-    await readFile(readStream);
+    await readStream.on('data', (file) => {
+      fs.writeFile("./" + readStream.s.file.filename, file, null, null);
+    });
 
     return {
       statusCode: 200,
@@ -202,7 +190,7 @@ export async function getFile(event: APIGatewayProxyEvent) {
       },
       body: JSON.stringify({
         success: true,
-        message: "Downloaded file " + curFile.metadata,
+        message: "Downloaded file " + event.pathParameters.uuid,
       }),
     };
   } catch (err) {
