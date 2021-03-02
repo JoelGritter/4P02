@@ -90,6 +90,10 @@ export const removeAdmin = lambda(
 
     const query = {} as any;
 
+    if(!cognitoId && !email) {
+      return badRequest("Cannot find user!");
+    }
+
     if (cognitoId) {
       query.cognitoId = cognitoId;
     }
@@ -117,6 +121,10 @@ export const addProf = lambda(
   roleAuth(["admin"], async (event, _, { userDoc }) => {
     const reqUser = userDoc as User;
     const { cognitoId, email } = parseBody(event);
+
+    if(!cognitoId && !email) {
+      return badRequest("Cannot find user!");
+    }
 
     if (cognitoId === reqUser.cognitoId) {
       return success();

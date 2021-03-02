@@ -141,7 +141,7 @@ export default function Nav(props: Props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            Logo
+            uAssign
           </Typography>
         </Toolbar>
       </AppBar>

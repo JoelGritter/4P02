@@ -15,6 +15,7 @@ import Amplify, { Auth } from "aws-amplify";
 import AdminHome from "./pages/admin/AdminHome";
 import Nav from "./components/Nav";
 import { AmplifyAuthenticator, AmplifySignUp } from "@aws-amplify/ui-react";
+import { SnackbarProvider } from "notistack";
 
 const awsConfig = {
   aws_project_region: "us-east-1",
@@ -50,40 +51,42 @@ export const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <Paper style={{ height: "100vh" }}>
-        <Nav>
-          <Switch>
-            <Route path="/login">
-              <LoginPage />
-            </Route>
-            <Route path="/addCourse">
-              <AddCoursePage />
-            </Route>
-            <Route path="/assignments">
-              <AssignmentsPage />
-            </Route>
-            <Route path="/courses">
-              <CoursesPage />
-            </Route>
-            <Route path="/profile">
-              <ProfilePage />
-            </Route>
-            <Route path="/tests">
-              <TestsPage />
-            </Route>
-            <Route path="/admin">
-              <AdminHome />
-            </Route>
-            <Route path="/home">
-              <HomePage />
-            </Route>
-            <Route path="/">
-              <HomePage />
-            </Route>
-          </Switch>
-        </Nav>
-      </Paper>
+      <SnackbarProvider>
+        <CssBaseline />
+        <Paper style={{ height: "100vh" }}>
+          <Nav>
+            <Switch>
+              <Route path="/login">
+                <LoginPage />
+              </Route>
+              <Route path="/addCourse">
+                <AddCoursePage />
+              </Route>
+              <Route path="/assignments">
+                <AssignmentsPage />
+              </Route>
+              <Route path="/courses">
+                <CoursesPage />
+              </Route>
+              <Route path="/profile">
+                <ProfilePage />
+              </Route>
+              <Route path="/tests">
+                <TestsPage />
+              </Route>
+              <Route path="/admin">
+                <AdminHome />
+              </Route>
+              <Route path="/home">
+                <HomePage />
+              </Route>
+              <Route path="/">
+                <HomePage />
+              </Route>
+            </Switch>
+          </Nav>
+        </Paper>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 };

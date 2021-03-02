@@ -3,13 +3,37 @@ import {
   CardContent,
   Checkbox,
   FormControlLabel,
+  Grid,
   Typography,
 } from "@material-ui/core";
-import React from "react";
+import { useSnackbar } from "notistack";
+import React, { useState } from "react";
 import User from "../../api/data/models/user.model";
 import useUsers from "../../api/data/use-users";
+import { del, post } from "../../api/util";
 
-function UserCard({ user }: { user: User }) {
+function UserCard({ user, mutate }: any) {
+  const { enqueueSnackbar } = useSnackbar();
+
+  const isAdmin = user.roles?.includes("admin");
+
+  const handler = async (event: any) => {
+    if (isAdmin) {
+      const {success, message} = await del("/user/admin", { cognitoId: user.cognitoId });
+      console.log({success})
+      if(!success) {
+        enqueueSnackbar(message);
+      }
+    } else {
+      const {success, message}  = await post("/user/admin", { cognitoId: user.cognitoId });
+      console.log({success})
+      if(!success) {
+        enqueueSnackbar(message);
+      }
+    }
+    mutate();
+  };
+
   return (
     <Card variant="outlined">
       <CardContent>
@@ -17,8 +41,8 @@ function UserCard({ user }: { user: User }) {
         <FormControlLabel
           control={
             <Checkbox
-              checked={user.roles?.includes("admin")}
-              onChange={() => {}}
+              checked={isAdmin}
+              onChange={handler}
               name={`admin-${user.cognitoId}`}
               color="primary"
             />
@@ -31,12 +55,16 @@ function UserCard({ user }: { user: User }) {
 }
 
 export default function AdminHome() {
-  const { users } = useUsers();
+  const { users, mutate } = useUsers();
   return (
     <>
-      {users?.map((user) => (
-        <UserCard user={user} key={user.cognitoId}></UserCard>
-      ))}
+      <Grid container spacing={1}>
+        {users?.map((user) => (
+          <Grid xs={12} item key={user.cognitoId}>
+            <UserCard user={user} mutate={mutate}></UserCard>
+          </Grid>
+        ))}
+      </Grid>
     </>
   );
 }
