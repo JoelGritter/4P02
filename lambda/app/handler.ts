@@ -27,10 +27,8 @@ const connectToDatabase = () => {
 };
 
 function callBack(err, result) {
-  //console.log("Callback!!")
   console.log(err)
   console.log(result)
-  curFile = result;
 }
 
 function jsonError(err, message = "Operation failed") {
@@ -166,13 +164,13 @@ export async function addFile(event: APIGatewayProxyEvent) {
 
     const fileOptns : File = JSON.parse(event.body as string); 
     const Attachment = createModel();
-    const readStream = createReadStream(fileOptns.userFileName);
+    const readStream = createReadStream(fileOptns.metadata);
 
     await Attachment.write(fileOptns, readStream, (error, file) => {
       curFile = file;
     })
 
-    //TODO: Find out better way to wait for this (potentially curFile not needed)
+    //TODO: Find out better way to wait for this
     while(curFile == undefined){
       console.log("test");
       await delay(300);
@@ -182,7 +180,8 @@ export async function addFile(event: APIGatewayProxyEvent) {
       statusCode: 201,
       headers: {
         "Content-Type": "application/json",
-        Location: "/files/" + curFile._id,
+        Location: "/files/" + curFile.filename,
+        Delete: "/files/" + curFile._id,
       },
       body: JSON.stringify(curFile),
     };
@@ -200,11 +199,18 @@ export async function getFile(event: APIGatewayProxyEvent) {
 
     const readStream = await Attachment.read({ filename: event.pathParameters.uuid });
 
+    let fileName;
 
-    //TODO: Discuss way to determine how to write out downloaded file (maybe based off uuid?)
-    readStream.on('data', (file) => {
-      fs.writeFile("./testamoondo.txt", file, null, null)
+    await readStream.on('data', (file) => {
+      fileName = (readStream.s.file.metadata)
+      fs.writeFile("./" + fileName, file, null, null)
     });
+
+    //TODO: Find out better way to wait for this
+    while(fileName == undefined){
+      await delay(300);
+    }
+    
 
     return {
       statusCode: 200,
@@ -213,7 +219,7 @@ export async function getFile(event: APIGatewayProxyEvent) {
       },
       body: JSON.stringify({
         success: true,
-        message: "Downloaded file " + event.pathParameters.uuid,
+        message: "Downloaded file " + fileName,
       }),
     };
   } catch (err) {
@@ -227,7 +233,6 @@ export async function deleteFile(event: APIGatewayProxyEvent) {
 
     const Attachment = createModel();
 
-    //TODO: Check if this is alright (does it catch errors?)
     const readStream = await Attachment.unlink({ _id: event.pathParameters.id }, (error, file) => {
       callBack(error, null)
     });
