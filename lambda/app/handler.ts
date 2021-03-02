@@ -161,7 +161,6 @@ export async function addFile(event: APIGatewayProxyEvent) {
 
     //TODO: Find out better way to wait for this
     while(curFile == undefined){
-      console.log("test");
       await delay(300);
     }
 
