@@ -136,7 +136,7 @@ export async function getAllNotes(event) {
   }
 }
 
-export async function addFile(event: any) {
+export async function addFile(event: APIGatewayProxyEvent) {
   try {
     await connectToDatabase();
 
