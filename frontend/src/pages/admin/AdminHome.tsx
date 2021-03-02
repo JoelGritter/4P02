@@ -7,8 +7,7 @@ import {
   Typography,
 } from "@material-ui/core";
 import { useSnackbar } from "notistack";
-import React, { useState } from "react";
-import User from "../../api/data/models/user.model";
+import React from "react";
 import useUsers from "../../api/data/use-users";
 import { del, post } from "../../api/util";
 
