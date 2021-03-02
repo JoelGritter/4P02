@@ -20,11 +20,6 @@ function callBack(err, result) {
   console.log(result)
 }
 
-function callBack(err, result) {
-  console.log(err)
-  console.log(result)
-}
-
 function jsonError(err, message = "Operation failed") {
   console.error(err);
   return {
