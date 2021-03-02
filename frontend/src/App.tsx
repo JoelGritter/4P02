@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Switch, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import AddCoursePage from "./pages/AddCoursePage";
 import AssignmentsPage from "./pages/AssignmentsPage";
@@ -8,10 +8,25 @@ import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import TestsPage from "./pages/TestsPage";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { Paper } from "@material-ui/core";
+import { CssBaseline, Paper } from "@material-ui/core";
 import red from "@material-ui/core/colors/red";
+import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
+import Amplify, { Auth } from "aws-amplify";
+import AdminHome from "./pages/admin/AdminHome";
+import Nav from "./components/Nav";
+import { AmplifyAuthenticator, AmplifySignUp } from "@aws-amplify/ui-react";
+import { SnackbarProvider } from "notistack";
 
-export default function App() {
+const awsConfig = {
+  aws_project_region: process.env.REACT_APP_AWS_PROJECT_REGION,
+  aws_cognito_region: process.env.REACT_APP_AWS_COGNITO_REGION,
+  aws_user_pools_id: process.env.REACT_APP_AWS_USER_POOLS_ID,
+  aws_user_pools_web_client_id: process.env.REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID,
+};
+
+Amplify.configure(awsConfig);
+
+export const App = () => {
   const [darkMode] = useState(false);
 
   const theme = createMuiTheme({
@@ -26,11 +41,20 @@ export default function App() {
     },
   });
 
+  useEffect(() => {
+    (async () => {
+      const data = await Auth.currentSession();
+      const jwtToken = data.getIdToken().getJwtToken();
+      localStorage.setItem("jwtToken", "Bearer " + jwtToken);
+    })();
+  }, []);
+
   return (
     <ThemeProvider theme={theme}>
-      <Paper style={{ height: "100vh" }}>
-        <Router>
-          <div>
+      <SnackbarProvider>
+        <CssBaseline />
+        <Paper style={{ height: "100vh" }}>
+          <Nav>
             <Switch>
               <Route path="/login">
                 <LoginPage />
@@ -50,6 +74,9 @@ export default function App() {
               <Route path="/tests">
                 <TestsPage />
               </Route>
+              <Route path="/admin">
+                <AdminHome />
+              </Route>
               <Route path="/home">
                 <HomePage />
               </Route>
@@ -57,9 +84,42 @@ export default function App() {
                 <HomePage />
               </Route>
             </Switch>
-          </div>
-        </Router>
-      </Paper>
+          </Nav>
+        </Paper>
+      </SnackbarProvider>
     </ThemeProvider>
   );
+};
+
+function AuthWrapper() {
+  const [authState, setAuthState] = React.useState();
+  const [user, setUser] = React.useState();
+
+  React.useEffect(() => {
+    return onAuthUIStateChange((nextAuthState: any, authData: any) => {
+      setAuthState(nextAuthState);
+      setUser(authData);
+    });
+  }, []);
+
+  return authState === AuthState.SignedIn && user ? (
+    <App />
+  ) : (
+    <AmplifyAuthenticator>
+      <AmplifySignUp
+        slot="sign-up"
+        usernameAlias="email"
+        formFields={[
+          {
+            type: "email",
+          },
+          {
+            type: "password",
+          },
+        ]}
+      />
+    </AmplifyAuthenticator>
+  );
 }
+
+export default AuthWrapper;
