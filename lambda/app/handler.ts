@@ -3,7 +3,7 @@ import { APIGatewayProxyEvent } from "aws-lambda";
 import { createReadStream  } from "fs";
 import fs from "fs";
 import NoteSchema, { Note } from "./schemas/note.model";
-import { Readable } from "stream";
+import { Readable, Writable } from "stream";
 import { createModel } from "mongoose-gridfs";
 import { v4 as uuidv4 } from 'uuid';
 import mongoose from 'mongoose';
@@ -137,23 +137,15 @@ export async function getAllNotes(event) {
 }
 
 export async function addFile(event: APIGatewayProxyEvent) {
+
   try {
     await connectToDatabase();
 
     const fileContent = event.body;
     const fileType = event.multiValueHeaders['Content-Type'][0]
-    const fileName = uuidv4().split("-").join("");
+    const fileName = uuidv4().split("-").join("") + "." + fileType.split("/")[1];
     const fileId = new mongoose.Types.ObjectId();
-
-    const fileOptns = {_id: fileId, filename: fileName, contentType: fileType}; 
-    const Attachment = createModel();
-    const readStream = Readable.from(fileContent)
-
-    await Attachment.write(fileOptns, readStream, (error, file) => {
-      callBack(error, file);
-    })
-
-    return {
+    const success =  {
       statusCode: 201,
       headers: {
         "Content-Type": "application/json",
@@ -162,16 +154,30 @@ export async function addFile(event: APIGatewayProxyEvent) {
       },
       body: JSON.stringify({
         success: true,
-        message: "Successfully uploaded file"
+        message: "Successfully uploaded file",
+        data: "/files/" + fileName
       }),
     };
+
+    const fileOptns = {_id: fileId, filename: fileName, contentType: fileType}; 
+    const Attachment = createModel();
+    const readStream = Readable.from(fileContent)
+
+    return new Promise((resolve) => {
+        Attachment.write(fileOptns, readStream, (error, file) => {
+          if(error) resolve(jsonError(error));
+          resolve(success);
+        })
+      })
 
   } catch (err) {
     return jsonError(err);
   }
+
 }
 
 export async function getFile(event: APIGatewayProxyEvent) {
+  
   try {
     await connectToDatabase();
 
@@ -179,23 +185,36 @@ export async function getFile(event: APIGatewayProxyEvent) {
 
     const readStream = await Attachment.read({ filename: event.pathParameters.uuid });
 
-    await readStream.on('data', (file) => {
-      fs.writeFile("./" + readStream.s.file.filename, file, null, null);
-    });
+    return new Promise((resolve) => {
 
-    return {
-      statusCode: 200,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        success: true,
-        message: "Downloaded file " + event.pathParameters.uuid,
-      }),
-    };
+      let curFile = []
+
+      readStream.on('data', (file) => {
+        curFile.push(file)
+      });
+  
+      readStream.on('error', (error) =>{
+        resolve(jsonError(error))
+      })
+
+      readStream.on('end', () =>{
+        const res = {
+          statusCode: 200,
+          headers: {
+            "Content-Type": readStream.s.file.contentType,
+          },
+          body: curFile.toString()
+        };
+
+        resolve(res)
+      })
+
+    })
+
   } catch (err) {
     return jsonError(err);
   }
+
 }
 
 export async function deleteFile(event: APIGatewayProxyEvent) {
@@ -203,12 +222,7 @@ export async function deleteFile(event: APIGatewayProxyEvent) {
     await connectToDatabase();
 
     const Attachment = createModel();
-
-    const readStream = await Attachment.unlink({ _id: event.pathParameters.id }, (error, file) => {
-      callBack(error, null)
-    });
-
-    return {
+    const success = {
       statusCode: 200,
       headers: {
         "Content-Type": "application/json",
@@ -218,6 +232,14 @@ export async function deleteFile(event: APIGatewayProxyEvent) {
         message: "Removed file with id " + event.pathParameters.id,
       }),
     };
+
+    return new Promise ((resolve) => {
+      Attachment.unlink({ _id: event.pathParameters.id }, (error) => {
+      if (error) resolve(jsonError(error));
+      resolve(success)
+      })
+    });
+
   } catch (err) {
     return jsonError(err);
   }
