@@ -187,10 +187,10 @@ export async function getFile(event: APIGatewayProxyEvent) {
 
     return await new Promise((resolve) => {
 
-      let curFile = []
+      let curFile = ""
 
       readStream.on('data', (file) => {
-        curFile.push(file.toString("base64"))
+        curFile += file.toString("base64")
       });
   
       readStream.on('error', (error) =>{
@@ -199,12 +199,12 @@ export async function getFile(event: APIGatewayProxyEvent) {
 
       readStream.on('end', () =>{
         const res = {
-          "isBase64Encoded":true,
+          isBase64Encoded: true,
           statusCode: 200,
           headers: {
             "Content-Type": readStream.s.file.contentType,
           },
-          body: curFile.toString()
+          body: curFile
         };
 
         resolve(res)
