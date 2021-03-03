@@ -163,8 +163,8 @@ export async function addFile(event: APIGatewayProxyEvent) {
     const Attachment = createModel();
     const readStream = Readable.from(fileContent)
 
-    return new Promise((resolve) => {
-        Attachment.write(fileOptns, readStream, (error, file) => {
+    return await new Promise((resolve) => {
+        Attachment.write(fileOptns, readStream, (error) => {
           if(error) resolve(jsonError(error));
           resolve(success);
         })
@@ -185,12 +185,12 @@ export async function getFile(event: APIGatewayProxyEvent) {
 
     const readStream = await Attachment.read({ filename: event.pathParameters.uuid });
 
-    return new Promise((resolve) => {
+    return await new Promise((resolve) => {
 
       let curFile = []
 
       readStream.on('data', (file) => {
-        curFile.push(file)
+        curFile.push(file.toString("base64"))
       });
   
       readStream.on('error', (error) =>{
@@ -199,6 +199,7 @@ export async function getFile(event: APIGatewayProxyEvent) {
 
       readStream.on('end', () =>{
         const res = {
+          "isBase64Encoded":true,
           statusCode: 200,
           headers: {
             "Content-Type": readStream.s.file.contentType,
@@ -233,7 +234,7 @@ export async function deleteFile(event: APIGatewayProxyEvent) {
       }),
     };
 
-    return new Promise ((resolve) => {
+    return await new Promise ((resolve) => {
       Attachment.unlink({ _id: event.pathParameters.id }, (error) => {
       if (error) resolve(jsonError(error));
       resolve(success)
