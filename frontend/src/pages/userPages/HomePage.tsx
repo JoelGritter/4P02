@@ -24,7 +24,7 @@ import {
   Theme,
   createStyles,
 } from "@material-ui/core/styles";
-import CourseCard from "../components/CourseCard";
+import CourseCard from "../../components/CourseCard";
 
 const drawerWidth = 240;
 
