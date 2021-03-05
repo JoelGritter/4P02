@@ -107,6 +107,34 @@ functions:
           path: user/prof
           method: delete
           cors: true
+  addCourse:
+    handler: app/handlers/course.addCourse
+    events:
+      - http:
+          path: course
+          method: post
+          cors: true
+  updateCourse:
+    handler: app/handlers/course.updateCourse
+    events:
+      - http:
+          path: course/{id}
+          method: put
+          cors: true
+  deleteCourse:
+    handler: app/handlers/course.deleteCourse
+    events:
+      - http:
+          path: course/{id}
+          method: delete
+          cors: true
+  getCourse:
+    handler: app/handlers/course.getCourse
+    events:
+      - http:
+          path: course/{id}
+          method: get
+          cors: true
 
 resources:
   Resources:
