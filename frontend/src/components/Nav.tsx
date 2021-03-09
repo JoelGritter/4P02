@@ -89,31 +89,25 @@ export default function Nav(props: Props) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        <ListItem button key={"Home"}>
+        <ListItem button key="home"component={Link} to="/">
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
           <ListItemText primary={"Home"} />
         </ListItem>
-        <ListItem button key={"Profile"}>
+        <ListItem button key="profile" component={Link} to="/profile">
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
           <ListItemText primary={"Profile"} />
         </ListItem>
-        <ListItem button key={"Add Course"} component={Link} to="/addCourse">
+        <ListItem button key="add-course" component={Link} to="/addCourse">
           <ListItemIcon>
             <AddCircleIcon />
           </ListItemIcon>
           <ListItemText primary={"Add Course"} />
         </ListItem>
-        <ListItem button key={"Give Feedback"}>
-          <ListItemIcon>
-            <MenuBookIcon />
-          </ListItemIcon>
-          <ListItemText primary={"Give Feedback"} />
-        </ListItem>
-        <ListItem button key={"Give Feedback"} onClick={logout}>
+        <ListItem button key="logout" onClick={logout}>
           <ListItemIcon>
             <ExitToAppIcon />
           </ListItemIcon>
