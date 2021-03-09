@@ -15,23 +15,47 @@ function UserCard({ user, mutate }: any) {
   const { enqueueSnackbar } = useSnackbar();
 
   const isAdmin = user.roles?.includes("admin");
+  const isProf = user.roles?.includes("prof");
 
-  const handler = async (event: any) => {
+  const adminHandler = async () => {
     if (isAdmin) {
       const {success, message} = await del("/user/admin", { cognitoId: user.cognitoId });
-      console.log({success})
       if(!success) {
         enqueueSnackbar(message);
+      } else {
+        enqueueSnackbar(message ?? `Removed ${user.email} as an admin`);
       }
     } else {
       const {success, message}  = await post("/user/admin", { cognitoId: user.cognitoId });
-      console.log({success})
       if(!success) {
         enqueueSnackbar(message);
+      } else {
+        enqueueSnackbar(message ?? `Added ${user.email} as an admin`);
       }
     }
     mutate();
   };
+
+  
+  const profHandler = async () => {
+    if (isProf) {
+      const {success, message} = await del("/user/prof", { cognitoId: user.cognitoId });
+      if(!success) {
+        enqueueSnackbar(message);
+      } else {
+        enqueueSnackbar(message ?? `Removed ${user.email} as a professor`);
+      }
+    } else {
+      const {success, message}  = await post("/user/prof", { cognitoId: user.cognitoId });
+      if(!success) {
+        enqueueSnackbar(message);
+      } else {
+        enqueueSnackbar(message ?? `Added ${user.email} as a professor`);
+      }
+    }
+    mutate();
+  };
+
 
   return (
     <Card variant="outlined">
@@ -41,12 +65,23 @@ function UserCard({ user, mutate }: any) {
           control={
             <Checkbox
               checked={isAdmin}
-              onChange={handler}
+              onChange={adminHandler}
               name={`admin-${user.cognitoId}`}
               color="primary"
             />
           }
           label="Admin"
+        />
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={isProf}
+              onChange={profHandler}
+              name={`prof-${user.cognitoId}`}
+              color="primary"
+            />
+          }
+          label="Professor"
         />
       </CardContent>
     </Card>

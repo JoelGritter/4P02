@@ -5,4 +5,4 @@ export default interface User {
   roles?: Role[]
 }
 
-export type Role = "admin"
+export type Role = "admin" | "prof"
