@@ -120,7 +120,7 @@ export default function Nav(props: Props) {
           button
           key="add-course"
           component={Link}
-          to="/addCourse"
+          to="/prof/courses/create"
           onClick={() => {
             setMobileOpen(!mobileOpen);
           }}

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Switch, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import AddCoursePage from "./pages/AddCoursePage";
 import AssignmentsPage from "./pages/AssignmentsPage";
 import CoursesPage from "./pages/CoursesPage";
 import HomePage from "./pages/HomePage";
@@ -61,11 +60,8 @@ export const App = () => {
               <Route path="/login">
                 <LoginPage />
               </Route>
-              <Route path="/CreateCoursePage">
+              <Route path="/prof/courses/create">
                 <CreateCoursePage />
-              </Route>
-              <Route path="/addCourse">
-                <AddCoursePage />
               </Route>
               <Route path="/assignments">
                 <AssignmentsPage />
