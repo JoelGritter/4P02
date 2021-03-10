@@ -88,19 +88,43 @@ export default function Nav(props: Props) {
       <div className={classes.toolbar} />
       <Divider />
       <List>
-        <ListItem button key="home"component={Link} to="/">
+        <ListItem
+          button
+          key="home"
+          component={Link}
+          to="/"
+          onClick={() => {
+            setMobileOpen(!mobileOpen);
+          }}
+        >
           <ListItemIcon>
             <HomeIcon />
           </ListItemIcon>
           <ListItemText primary={"Home"} />
         </ListItem>
-        <ListItem button key="profile" component={Link} to="/profile">
+        <ListItem
+          button
+          key="profile"
+          component={Link}
+          to="/profile"
+          onClick={() => {
+            setMobileOpen(!mobileOpen);
+          }}
+        >
           <ListItemIcon>
             <PersonIcon />
           </ListItemIcon>
           <ListItemText primary={"Profile"} />
         </ListItem>
-        <ListItem button key="add-course" component={Link} to="/addCourse">
+        <ListItem
+          button
+          key="add-course"
+          component={Link}
+          to="/addCourse"
+          onClick={() => {
+            setMobileOpen(!mobileOpen);
+          }}
+        >
           <ListItemIcon>
             <AddCircleIcon />
           </ListItemIcon>

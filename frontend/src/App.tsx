@@ -7,6 +7,7 @@ import CoursesPage from "./pages/CoursesPage";
 import HomePage from "./pages/HomePage";
 import ProfilePage from "./pages/ProfilePage";
 import TestsPage from "./pages/TestsPage";
+import CreateCoursePage from "./pages/instructorPages/CreateCoursePage";
 import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
 import { CssBaseline, Paper } from "@material-ui/core";
 import red from "@material-ui/core/colors/red";
@@ -21,7 +22,8 @@ const awsConfig = {
   aws_project_region: process.env.REACT_APP_AWS_PROJECT_REGION,
   aws_cognito_region: process.env.REACT_APP_AWS_COGNITO_REGION,
   aws_user_pools_id: process.env.REACT_APP_AWS_USER_POOLS_ID,
-  aws_user_pools_web_client_id: process.env.REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID,
+  aws_user_pools_web_client_id:
+    process.env.REACT_APP_AWS_USER_POOLS_WEB_CLIENT_ID,
 };
 
 Amplify.configure(awsConfig);
@@ -58,6 +60,9 @@ export const App = () => {
             <Switch>
               <Route path="/login">
                 <LoginPage />
+              </Route>
+              <Route path="/CreateCoursePage">
+                <CreateCoursePage />
               </Route>
               <Route path="/addCourse">
                 <AddCoursePage />
