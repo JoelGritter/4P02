@@ -94,7 +94,7 @@ export default function Nav(props: Props) {
           component={Link}
           to="/"
           onClick={() => {
-            setMobileOpen(!mobileOpen);
+            setMobileOpen(false);
           }}
         >
           <ListItemIcon>
@@ -108,7 +108,7 @@ export default function Nav(props: Props) {
           component={Link}
           to="/profile"
           onClick={() => {
-            setMobileOpen(!mobileOpen);
+            setMobileOpen(false);
           }}
         >
           <ListItemIcon>
@@ -122,7 +122,7 @@ export default function Nav(props: Props) {
           component={Link}
           to="/prof/courses/create"
           onClick={() => {
-            setMobileOpen(!mobileOpen);
+            setMobileOpen(false);
           }}
         >
           <ListItemIcon>

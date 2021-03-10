@@ -30,7 +30,7 @@ export default function CreateCoursePage() {
             color="primary"
             className={classes.button}
           >
-            Save
+            Create
           </Button>
           <Button
             variant="contained"
