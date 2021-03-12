@@ -25,7 +25,7 @@ export default function CreateCoursePage() {
   const classes = useStyles();
 
   const courseHandler = async () => {
-    const { success, message } = await post("/courses", {
+    const { success, message } = await post("/course", {
       courseName: courseName,
       instructor: instructor,
       description: description,
