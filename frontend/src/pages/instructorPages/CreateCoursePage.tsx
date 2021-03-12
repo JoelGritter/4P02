@@ -61,6 +61,12 @@ export default function CreateCoursePage() {
     setDescription(event.target.value);
   };
 
+  const handleClear = () => {
+    setCourseName("");
+    setInstructor("");
+    setDescription("");
+  };
+
   return (
     <div className={classes.root}>
       <div className={classes.headerContainer}>
@@ -78,8 +84,9 @@ export default function CreateCoursePage() {
             variant="contained"
             color="secondary"
             className={classes.button}
+            onClick={handleClear}
           >
-            Cancel
+            Clear
           </Button>
         </div>
       </div>
