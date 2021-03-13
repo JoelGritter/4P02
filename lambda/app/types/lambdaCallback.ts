@@ -1,7 +1,7 @@
 import {
   APIGatewayEventRequestContext,
   APIGatewayProxyEvent,
-} from "aws-lambda";
+} from 'aws-lambda';
 
 type LambdaCallbackResult = any;
 

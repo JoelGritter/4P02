@@ -1,8 +1,8 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Document } from 'mongoose';
 
-export type Role = "student" | "admin" | "prof";
+export type Role = 'student' | 'admin' | 'prof';
 
-export interface User extends Document{
+export interface User extends Document {
   name: string;
   email: string;
   cognitoId: string;
@@ -11,13 +11,13 @@ export interface User extends Document{
 }
 
 const UserModel = model(
-  "User",
+  'User',
   new Schema<User>({
     name: String,
     email: String,
     cognitoId: String,
     roles: [String],
-    initialized: Boolean
+    initialized: Boolean,
   })
 );
 

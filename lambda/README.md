@@ -8,8 +8,8 @@ serverless invoke local --function getAllNotes
 
 ### To Test It Locally
 
-* Run ```npm install``` to install all the necessary dependencies.
-* Run ```npm run local``` use serverless offline to test locally. 
+- Run `npm install` to install all the necessary dependencies.
+- Run `npm run local` use serverless offline to test locally.
 
 ### Deploy on AWS, simply run:
 
