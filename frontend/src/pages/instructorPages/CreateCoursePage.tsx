@@ -6,6 +6,7 @@ import { useSnackbar } from 'notistack';
 import { CreateCourseForm } from '../../components/CreateCourseForm';
 import { post } from '../../api/util';
 import Course from '../../api/data/models/course.model';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -28,15 +29,17 @@ export default function CreateCoursePage() {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const [course, setCourse] = useState<Course>({});
+  const history = useHistory();
 
   const addCourse = async () => {
-    const { success, message } = await post('/course', course);
+    const { success, message, data } = await post('/course', course);
     if (!success) {
       enqueueSnackbar(
         message ?? `Couldn't add "${course.name}" to your courses!`
       );
     } else {
       enqueueSnackbar(message ?? `Added ${course.name} to your courses!`);
+      history.push(`/courses/${data._id}`);
     }
   };
 
