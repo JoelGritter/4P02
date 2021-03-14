@@ -135,6 +135,34 @@ functions:
           path: course/{id}
           method: get
           cors: true
+  addAssignment:
+    handler: app/handlers/assignment.addAssignment
+    events:
+      - http:
+          path: assign
+          method: post
+          cors: true
+  updateAssignment:
+    handler: app/handlers/assignment.updateAssignment
+    events:
+      - http:
+          path: assign/{id}
+          method: put
+          cors: true
+  deleteAssignment:
+    handler: app/handlers/assignment.deleteAssignment
+    events:
+      - http:
+          path: assign/{id}
+          method: delete
+          cors: true
+  getAssignment:
+    handler: app/handlers/assignment.getAssignment
+    events:
+      - http:
+          path: assign/{id}
+          method: get
+          cors: true
 
 resources:
   Resources:
