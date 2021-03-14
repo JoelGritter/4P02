@@ -12,6 +12,18 @@ export const getAll = lambda(
   })
 );
 
+export const getAllProf = lambda(
+  roleAuth(['prof'], async (event, context, { userDoc }) => {
+    console.log({
+      currentProfessors: userDoc.cognitoId,
+    });
+    const courses = await CourseModel.find({
+      currentProfessors: userDoc.cognitoId,
+    });
+    return success(courses);
+  })
+);
+
 export const addCourse = lambda(
   roleAuth(['admin', 'prof'], async (event, context, { userDoc }) => {
     const newCourse = parseBody<Course>(event);
