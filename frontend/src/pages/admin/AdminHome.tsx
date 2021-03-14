@@ -8,8 +8,10 @@ import {
 } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 import React from 'react';
+import { Switch, Route, Redirect } from 'react-router-dom';
 import useUsers from '../../api/data/use-users';
 import { del, post } from '../../api/util';
+import AdminCourses from './pages/AdminCourses';
 
 function UserCard({ user, mutate }: any) {
   const { enqueueSnackbar } = useSnackbar();
@@ -98,13 +100,21 @@ export default function AdminHome() {
   const { users, mutate } = useUsers();
   return (
     <>
-      <Grid container spacing={1}>
-        {users?.map((user) => (
-          <Grid xs={12} item key={user.cognitoId}>
-            <UserCard user={user} mutate={mutate}></UserCard>
+      <Switch>
+        <Route path="/admin/users">
+          <Grid container spacing={1}>
+            {users?.map((user) => (
+              <Grid xs={12} item key={user.cognitoId}>
+                <UserCard user={user} mutate={mutate}></UserCard>
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
+        </Route>
+        <Route path="/admin/courses">
+          <AdminCourses></AdminCourses>
+        </Route>
+        <Redirect to="/admin/users" />
+      </Switch>
     </>
   );
 }

@@ -6,16 +6,21 @@ export interface Course extends Document {
   // announcements: Announcement[],
   // gradebook: Assessment[],
   currentProfessors: string[];
+  description: string;
 }
 
 const CourseModel = model(
   'Course',
   new Schema<Course>({
-    name: String,
+    name: {
+      type: String,
+      required: true,
+    },
     studentCapacity: Number,
     // announcements: [String],
     // gradebook: [String],
     currentProfessors: [String], // use userID to reference
+    description: String,
   })
 );
 

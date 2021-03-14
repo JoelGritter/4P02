@@ -3,6 +3,7 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import CourseCard from '../components/CourseCard';
+import Course from '../api/data/models/course.model';
 
 const drawerWidth = 240;
 
@@ -45,61 +46,87 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     coursesContainer: {},
     calendarContainer: {},
+    innerCoursesContainer: {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+    },
   })
 );
 
 export default function HomePage() {
   const classes = useStyles();
 
-  const courseData = [
+  const courseData: Course[] = [
     {
       name: 'firstcourse',
-      instructor: 'notme',
     },
     {
       name: 'sec',
-      instructor: '2',
     },
     {
       name: 'third',
-      instructor: 'sadfasdf',
     },
     {
       name: 'fourth',
-      instructor: 'asdfasdfasdfasdf',
     },
-  ];
+  ] as Course[];
 
   return (
-    <Grid container spacing={1}>
-      <Grid
-        container
-        item
-        md={9}
-        spacing={1}
-        className={classes.coursesContainer}
-      >
-        {courseData.map((data, index) => {
-          return (
-            <Grid item xs={12}>
-              <CourseCard name={data.name} instructor={data.instructor} />
-            </Grid>
-          );
-        })}
-      </Grid>
-      <Grid
-        container
-        item
-        md={3}
-        spacing={1}
-        className={classes.calendarContainer}
-      >
-        <Grid item xs={12}>
-          <Typography gutterBottom variant="h5" color="primary" component="h5">
-            Deadlines
-          </Typography>
+    <>
+      <Grid container spacing={1}>
+        <Grid item md={9} className={classes.coursesContainer}>
+          <Typography variant="h4">Courses I'm Teaching</Typography>
+          <Grid
+            container
+            xs={12}
+            spacing={1}
+            className={classes.innerCoursesContainer}
+          >
+            {courseData.map((data, index) => {
+              return (
+                <Grid item xs={12}>
+                  <CourseCard course={data} />
+                </Grid>
+              );
+            })}
+          </Grid>
+          <Typography variant="h4">My Courses</Typography>
+
+          <Grid
+            container
+            item
+            xs={12}
+            spacing={1}
+            className={classes.innerCoursesContainer}
+          >
+            {courseData.map((data, index) => {
+              return (
+                <Grid item xs={12}>
+                  <CourseCard course={data} />
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          item
+          md={3}
+          spacing={1}
+          className={classes.calendarContainer}
+        >
+          <Grid item xs={12}>
+            <Typography
+              gutterBottom
+              variant="h5"
+              color="primary"
+              component="h5"
+            >
+              Deadlines
+            </Typography>
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }

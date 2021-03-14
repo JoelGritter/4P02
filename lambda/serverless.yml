@@ -135,7 +135,13 @@ functions:
           path: course/{id}
           method: get
           cors: true
-
+  getAllCourses:
+    handler: app/handlers/course.getAll
+    events:
+      - http:
+          path: course
+          method: get
+          cors: true
 resources:
   Resources:
     serviceUserPool:
