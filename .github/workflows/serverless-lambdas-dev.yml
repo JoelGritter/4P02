@@ -13,19 +13,19 @@ jobs:
       matrix:
         node-version: [14.x]
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - name: configure .env
-      run: |
-        cd lambda
-        touch .env 
-        echo "DB=${{ secrets.DB_DEV }}" >> .env
-        echo "USER_POOL_ID=${{ secrets.USER_POOL_ID }}" >> .env
-        echo "USER_POOL_CLIENT_ID=${{ secrets.USER_POOL_CLIENT_ID }}" >> .env
-        npm install -g serverless
-        npm install
-        serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        serverless deploy
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: configure .env
+        run: |
+          cd lambda
+          touch .env 
+          echo "DB=${{ secrets.DB_DEV }}" >> .env
+          echo "USER_POOL_ID=${{ secrets.USER_POOL_ID }}" >> .env
+          echo "USER_POOL_CLIENT_ID=${{ secrets.USER_POOL_CLIENT_ID }}" >> .env
+          npm install -g serverless
+          npm install
+          serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          serverless deploy

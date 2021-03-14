@@ -1,9 +1,9 @@
-import { APIGatewayProxyEvent } from "aws-lambda";
-export function internalServerError(message = "Operation failed") {
+import { APIGatewayProxyEvent } from 'aws-lambda';
+export function internalServerError(message = 'Operation failed') {
   return {
     statusCode: 500,
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
@@ -15,7 +15,7 @@ export function success(data?: any, message?: string) {
   return {
     statusCode: 200,
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
@@ -31,7 +31,7 @@ export function created(data: any, message?: string) {
   return {
     statusCode: 201,
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
@@ -48,11 +48,11 @@ export function parseBody<T>(event: APIGatewayProxyEvent): T {
 }
 
 // TODO: FOrmatting might be wrong
-export function unauthorized(message = "Unauthorized") {
+export function unauthorized(message = 'Unauthorized') {
   return {
     statusCode: 401,
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },
@@ -63,11 +63,11 @@ export function unauthorized(message = "Unauthorized") {
   };
 }
 
-export function badRequest(message = "Bad Request") {
+export function badRequest(message = 'Bad Request') {
   return {
     statusCode: 400,
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Credentials': true,
     },

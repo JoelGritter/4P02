@@ -1,8 +1,8 @@
-import User from "./user.model";
+import User from './user.model';
 
 export default interface Course {
-    name: string;
-    _id: string;
-    studentCapacity: number;
-    currentProfessors: string[]
+  name: string;
+  _id: string;
+  studentCapacity: number;
+  currentProfessors: string[];
 }

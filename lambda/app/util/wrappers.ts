@@ -1,9 +1,9 @@
-import { Role } from "./../schemas/user.model";
-import { connectToDatabase } from "./mongo";
-import { LambdaCallback } from "./../types/lambdaCallback";
-import { internalServerError, unauthorized } from "./rest";
-import UserModel, { User } from "../schemas/user.model";
-import { authorizer } from "../util/auth";
+import { Role } from './../schemas/user.model';
+import { connectToDatabase } from './mongo';
+import { LambdaCallback } from './../types/lambdaCallback';
+import { internalServerError, unauthorized } from './rest';
+import UserModel, { User } from '../schemas/user.model';
+import { authorizer } from '../util/auth';
 
 export const lambda: (c: LambdaCallback) => LambdaCallback = (
   callback: LambdaCallback
@@ -15,7 +15,7 @@ export const lambda: (c: LambdaCallback) => LambdaCallback = (
     } catch (error) {
       // TODO: Use error codes from error if available
       console.error(error);
-      return internalServerError("Operation failed!");
+      return internalServerError('Operation failed!');
     }
   };
 };
@@ -30,7 +30,7 @@ export const auth: (c: LambdaCallback) => LambdaCallback = (
       return internalServerError(message);
     } else {
       const userDoc = await UserModel.findOne({
-        cognitoId: payload["cognito:username"],
+        cognitoId: payload['cognito:username'],
       });
 
       if (userDoc) {
@@ -38,7 +38,7 @@ export const auth: (c: LambdaCallback) => LambdaCallback = (
         return await callback(event, context, options);
       } else {
         const userDoc = await UserModel.create({
-          cognitoId: payload["cognito:username"],
+          cognitoId: payload['cognito:username'],
           email: payload.email,
         });
         options.userDoc = userDoc;
@@ -69,7 +69,7 @@ export const roleAuth: (roles: Role[], c: LambdaCallback) => LambdaCallback = (
     const user = options.userDoc as User;
 
     if (checkRole(roles, user)) {
-      const res =  await callback(event, context, options);
+      const res = await callback(event, context, options);
       return res;
     } else {
       return unauthorized();

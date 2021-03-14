@@ -1,18 +1,18 @@
-import React, { useState } from "react";
-import { makeStyles, Theme } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import { useSnackbar } from "notistack";
-import { CreateCourseForm } from "../../components/CreateCourseForm";
-import { post } from "../../api/util";
+import React, { useState } from 'react';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+import Typography from '@material-ui/core/Typography';
+import { useSnackbar } from 'notistack';
+import { CreateCourseForm } from '../../components/CreateCourseForm';
+import { post } from '../../api/util';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
   headerContainer: {
-    display: "flex",
+    display: 'flex',
     margin: theme.spacing(1),
-    alignItems: "center",
-    justifyContent: "space-between",
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   buttonContainer: {},
   button: {
@@ -25,7 +25,7 @@ export default function CreateCoursePage() {
   const classes = useStyles();
 
   const courseHandler = async () => {
-    const { success, message } = await post("/course", {
+    const { success, message } = await post('/course', {
       courseName: courseName,
       instructor: instructor,
       description: description,
@@ -39,9 +39,9 @@ export default function CreateCoursePage() {
     }
   };
 
-  const [courseName, setCourseName] = useState("");
-  const [instructor, setInstructor] = useState("");
-  const [description, setDescription] = useState("");
+  const [courseName, setCourseName] = useState('');
+  const [instructor, setInstructor] = useState('');
+  const [description, setDescription] = useState('');
 
   const handleCourseNameChange = (
     event: React.ChangeEvent<HTMLInputElement>
@@ -62,9 +62,9 @@ export default function CreateCoursePage() {
   };
 
   const handleClear = () => {
-    setCourseName("");
-    setInstructor("");
-    setDescription("");
+    setCourseName('');
+    setInstructor('');
+    setDescription('');
   };
 
   return (
