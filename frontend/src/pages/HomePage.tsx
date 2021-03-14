@@ -3,6 +3,11 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import CourseCard from '../components/CourseCard';
+import Course from '../api/data/models/course.model';
+import useMe from '../api/data/use-me';
+import useProfCourses from '../api/data/use-prof-courses';
+import { Box, Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -45,61 +50,115 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     coursesContainer: {},
     calendarContainer: {},
+    innerCoursesContainer: {
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
+    },
   })
 );
+
+function ProfCourses() {
+  const classes = useStyles();
+  const { courses: profCourses } = useProfCourses();
+
+  return (
+    <>
+      {profCourses && (
+        <>
+          <Box display="flex" justifyContent="space-between" paddingRight={1}>
+            <Typography variant="h4">Courses I'm Teaching</Typography>
+            <Button
+              color="primary"
+              variant="contained"
+              component={Link}
+              to="/courses/create"
+            >
+              Add course
+            </Button>
+          </Box>
+          <Grid
+            container
+            xs={12}
+            spacing={1}
+            className={classes.innerCoursesContainer}
+          >
+            {profCourses.map((course) => {
+              return (
+                <Grid item xs={12} key={course._id}>
+                  <CourseCard course={course} />
+                </Grid>
+              );
+            })}
+          </Grid>
+        </>
+      )}
+    </>
+  );
+}
 
 export default function HomePage() {
   const classes = useStyles();
 
-  const courseData = [
+  const courseData: Course[] = [
     {
       name: 'firstcourse',
-      instructor: 'notme',
     },
     {
       name: 'sec',
-      instructor: '2',
     },
     {
       name: 'third',
-      instructor: 'sadfasdf',
     },
     {
       name: 'fourth',
-      instructor: 'asdfasdfasdfasdf',
     },
-  ];
+  ] as Course[];
+
+  const { me } = useMe();
+
+  const isProf = me?.roles?.includes('prof');
 
   return (
-    <Grid container spacing={1}>
-      <Grid
-        container
-        item
-        md={9}
-        spacing={1}
-        className={classes.coursesContainer}
-      >
-        {courseData.map((data, index) => {
-          return (
-            <Grid item xs={12}>
-              <CourseCard name={data.name} instructor={data.instructor} />
-            </Grid>
-          );
-        })}
-      </Grid>
-      <Grid
-        container
-        item
-        md={3}
-        spacing={1}
-        className={classes.calendarContainer}
-      >
-        <Grid item xs={12}>
-          <Typography gutterBottom variant="h5" color="primary" component="h5">
-            Deadlines
-          </Typography>
+    <>
+      <Grid container spacing={1}>
+        <Grid item md={9} className={classes.coursesContainer}>
+          {isProf && <ProfCourses />}
+          <Typography variant="h4">My Courses</Typography>
+          <Grid
+            container
+            item
+            xs={12}
+            spacing={1}
+            className={classes.innerCoursesContainer}
+          >
+            {courseData.map((data, index) => {
+              return (
+                <Grid item xs={12}>
+                  <CourseCard course={data} />
+                </Grid>
+              );
+            })}
+          </Grid>
+        </Grid>
+        <Grid
+          container
+          item
+          md={3}
+          spacing={1}
+          className={classes.calendarContainer}
+        >
+          <Grid item xs={12}>
+            <Typography
+              gutterBottom
+              variant="h5"
+              color="primary"
+              component="h5"
+            >
+              Deadlines
+            </Typography>
+          </Grid>
         </Grid>
       </Grid>
-    </Grid>
+    </>
   );
 }

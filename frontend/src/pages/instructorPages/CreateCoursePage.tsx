@@ -5,6 +5,8 @@ import Typography from '@material-ui/core/Typography';
 import { useSnackbar } from 'notistack';
 import { CreateCourseForm } from '../../components/CreateCourseForm';
 import { post } from '../../api/util';
+import Course from '../../api/data/models/course.model';
+import { useHistory } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -18,86 +20,57 @@ const useStyles = makeStyles((theme: Theme) => ({
   button: {
     margin: theme.spacing(1),
   },
+  fieldsContainer: {
+    marginTop: theme.spacing(2)
+  },
 }));
 
 export default function CreateCoursePage() {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
+  const [course, setCourse] = useState<Course>({});
+  const history = useHistory();
 
-  const courseHandler = async () => {
-    const { success, message } = await post('/course', {
-      courseName: courseName,
-      instructor: instructor,
-      description: description,
-    });
+  const addCourse = async () => {
+    const { success, message, data } = await post('/course', course);
     if (!success) {
       enqueueSnackbar(
-        message ?? `Couldn't add "${courseName}" to your courses!`
+        message ?? `Couldn't add "${course.name}" to your courses!`
       );
     } else {
-      enqueueSnackbar(message ?? `Added ${courseName} to your courses!`);
+      enqueueSnackbar(message ?? `Added ${course.name} to your courses!`);
+      history.push(`/courses/${data._id}`);
     }
-  };
-
-  const [courseName, setCourseName] = useState('');
-  const [instructor, setInstructor] = useState('');
-  const [description, setDescription] = useState('');
-
-  const handleCourseNameChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setCourseName(event.target.value);
-  };
-
-  const handleInstructorChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setInstructor(event.target.value);
-  };
-
-  const handleDescriptionChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    setDescription(event.target.value);
-  };
-
-  const handleClear = () => {
-    setCourseName('');
-    setInstructor('');
-    setDescription('');
   };
 
   return (
     <div className={classes.root}>
       <div className={classes.headerContainer}>
-        <Typography variant="h4">CreateCourse</Typography>
+        <Typography variant="h4">Create Course</Typography>
         <div className={classes.buttonContainer}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            className={classes.button}
+            onClick={() => {
+              setCourse({});
+            }}
+          >
+            Clear
+          </Button>
           <Button
             variant="contained"
             color="primary"
             className={classes.button}
-            onClick={courseHandler}
+            onClick={addCourse}
           >
             Create
           </Button>
-          <Button
-            variant="contained"
-            color="secondary"
-            className={classes.button}
-            onClick={handleClear}
-          >
-            Clear
-          </Button>
         </div>
       </div>
-      <CreateCourseForm
-        courseName={courseName}
-        instructor={instructor}
-        description={description}
-        changeCourseName={handleCourseNameChange}
-        changeInstructor={handleInstructorChange}
-        changeDescription={handleDescriptionChange}
-      />
+      <div className={classes.fieldsContainer}>
+        <CreateCourseForm course={course} setCourse={setCourse} />
+      </div>
     </div>
   );
 }

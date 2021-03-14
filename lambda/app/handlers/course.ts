@@ -1,6 +1,6 @@
 import { roleAuth } from './../util/wrappers';
 import CourseModel, { Course } from './../schemas/course.model';
-import { User } from './../schemas/user.model';
+import UserModel, { User } from './../schemas/user.model';
 import { badRequest, parseBody, unauthorized } from '../util/rest';
 import { success } from '../util/rest';
 import { lambda } from '../util/wrappers';
@@ -8,6 +8,18 @@ import { lambda } from '../util/wrappers';
 export const getAll = lambda(
   roleAuth(['admin'], async (event) => {
     const courses = await CourseModel.find();
+    return success(courses);
+  })
+);
+
+export const getAllProf = lambda(
+  roleAuth(['prof'], async (event, context, { userDoc }) => {
+    console.log({
+      currentProfessors: userDoc.cognitoId,
+    });
+    const courses = await CourseModel.find({
+      currentProfessors: userDoc.cognitoId,
+    });
     return success(courses);
   })
 );
@@ -21,9 +33,11 @@ export const addCourse = lambda(
 
     // add current user to this new course if user is prof
     if (reqUser.roles.includes('prof')) {
+      if (!newCourse.currentProfessors) {
+        newCourse.currentProfessors = [];
+      }
       newCourse.currentProfessors.push(cognitoId);
     }
-
     const resCourse = await CourseModel.create(newCourse);
     return success(resCourse);
   })

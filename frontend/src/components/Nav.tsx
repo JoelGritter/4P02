@@ -13,9 +13,11 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
-import AddCircleIcon from '@material-ui/icons/AddCircle';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { Link } from 'react-router-dom';
+import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import { Link, useLocation } from 'react-router-dom';
 import {
   makeStyles,
   useTheme,
@@ -23,6 +25,8 @@ import {
   createStyles,
 } from '@material-ui/core/styles';
 import { logout } from '../api/auth';
+import useMe from '../api/data/use-me';
+import { Collapse } from '@material-ui/core';
 
 const drawerWidth = 240;
 
@@ -65,6 +69,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     coursesContainer: {},
     calendarContainer: {},
+    nested: {
+      paddingLeft: theme.spacing(4),
+    },
   })
 );
 
@@ -78,10 +85,22 @@ export default function Nav(props: Props) {
   const classes = useStyles();
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [adminOpen, setAdminOpen] = React.useState(false);
+
+  const { me } = useMe();
+  const isAdmin = me?.roles?.includes('admin');
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const { pathname } = useLocation();
+
+  const pathStartsWith = (str: string) =>
+    pathname.substr(0, str.length) === str;
+
+  const pathIs = (str: string) =>
+    pathname === str || pathname === str + '/' || pathname + '/' === str;
 
   const drawer = (
     <div>
@@ -93,6 +112,7 @@ export default function Nav(props: Props) {
           key="home"
           component={Link}
           to="/"
+          selected={pathIs('/')}
           onClick={() => {
             setMobileOpen(false);
           }}
@@ -107,6 +127,7 @@ export default function Nav(props: Props) {
           key="profile"
           component={Link}
           to="/profile"
+          selected={pathStartsWith('/profile')}
           onClick={() => {
             setMobileOpen(false);
           }}
@@ -116,20 +137,46 @@ export default function Nav(props: Props) {
           </ListItemIcon>
           <ListItemText primary={'Profile'} />
         </ListItem>
-        <ListItem
-          button
-          key="add-course"
-          component={Link}
-          to="/prof/courses/create"
-          onClick={() => {
-            setMobileOpen(false);
-          }}
-        >
-          <ListItemIcon>
-            <AddCircleIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Add Course'} />
-        </ListItem>
+        {isAdmin && (
+          <ListItem
+            button
+            component={Link}
+            to="/admin"
+            key="admin"
+            onClick={() => {
+              setAdminOpen((prev) => !prev);
+              setMobileOpen(false);
+            }}
+          >
+            <ListItemIcon>
+              <SupervisorAccountIcon />
+            </ListItemIcon>
+            <ListItemText primary={'Admin'} />
+            {adminOpen ? <ExpandLess /> : <ExpandMore />}
+          </ListItem>
+        )}
+        <Collapse in={adminOpen} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            <ListItem
+              button
+              className={classes.nested}
+              component={Link}
+              selected={pathStartsWith('/admin/users')}
+              to="/admin/users"
+            >
+              <ListItemText primary="Users" />
+            </ListItem>
+            <ListItem
+              button
+              className={classes.nested}
+              component={Link}
+              to="/admin/courses"
+              selected={pathStartsWith('/admin/courses')}
+            >
+              <ListItemText primary="Courses" />
+            </ListItem>
+          </List>
+        </Collapse>
         <ListItem button key="logout" onClick={logout}>
           <ListItemIcon>
             <ExitToAppIcon />

@@ -1,7 +1,7 @@
 import { Role } from './../schemas/user.model';
 import { connectToDatabase } from './mongo';
 import { LambdaCallback } from './../types/lambdaCallback';
-import { internalServerError, unauthorized } from './rest';
+import { badRequest, internalServerError, unauthorized } from './rest';
 import UserModel, { User } from '../schemas/user.model';
 import { authorizer } from '../util/auth';
 
@@ -15,6 +15,17 @@ export const lambda: (c: LambdaCallback) => LambdaCallback = (
     } catch (error) {
       // TODO: Use error codes from error if available
       console.error(error);
+      let message = null;
+      for (const key in error?.errors) {
+        message = error.errors[key]?.properties?.message;
+        if (message) {
+          break;
+        }
+      }
+
+      if (message) {
+        return badRequest(message);
+      }
       return internalServerError('Operation failed!');
     }
   };
