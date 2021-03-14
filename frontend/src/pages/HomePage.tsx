@@ -6,6 +6,8 @@ import CourseCard from '../components/CourseCard';
 import Course from '../api/data/models/course.model';
 import useMe from '../api/data/use-me';
 import useProfCourses from '../api/data/use-prof-courses';
+import { Box, Button } from '@material-ui/core';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -63,7 +65,17 @@ function ProfCourses() {
     <>
       {profCourses && (
         <>
-          <Typography variant="h4">Courses I'm Teaching</Typography>
+          <Box display="flex" justifyContent="space-between" paddingRight={1}>
+            <Typography variant="h4">Courses I'm Teaching</Typography>
+            <Button
+              color="primary"
+              variant="contained"
+              component={Link}
+              to="/courses/create"
+            >
+              Add course
+            </Button>
+          </Box>
           <Grid
             container
             xs={12}
