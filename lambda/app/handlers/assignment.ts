@@ -1,5 +1,6 @@
 import { roleAuth } from './../util/wrappers';
 import AssignmentModel, { Assignment } from './../schemas/assignment.model';
+import CourseModel, { Course } from './../schemas/course.model';
 import { User } from './../schemas/user.model';
 import { badRequest, parseBody, unauthorized } from '../util/rest';
 import { success } from '../util/rest';
@@ -7,27 +8,56 @@ import { lambda } from '../util/wrappers';
 
 export const getAll = lambda(
   roleAuth(['admin'], async (event) => {
-    const courses = await AssignmentModel.find();
-    return success(courses);
+    const assignments = await AssignmentModel.find();
+    return success(assignments);
+  })
+);
+
+export const getAllCourseAssigns = lambda(
+  roleAuth(['admin', 'prof'], async (event, context, { userDoc }) => {
+    const resCourse = await CourseModel.findById(event.pathParameters.id);
+
+    const reqUser = userDoc as User;
+    const { cognitoId } = reqUser;
+
+    if (
+      reqUser.roles.includes('admin') ||
+      resCourse.currentProfessors.includes(cognitoId)
+    ) {
+      const assignments = await AssignmentModel.find({
+        courseID: event.pathParameters.id,
+      });
+      return success(assignments);
+    } else {
+      return unauthorized(
+        'Insufficient Privileges: Cannot retrieve course assignments'
+      );
+    }
   })
 );
 
 export const addAssignment = lambda(
   roleAuth(['admin', 'prof'], async (event, context, { userDoc }) => {
     const newAssignment = parseBody<Assignment>(event);
+    const resCourse = await CourseModel.findById(newAssignment.courseID);
 
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
 
     //List who created a given assignment
-    if (reqUser.roles.includes('prof')) {
-      newAssignment.createdBy = cognitoId;
-    } else {
-      newAssignment.createdBy = 'admin';
-    }
+    newAssignment.createdBy = cognitoId;
 
-    const resAssignment = await AssignmentModel.create(newAssignment);
-    return success(resAssignment);
+    if (
+      reqUser.roles.includes('admin') ||
+      resCourse.currentProfessors.includes(cognitoId)
+    ) {
+      const resAssignment = await AssignmentModel.create(newAssignment);
+      return success(resAssignment);
+    } else {
+      return unauthorized(
+        'Insufficient Privileges: Cannot add assignment to course'
+      );
+    }
   })
 );
 
@@ -37,23 +67,20 @@ export const updateAssignment = lambda(
       event.pathParameters.id
     );
     const newAssignment = parseBody<Assignment>(event);
+    const resCourse = await CourseModel.findById(resAssignment.courseID);
 
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
 
     if (
       reqUser.roles.includes('admin') ||
-      resAssignment.createdBy == cognitoId
+      resAssignment.createdBy == cognitoId ||
+      resCourse.currentProfessors.includes(cognitoId)
     ) {
       if (newAssignment._id) delete newAssignment._id;
 
-      // prevent prof from removing themselves as assignment creator
-      if (
-        newAssignment.createdBy != cognitoId &&
-        newAssignment.createdBy != 'admin'
-      ) {
-        newAssignment.createdBy = cognitoId;
-      }
+      // maintain assignment creator
+      newAssignment.createdBy = resAssignment.createdBy;
 
       const updatedAssignment = await AssignmentModel.findByIdAndUpdate(
         event.pathParameters.id,
@@ -99,13 +126,15 @@ export const getAssignment = lambda(
     const resAssignment = await AssignmentModel.findById(
       event.pathParameters.id
     );
+    const resCourse = await CourseModel.findById(resAssignment.courseID);
 
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
 
     if (
       reqUser.roles.includes('admin') ||
-      resAssignment.createdBy == cognitoId
+      resAssignment.createdBy == cognitoId ||
+      resCourse.currentProfessors.includes(cognitoId)
     ) {
       return success(resAssignment);
     } else {

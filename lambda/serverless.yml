@@ -177,6 +177,20 @@ functions:
           path: assign/{id}
           method: get
           cors: true
+  getAllAssignments:
+    handler: app/handlers/assignment.getAll
+    events:
+      - http:
+          path: assign
+          method: get
+          cors: true
+  getAllCourseAssignments:
+    handler: app/handlers/assignment.getAllCourseAssigns
+    events:
+      - http:
+          path: assign/course/{id}
+          method: get
+          cors: true
 resources:
   Resources:
     serviceUserPool:
