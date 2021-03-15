@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: theme.spacing(1),
   },
   fieldsContainer: {
-    marginTop: theme.spacing(2)
+    marginTop: theme.spacing(2),
   },
 }));
 

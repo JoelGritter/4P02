@@ -27,7 +27,7 @@ export default function AdminCourses() {
       </Box>
       <Grid container spacing={2} className={classes.courseGrid}>
         {courses?.map((course) => (
-          <Grid item  xs={12}>
+          <Grid item xs={12}>
             <CourseCard course={course}></CourseCard>{' '}
           </Grid>
         ))}

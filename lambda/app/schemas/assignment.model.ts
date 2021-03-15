@@ -1,6 +1,6 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Document } from 'mongoose';
 
-export interface Assignment extends Document{
+export interface Assignment extends Document {
   name: string;
   course: string;
   createdBy: string;
@@ -9,7 +9,7 @@ export interface Assignment extends Document{
 }
 
 const AssignmentModel = model(
-  "Assignment",
+  'Assignment',
   new Schema<Assignment>({
     name: String,
     course: String,
