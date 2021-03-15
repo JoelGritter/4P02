@@ -1,5 +1,5 @@
-import urlJoin from "url-join";
-import { getToken } from "./auth";
+import urlJoin from 'url-join';
+import { getToken } from './auth';
 const { REACT_APP_API_BASE }: any = process.env;
 
 export function apiJoin(...parts: string[]) {
@@ -9,18 +9,18 @@ export function apiJoin(...parts: string[]) {
 export const fetcher = (url: string) =>
   fetch(url, {
     headers: {
-      Authorization: getToken() ?? "",
+      Authorization: getToken() ?? '',
     },
   }).then(async (r) => {
     if (r.ok) {
       return r.json();
     } else {
-      const error: any = new Error("Error occurred while fetching the data.");
+      const error: any = new Error('Error occurred while fetching the data.');
       error.status = r.status;
       try {
         error.info = r.json();
       } catch (e) {
-        error.info = "Error getting error info";
+        error.info = 'Error getting error info';
       }
       throw error;
     }
@@ -29,10 +29,10 @@ export const fetcher = (url: string) =>
 export async function post(path: string, data: any) {
   try {
     const response = await fetch(apiJoin(path), {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: getToken() ?? "",
+        'Content-Type': 'application/json',
+        Authorization: getToken() ?? '',
       },
       body: JSON.stringify(data),
     });
@@ -50,12 +50,12 @@ export async function post(path: string, data: any) {
 export async function postFile(file: any) {
   try {
     const formData = new FormData();
-    formData.append("file", file);
-    formData.append("filename", file.name);
-    const response = await fetch(apiJoin("files"), {
-      method: "POST",
+    formData.append('file', file);
+    formData.append('filename', file.name);
+    const response = await fetch(apiJoin('files'), {
+      method: 'POST',
       headers: {
-        Authorization: getToken() ?? "",
+        Authorization: getToken() ?? '',
       },
       body: formData,
     });
@@ -73,10 +73,10 @@ export async function postFile(file: any) {
 export async function update(path: string, data: any) {
   try {
     const response = await fetch(apiJoin(path), {
-      method: "PATCH",
+      method: 'PATCH',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: getToken() ?? "",
+        'Content-Type': 'application/json',
+        Authorization: getToken() ?? '',
       },
       body: JSON.stringify(data),
     });
@@ -90,10 +90,10 @@ export async function update(path: string, data: any) {
 export async function del(path: string, data?: any) {
   try {
     const params: RequestInit = {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
-        "Content-Type": "application/json",
-        Authorization: getToken() ?? "",
+        'Content-Type': 'application/json',
+        Authorization: getToken() ?? '',
       },
     };
 

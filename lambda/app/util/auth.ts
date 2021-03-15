@@ -1,16 +1,16 @@
-import { AuthPayload } from "./../types/index";
-import request from "request";
-import jwkToPem from "jwk-to-pem";
-import jwt from "jsonwebtoken";
-import fetch from "node-fetch";
-import { USER_POOL_CLIENT_ID, USER_POOL_ID } from "./env";
+import { AuthPayload } from './../types/index';
+import request from 'request';
+import jwkToPem from 'jwk-to-pem';
+import jwt from 'jsonwebtoken';
+import fetch from 'node-fetch';
+import { USER_POOL_CLIENT_ID, USER_POOL_ID } from './env';
 global.fetch = fetch;
 
 const poolData = {
   UserPoolId: USER_POOL_ID, // Your user pool id here
   ClientId: USER_POOL_CLIENT_ID, // Your client id here
 };
-const pool_region = "us-east-1";
+const pool_region = 'us-east-1';
 
 // https://medium.com/@prasadjay/amazon-cognito-user-pools-in-nodejs-as-fast-as-possible-22d586c5c8ec
 export function validateToken(
@@ -25,7 +25,7 @@ export function validateToken(
       function (error, response, body) {
         if (!error && response.statusCode === 200) {
           const pems = {};
-          const keys = body["keys"];
+          const keys = body['keys'];
           for (let i = 0; i < keys.length; i++) {
             //Convert each key to PEM
             const key_id = keys[i].kid;
@@ -37,13 +37,13 @@ export function validateToken(
             pems[key_id] = pem;
           }
           //validate the token
-          token = token.split(" ")[1];
+          token = token.split(' ')[1];
           const decodedJwt = jwt.decode(token, { complete: true });
 
           if (!decodedJwt) {
             return resolve({
               valid: false,
-              message: "Invalid token 1",
+              message: 'Invalid token 1',
             });
           }
 
@@ -52,7 +52,7 @@ export function validateToken(
           if (!pem) {
             return resolve({
               valid: false,
-              message: "Invalid token 2",
+              message: 'Invalid token 2',
             });
           }
 
@@ -60,7 +60,7 @@ export function validateToken(
             if (err) {
               return resolve({
                 valid: false,
-                message: "Invalid token 3",
+                message: 'Invalid token 3',
               });
             } else {
               return resolve({
@@ -72,7 +72,7 @@ export function validateToken(
         } else {
           return resolve({
             valid: false,
-            message: "Download error",
+            message: 'Download error',
           });
         }
       }

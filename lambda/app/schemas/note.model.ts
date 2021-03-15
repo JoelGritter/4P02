@@ -1,4 +1,4 @@
-import { Schema, model, Document } from "mongoose";
+import { Schema, model, Document } from 'mongoose';
 
 export interface Note {
   title: string;
@@ -6,7 +6,7 @@ export interface Note {
 }
 
 const NoteModel = model(
-  "Note",
+  'Note',
   new Schema<Document<Note>>({
     title: String,
     description: String,

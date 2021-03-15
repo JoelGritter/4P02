@@ -2,18 +2,18 @@ import useSWR from 'swr';
 import { apiJoin, fetcher } from './../util';
 import User from './models/user.model';
 
-export default function useUsers() {
-  const { data, mutate, error } = useSWR(apiJoin('user/'), fetcher);
+export default function useMe() {
+  const { data, mutate, error } = useSWR(apiJoin('user/me'), fetcher);
 
   const loading = !data && !error;
   const failed = !!error;
 
-  const users: User[] = data?.data;
+  const me: User = data?.data;
 
   return {
     loading,
     failed,
-    users,
+    me,
     mutate,
   };
 }

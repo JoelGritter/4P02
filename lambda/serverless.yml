@@ -8,7 +8,7 @@ provider:
     DOMAIN_SUFFIX: space
 
 plugins:
-  - serverless-plugin-typescript 
+  - serverless-plugin-typescript
   - serverless-offline
 
 package:
@@ -52,56 +52,56 @@ functions:
           method: get
           cors: true
   getUser:
-    handler: app/handlers/user.get 
+    handler: app/handlers/user.get
     events:
       - http:
           path: user
           method: post
           cors: true
   getAllUsers:
-    handler: app/handlers/user.getAll 
+    handler: app/handlers/user.getAll
     events:
       - http:
           path: user
           method: get
           cors: true
   getMe:
-    handler: app/handlers/user.me 
+    handler: app/handlers/user.me
     events:
       - http:
           path: user/me
           method: get
           cors: true
   updateMe:
-    handler: app/handlers/user.updateMe 
+    handler: app/handlers/user.updateMe
     events:
       - http:
           path: user/me
           method: patch
           cors: true
   addAdmin:
-    handler: app/handlers/user.addAdmin 
+    handler: app/handlers/user.addAdmin
     events:
       - http:
           path: user/admin
           method: post
           cors: true
   removeAdmin:
-    handler: app/handlers/user.removeAdmin 
+    handler: app/handlers/user.removeAdmin
     events:
       - http:
           path: user/admin
           method: delete
           cors: true
   addProf:
-    handler: app/handlers/user.addProf 
+    handler: app/handlers/user.addProf
     events:
       - http:
           path: user/prof
           method: post
           cors: true
   removeProf:
-    handler: app/handlers/user.removeProf 
+    handler: app/handlers/user.removeProf
     events:
       - http:
           path: user/prof
@@ -135,6 +135,20 @@ functions:
           path: course/{id}
           method: get
           cors: true
+  getAllCourses:
+    handler: app/handlers/course.getAll
+    events:
+      - http:
+          path: course
+          method: get
+          cors: true
+  getAllProfCourses:
+    handler: app/handlers/course.getAllProf
+    events:
+      - http:
+          path: course/prof
+          method: get
+          cors: true
   addAssignment:
     handler: app/handlers/assignment.addAssignment
     events:
@@ -163,7 +177,6 @@ functions:
           path: assign/{id}
           method: get
           cors: true
-
 resources:
   Resources:
     serviceUserPool:
@@ -189,17 +202,17 @@ resources:
           - aws.cognito.signin.user.admin
         UserPoolId:
           Ref: serviceUserPool
-        CallbackURLs: 
+        CallbackURLs:
           - https://localhost:3000
         ExplicitAuthFlows:
           - ALLOW_USER_SRP_AUTH
           - ALLOW_REFRESH_TOKEN_AUTH
         GenerateSecret: false
-        SupportedIdentityProviders: 
+        SupportedIdentityProviders:
           - COGNITO
     serviceUserPoolDomain:
-      Type: AWS::Cognito::UserPoolDomain 
+      Type: AWS::Cognito::UserPoolDomain
       Properties:
-        UserPoolId: 
+        UserPoolId:
           Ref: serviceUserPool
         Domain: service-user-pool-domain-${opt:stage, self:provider.stage}-${self:provider.environment.DOMAIN_SUFFIX}

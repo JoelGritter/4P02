@@ -9,12 +9,12 @@ API: https://qbtmtcwon0.execute-api.us-east-1.amazonaws.com/dev/
 
 ## The Team :family:
 
-* Tennyson Demchuk - td16qg@brocku.ca (6190532)
-* Mutaz Fattal - mf17lg@brocku.ca (6362156)
-* Joel Gritter - jg17uy@brocku.ca (6331763) ***Leader***
-* Kindeep Singh Kargil - kk17xg@brocku.ca (6329817)
-* Aditya Rajyaguru - ar18xp@brocku.ca (6582282)
-* Daniel Sokic - ds16sz@brocku.ca (6164545)
+- Tennyson Demchuk - td16qg@brocku.ca (6190532)
+- Mutaz Fattal - mf17lg@brocku.ca (6362156)
+- Joel Gritter - jg17uy@brocku.ca (6331763) **_Leader_**
+- Kindeep Singh Kargil - kk17xg@brocku.ca (6329817)
+- Aditya Rajyaguru - ar18xp@brocku.ca (6582282)
+- Daniel Sokic - ds16sz@brocku.ca (6164545)
 
 ## Project Proposal :ring:
 
@@ -37,8 +37,8 @@ A platform like this would streamline assignment submission and marking, increas
 
 - Plagiarism detection (potentially Turnitin integration)
 - Online code editing: Ability to just edit and run within the web interface. Eliminating complexity of different installations, reducing the need for labs.
-- Ability to create examinations with coding questions, students can use the above online code editor with predefined starter code and compile/run bindings that can be customized by the test maker. Presets for popular languages like Java, Python, C++ can be included. Test cases for marking can be supported similar to assignments.    
-- Customizable layout for a course landing page: Allows professors to prioritize certain tabs, functions, and provide custom buttons (i.e. A button that directly takes students to a specific test or assignment) 
+- Ability to create examinations with coding questions, students can use the above online code editor with predefined starter code and compile/run bindings that can be customized by the test maker. Presets for popular languages like Java, Python, C++ can be included. Test cases for marking can be supported similar to assignments.
+- Customizable layout for a course landing page: Allows professors to prioritize certain tabs, functions, and provide custom buttons (i.e. A button that directly takes students to a specific test or assignment)
 
 ### Target users :man:
 
@@ -47,12 +47,14 @@ A platform like this would streamline assignment submission and marking, increas
 - COSC professors / instructors
 
 ### Skills used :hammer:
+
 - UI/UX
 - Full-Stack development
 - Containerization
 - Storage management
 
 ### Technologies proposed to be used (subject to change) :iphone:
+
 - React
 - Express
 - MongoDB
@@ -65,24 +67,24 @@ A platform like this would streamline assignment submission and marking, increas
 
 _(Weekly meetings, rough bi-weekly goals)_
 
-__Sunday, January 17, 2021 - Proposal Submission__
+**Sunday, January 17, 2021 - Proposal Submission**
 
-__Wednesday, January 20, 2021__
+**Wednesday, January 20, 2021**
 
 - Requirements specifications complete
 - UI wireframe proposals
 
-__Wednesday, January 27, 2021__
+**Wednesday, January 27, 2021**
 
 - Use-case and sequence diagrams complete
 - UI wireframe finalization
 
-__Wednesday, February 3, 2021__
+**Wednesday, February 3, 2021**
 
 - System architecture diagrams complete
 - Deployment diagrams complete
 
-__Sunday, February 7, 2021 - Requirements + Overall design submit__
+**Sunday, February 7, 2021 - Requirements + Overall design submit**
 
 - Requirements specifications
 - Use-case and sequence diagrams
@@ -90,32 +92,33 @@ __Sunday, February 7, 2021 - Requirements + Overall design submit__
 - UI wireframes
 - Deployment diagrams
 
-__Wednesday, February 17, 2021__
+**Wednesday, February 17, 2021**
 
 - Basic project setup, hosting setup, deployment automation and integrations
 - Basic web development complete (i.e website skeleton done)
 - Template dockerfiles for container templates complete
 
-__Sunday, March 7, 2021 - Mandatory Report 1__
+**Sunday, March 7, 2021 - Mandatory Report 1**
 
 - Monday, March 8, 2021 - Friday, April 2, 2021
 - Complete MVP and backlog
 
-__Saturday, April 3, 2021 - Mandatory Report 2__
+**Saturday, April 3, 2021 - Mandatory Report 2**
 
 Sunday, April 4, 2021 - Sunday, April 25, 2021
+
 - Refactoring, cleanup, documentation, potentially implement stretch goals
 
-__Monday, April 26, 2021 -> Friday, April 30, 2021 - Final Demonstration + Presentation + Report__
+**Monday, April 26, 2021 -> Friday, April 30, 2021 - Final Demonstration + Presentation + Report**
+
 - Report with updated requirements doc, user manual, installation manual, etc.
 - 15 minute presentation about the software
 - 5 minute demo of the software
 
-__Task Management Methodology: Kanban__
+**Task Management Methodology: Kanban**
 
 We will be using Kanban to facilitate the development of this project, this will include designing a kanban board which will have user stories. There will be stages for the user stories which range from backlog, to user-stories for work today, user-stories being done currently, blocked user-stories, and completed user-stories. There will also be a limit to how many user stories can be in progress at a time.
 
 For more information: https://www.atlassian.com/agile/kanban
 
-__Weekly meeting time:__ Wednesdays, 2:00pm-3:00pm
-
+**Weekly meeting time:** Wednesdays, 2:00pm-3:00pm

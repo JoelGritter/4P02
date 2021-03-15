@@ -10,5 +10,5 @@ export interface AuthPayload {
   exp: number;
   iat: number;
   email: string;
-  "cognito:username": string;
+  'cognito:username': string;
 }

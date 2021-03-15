@@ -1,14 +1,13 @@
 import { connectToDatabase } from './util/mongo';
-import { APIGatewayProxyEvent } from "aws-lambda";
-import NoteSchema, { Note } from "./schemas/note.model";
+import { APIGatewayProxyEvent } from 'aws-lambda';
+import NoteSchema, { Note } from './schemas/note.model';
 
-
-function jsonError(err, message = "Operation failed") {
+function jsonError(err, message = 'Operation failed') {
   console.error(err);
   return {
     statusCode: err.statusCode || 500,
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify({ success: false, message }),
   };
@@ -25,8 +24,8 @@ export async function addNote(event: APIGatewayProxyEvent) {
     return {
       statusCode: 201,
       headers: {
-        "Content-Type": "application/json",
-        Location: "/notes/" + resNote._id,
+        'Content-Type': 'application/json',
+        Location: '/notes/' + resNote._id,
       },
       body: JSON.stringify(resNote),
     };
@@ -50,7 +49,7 @@ export async function updateNote(event: APIGatewayProxyEvent) {
     return {
       statusCode: 200,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         success: true,
@@ -71,7 +70,7 @@ export async function deleteNote(event: APIGatewayProxyEvent) {
     return {
       statusCode: 200,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         success: true,
@@ -93,7 +92,7 @@ export async function getNote(event: APIGatewayProxyEvent) {
     return {
       statusCode: 200,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         success: true,
@@ -114,7 +113,7 @@ export async function getAllNotes(event) {
     return {
       statusCode: 200,
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         success: true,

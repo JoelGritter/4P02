@@ -1,21 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { Switch, Route } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
-import AssignmentsPage from "./pages/AssignmentsPage";
-import CoursesPage from "./pages/CoursesPage";
-import HomePage from "./pages/HomePage";
-import ProfilePage from "./pages/ProfilePage";
-import TestsPage from "./pages/TestsPage";
-import CreateCoursePage from "./pages/instructorPages/CreateCoursePage";
-import { ThemeProvider, createMuiTheme } from "@material-ui/core/styles";
-import { CssBaseline, Paper } from "@material-ui/core";
-import red from "@material-ui/core/colors/red";
-import { AuthState, onAuthUIStateChange } from "@aws-amplify/ui-components";
-import Amplify, { Auth } from "aws-amplify";
-import AdminHome from "./pages/admin/AdminHome";
-import Nav from "./components/Nav";
-import { AmplifyAuthenticator, AmplifySignUp } from "@aws-amplify/ui-react";
-import { SnackbarProvider } from "notistack";
+import React, { useEffect, useState } from 'react';
+import { Switch, Route } from 'react-router-dom';
+import LoginPage from './pages/LoginPage';
+import AssignmentsPage from './pages/AssignmentsPage';
+import CoursesPage from './pages/CoursePage';
+import HomePage from './pages/HomePage';
+import ProfilePage from './pages/ProfilePage';
+import TestsPage from './pages/TestsPage';
+import CreateCoursePage from './pages/instructorPages/CreateCoursePage';
+import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
+import { CssBaseline, Paper } from '@material-ui/core';
+import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
+import Amplify, { Auth } from 'aws-amplify';
+import AdminHome from './pages/admin/AdminHome';
+import Nav from './components/Nav';
+import { AmplifyAuthenticator, AmplifySignUp } from '@aws-amplify/ui-react';
+import { SnackbarProvider } from 'notistack';
 
 const awsConfig = {
   aws_project_region: process.env.REACT_APP_AWS_PROJECT_REGION,
@@ -32,12 +31,12 @@ export const App = () => {
 
   const theme = createMuiTheme({
     palette: {
-      type: darkMode ? "dark" : "light",
+      type: darkMode ? 'dark' : 'light',
       primary: {
-        main: red[800],
+        main: '#d50000',
       },
       secondary: {
-        main: red[500],
+        main: '#757575',
       },
     },
   });
@@ -46,7 +45,7 @@ export const App = () => {
     (async () => {
       const data = await Auth.currentSession();
       const jwtToken = data.getIdToken().getJwtToken();
-      localStorage.setItem("jwtToken", "Bearer " + jwtToken);
+      localStorage.setItem('jwtToken', 'Bearer ' + jwtToken);
     })();
   }, []);
 
@@ -54,19 +53,19 @@ export const App = () => {
     <ThemeProvider theme={theme}>
       <SnackbarProvider>
         <CssBaseline />
-        <Paper style={{ height: "100vh" }}>
+        <Paper style={{ height: '100vh' }}>
           <Nav>
             <Switch>
               <Route path="/login">
                 <LoginPage />
               </Route>
-              <Route path="/prof/courses/create">
+              <Route path="/courses/create">
                 <CreateCoursePage />
               </Route>
               <Route path="/assignments">
                 <AssignmentsPage />
               </Route>
-              <Route path="/courses">
+              <Route path="/courses/:id">
                 <CoursesPage />
               </Route>
               <Route path="/profile">
@@ -112,10 +111,10 @@ function AuthWrapper() {
         usernameAlias="email"
         formFields={[
           {
-            type: "email",
+            type: 'email',
           },
           {
-            type: "password",
+            type: 'password',
           },
         ]}
       />

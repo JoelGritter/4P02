@@ -2,7 +2,7 @@ export default interface User {
   cognitoId: string;
   email: string;
   initialized?: boolean;
-  roles?: Role[]
+  roles?: Role[];
 }
 
-export type Role = "admin" | "prof"
+export type Role = 'admin' | 'prof';

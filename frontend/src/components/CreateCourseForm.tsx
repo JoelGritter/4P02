@@ -1,7 +1,8 @@
-import React from "react";
-import { makeStyles, Theme } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import TextField from "@material-ui/core/TextField";
+import React from 'react';
+import { makeStyles, Theme } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+import TextField from '@material-ui/core/TextField';
+import Course from '../api/data/models/course.model';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -10,52 +11,50 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 interface CreateCourseFormProps {
-  courseName: string;
-  instructor: string;
-  description: string;
-  changeCourseName: any;
-  changeInstructor: any;
-  changeDescription: any;
+  course: Course;
+  setCourse: any;
 }
 
 export const CreateCourseForm: React.FC<CreateCourseFormProps> = ({
-  courseName,
-  instructor,
-  description,
-  changeCourseName,
-  changeInstructor,
-  changeDescription,
+  course,
+  setCourse,
 }) => {
   const classes = useStyles();
+
+  const handleFormChange = (event: any) => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    setCourse((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   return (
     <div className={classes.root}>
       <Grid container spacing={3}>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12}>
           <TextField
             fullWidth
-            id="courseName"
+            variant="outlined"
+            id="name"
+            name="name"
             label="Course Name"
-            value={courseName}
-            onChange={changeCourseName}
-          />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <TextField
-            fullWidth
-            id="instructor"
-            label="Instructor"
-            value={instructor}
-            onChange={changeInstructor}
+            value={course?.name}
+            onChange={handleFormChange}
           />
         </Grid>
         <Grid item xs={12}>
           <TextField
             fullWidth
+            multiline
+            variant="outlined"
             id="description"
+            name="description"
             label="Description"
-            value={description}
-            onChange={changeDescription}
+            value={course?.description}
+            onChange={handleFormChange}
           />
         </Grid>
       </Grid>
