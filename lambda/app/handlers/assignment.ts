@@ -1,8 +1,8 @@
 import { roleAuth } from './../util/wrappers';
 import AssignmentModel, { Assignment } from './../schemas/assignment.model';
-import CourseModel, { Course } from './../schemas/course.model';
+import CourseModel from './../schemas/course.model';
 import { User } from './../schemas/user.model';
-import { badRequest, parseBody, unauthorized } from '../util/rest';
+import { parseBody, unauthorized } from '../util/rest';
 import { success } from '../util/rest';
 import { lambda } from '../util/wrappers';
 
@@ -74,7 +74,7 @@ export const updateAssignment = lambda(
 
     if (
       reqUser.roles.includes('admin') ||
-      resAssignment.createdBy == cognitoId ||
+      resAssignment.createdBy === cognitoId ||
       resCourse.currentProfessors.includes(cognitoId)
     ) {
       if (newAssignment._id) delete newAssignment._id;
@@ -102,13 +102,15 @@ export const deleteAssignment = lambda(
     const resAssignment = await AssignmentModel.findById(
       event.pathParameters.id
     );
+    const resCourse = await CourseModel.findById(resAssignment.courseID);
 
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
 
     if (
       reqUser.roles.includes('admin') ||
-      resAssignment.createdBy == cognitoId
+      resAssignment.createdBy === cognitoId ||
+      resCourse.currentProfessors.includes(cognitoId)
     ) {
       const deleteRes = await AssignmentModel.findByIdAndDelete(
         event.pathParameters.id
@@ -133,7 +135,7 @@ export const getAssignment = lambda(
 
     if (
       reqUser.roles.includes('admin') ||
-      resAssignment.createdBy == cognitoId ||
+      resAssignment.createdBy === cognitoId ||
       resCourse.currentProfessors.includes(cognitoId)
     ) {
       return success(resAssignment);
