@@ -140,8 +140,6 @@ export default function Nav(props: Props) {
         {isAdmin && (
           <ListItem
             button
-            component={Link}
-            to="/admin"
             key="admin"
             onClick={() => {
               setAdminOpen((prev) => !prev);
@@ -163,6 +161,9 @@ export default function Nav(props: Props) {
               component={Link}
               selected={pathStartsWith('/admin/users')}
               to="/admin/users"
+              onClick={() => {
+                setMobileOpen(false);
+              }}
             >
               <ListItemText primary="Users" />
             </ListItem>
@@ -172,6 +173,9 @@ export default function Nav(props: Props) {
               component={Link}
               to="/admin/courses"
               selected={pathStartsWith('/admin/courses')}
+              onClick={() => {
+                setMobileOpen(false);
+              }}
             >
               <ListItemText primary="Courses" />
             </ListItem>

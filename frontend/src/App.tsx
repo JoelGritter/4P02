@@ -15,6 +15,7 @@ import AdminHome from './pages/admin/AdminHome';
 import Nav from './components/Nav';
 import { AmplifyAuthenticator, AmplifySignUp } from '@aws-amplify/ui-react';
 import { SnackbarProvider } from 'notistack';
+import EditCoursePage from './pages/instructorPages/EditCoursePage';
 
 const awsConfig = {
   aws_project_region: process.env.REACT_APP_AWS_PROJECT_REGION,
@@ -61,6 +62,9 @@ export const App = () => {
               </Route>
               <Route path="/courses/create">
                 <CreateCoursePage />
+              </Route>
+              <Route path="/courses/:id/edit">
+                <EditCoursePage />
               </Route>
               <Route path="/assignments">
                 <AssignmentsPage />

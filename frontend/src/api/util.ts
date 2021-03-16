@@ -70,6 +70,23 @@ export async function postFile(file: any) {
   }
 }
 
+export async function put(path: string, data: any) {
+  try {
+    const response = await fetch(apiJoin(path), {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: getToken() ?? '',
+      },
+      body: JSON.stringify(data),
+    });
+    const json = await response.json();
+    return { success: response.status === 200 || json?.success, ...json };
+  } catch (e) {
+    return { success: false };
+  }
+}
+
 export async function update(path: string, data: any) {
   try {
     const response = await fetch(apiJoin(path), {
