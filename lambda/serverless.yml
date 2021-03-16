@@ -205,6 +205,13 @@ functions:
           path: assign/course/{id}
           method: get
           cors: true
+  getAllAssociatedCourses:
+    handler: app/handlers/course.getAssociated
+    events:
+      - http:
+          path: course/associated
+          method: get
+          cors: true
 resources:
   Resources:
     serviceUserPool:

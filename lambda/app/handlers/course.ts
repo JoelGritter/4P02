@@ -24,6 +24,25 @@ export const getAllProf = lambda(
   })
 );
 
+// Retrieves a list of all courses in which the current
+// user is a student, prof, or moderator
+export const getAssociated = lambda(
+  roleAuth(
+    ['student', 'admin', 'prof'],
+    async (event, context, { userDoc }) => {
+      const cognitoId = userDoc.cognitoId;
+      const courses = await CourseModel.find({
+        $or: [
+          { currentProfessors: cognitoId },
+          { currentModerators: cognitoId },
+          { currentStudents: cognitoId },
+        ],
+      });
+      return success(courses);
+    }
+  )
+);
+
 export const addCourse = lambda(
   roleAuth(['admin', 'prof'], async (event, context, { userDoc }) => {
     const newCourse = parseBody<Course>(event);
@@ -50,6 +69,19 @@ export const updateCourse = lambda(
 
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
+
+    // reject update if student capacity exceeded or added moderator is
+    // already a student registered in the class
+    if (newCourse.students.length > newCourse.studentCapacity) {
+      return unauthorized('Student Limit Exceeded: Cannot update course');
+    }
+    let intersection = newCourse.moderators.filter((x) =>
+      newCourse.students.includes(x)
+    );
+    if (intersection.length > 0)
+      return unauthorized(
+        'Student-Moderator Intersection: Cannot update course'
+      );
 
     if (
       reqUser.roles.includes('admin') ||
