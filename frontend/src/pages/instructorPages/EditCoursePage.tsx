@@ -43,7 +43,7 @@ export default function EditCoursePage() {
   const history = useHistory();
 
   const updateCourse = async () => {
-    const { success, message, data, loading } = await update(
+    const { success, message, data } = await update(
       `/course/${id}`,
       resCourse
     );
