@@ -3,7 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { useSnackbar } from 'notistack';
-import { CreateCourseForm } from '../../components/CreateCourseForm';
+import { CourseForm } from '../../components/CourseForm';
 import { post } from '../../api/util';
 import Course from '../../api/data/models/course.model';
 import { useHistory } from 'react-router';
@@ -69,7 +69,7 @@ export default function CreateCoursePage() {
         </div>
       </div>
       <div className={classes.fieldsContainer}>
-        <CreateCourseForm course={course} setCourse={setCourse} />
+        <CourseForm course={course} setCourse={setCourse} />
       </div>
     </div>
   );

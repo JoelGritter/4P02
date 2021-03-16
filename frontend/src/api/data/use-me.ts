@@ -15,5 +15,6 @@ export default function useMe() {
     failed,
     me,
     mutate,
+    isAdmin: me?.roles?.includes('admin'),
   };
 }

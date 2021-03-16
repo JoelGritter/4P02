@@ -1,6 +1,9 @@
-export default interface User {
+export interface PublicUser {
   cognitoId: string;
   email: string;
+}
+
+export default interface User extends PublicUser {
   initialized?: boolean;
   roles?: Role[];
 }

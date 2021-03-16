@@ -11,6 +11,27 @@ export const getAll = lambda(
   })
 );
 
+// To aid with finding users for profs, only returns what's absolutely needed for the user, for now email, cognitoId
+export const getAllPublic = lambda(
+  roleAuth(['admin', 'prof'], async () => {
+    const users = await UserModel.find();
+    return success(users.map(({cognitoId, email}) => ({
+      cognitoId, email
+    }))
+  })
+)
+
+// Similar reasons to above
+export const getAllProfPublic = lambda(
+  roleAuth(['admin', 'prof'], async () => {
+    const users = await UserModel.find({roles: "prof"});
+    return success(users.map(({cognitoId, email}) => ({
+     cognitoId, email
+    }))
+  })
+)
+
+
 export const get = lambda(
   roleAuth(['admin'], async (event) => {
     const query = parseBody<any>(event);

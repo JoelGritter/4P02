@@ -65,6 +65,20 @@ functions:
           path: user
           method: get
           cors: true
+  getAllUsersPublic:
+    handler: app/handlers/user.getAllPublic
+    events:
+      - http:
+          path: user/public
+          method: get 
+          cors: true
+  getAllUsersProfPublic:
+    handler: app/handlers/user.getAllProfPublic
+    events:
+      - http:
+          path: user/public/prof
+          method: get 
+          cors: true
   getMe:
     handler: app/handlers/user.me
     events:
@@ -119,7 +133,7 @@ functions:
     events:
       - http:
           path: course/{id}
-          method: put
+          method: patch
           cors: true
   deleteCourse:
     handler: app/handlers/course.deleteCourse
