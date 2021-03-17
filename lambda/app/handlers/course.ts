@@ -24,9 +24,19 @@ export const getAllProf = lambda(
   })
 );
 
+// Retrieves list of all courses in which the current user is a student
+export const getAllStudent = lambda(
+  roleAuth(['student'], async (event, context, { userDoc }) => {
+    const courses = await CourseModel.find({
+      students: userDoc.cognitoId,
+    });
+    return success(courses);
+  })
+);
+
 // Retrieves a list of all courses in which the current
 // user is a student, prof, or moderator
-export const getAssociated = lambda(
+export const getAllAssociated = lambda(
   roleAuth(
     ['student', 'admin', 'prof'],
     async (event, context, { userDoc }) => {
@@ -59,7 +69,10 @@ export const addCourse = lambda(
       if (!newCourse.currentProfessors) {
         newCourse.currentProfessors = [];
       }
-      newCourse.currentProfessors.push(cognitoId);
+      if (!newCourse.currentProfessors.find((x) => x == cognitoId)) {
+        // prevent duplication
+        newCourse.currentProfessors.push(cognitoId);
+      }
     }
     const resCourse = await CourseModel.create(newCourse);
     return success(resCourse);
@@ -134,19 +147,13 @@ export const getCourse = lambda(
 
 // Compares users across different roles within a course for overlap
 export function courseRoleIntersections(course: Course) {
-  if (course.moderators.filter((x) => course.students.includes(x)).length > 0) {
+  if (course.moderators?.find((x) => course.students?.includes(x))) {
     return 'Student-Moderator Intersection: Cannot update course';
   }
-  if (
-    course.currentProfessors.filter((x) => course.students.includes(x)).length >
-    0
-  ) {
+  if (course.currentProfessors?.find((x) => course.students?.includes(x))) {
     return 'Professor-Student Intersection: Cannot update course';
   }
-  if (
-    course.currentProfessors.filter((x) => course.moderators.includes(x))
-      .length > 0
-  ) {
+  if (course.currentProfessors?.find((x) => course.moderators?.includes(x))) {
     return 'Professor-Moderator Intersection: Cannot update course';
   }
   return null;
