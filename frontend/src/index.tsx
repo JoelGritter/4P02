@@ -3,14 +3,20 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import { BrowserRouter as Router } from 'react-router-dom';
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      <App />
-    </Router>
+    <HelmetProvider>
+      <Helmet>
+        <title>uAssign</title>
+      </Helmet>
+      <Router>
+        <App />
+      </Router>
+    </HelmetProvider>
   </React.StrictMode>,
   document.getElementById('root')
 );
