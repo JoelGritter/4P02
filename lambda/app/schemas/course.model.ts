@@ -2,7 +2,7 @@ import { Schema, model, Document } from 'mongoose';
 
 export interface Course extends Document {
   name: string;
-  studentCapacity: number;
+  // studentCapacity: number;
   // announcements: Announcement[],
   // gradebook: Assessment[],
   currentProfessors: string[];
@@ -18,7 +18,7 @@ const CourseModel = model(
       type: String,
       required: true,
     },
-    studentCapacity: Number,
+    // studentCapacity: Number,
     // announcements: [String],
     // gradebook: [String],
     currentProfessors: [String], // cognitoId of user

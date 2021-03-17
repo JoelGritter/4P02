@@ -70,14 +70,14 @@ functions:
     events:
       - http:
           path: user/public
-          method: get 
+          method: get
           cors: true
   getAllUsersProfPublic:
     handler: app/handlers/user.getAllProfPublic
     events:
       - http:
           path: user/public/prof
-          method: get 
+          method: get
           cors: true
   getMe:
     handler: app/handlers/user.me
@@ -163,6 +163,13 @@ functions:
           path: course/prof
           method: get
           cors: true
+  getAllAssociatedCourses:
+    handler: app/handlers/course.getAssociated
+    events:
+      - http:
+          path: course/associated
+          method: get
+          cors: true
   addAssignment:
     handler: app/handlers/assignment.addAssignment
     events:
@@ -203,13 +210,6 @@ functions:
     events:
       - http:
           path: assign/course/{id}
-          method: get
-          cors: true
-  getAllAssociatedCourses:
-    handler: app/handlers/course.getAssociated
-    events:
-      - http:
-          path: course/associated
           method: get
           cors: true
 resources:
