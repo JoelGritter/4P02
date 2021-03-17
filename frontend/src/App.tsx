@@ -55,7 +55,7 @@ export const App = () => {
     <ThemeProvider theme={theme}>
       <SnackbarProvider>
         <CssBaseline />
-        <Paper style={{ height: '100vh' }}>
+        <Paper style={{ minHeight: '100vh' }}>
           <Nav>
             <Switch>
               <Route path="/login">

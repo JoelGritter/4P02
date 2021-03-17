@@ -1,4 +1,4 @@
-import { roleAuth } from './../util/wrappers';
+import { auth, roleAuth } from './../util/wrappers';
 import CourseModel, { Course } from './../schemas/course.model';
 import UserModel, { User } from './../schemas/user.model';
 import { badRequest, parseBody, unauthorized } from '../util/rest';
@@ -14,9 +14,6 @@ export const getAll = lambda(
 
 export const getAllProf = lambda(
   roleAuth(['prof'], async (event, context, { userDoc }) => {
-    console.log({
-      currentProfessors: userDoc.cognitoId,
-    });
     const courses = await CourseModel.find({
       currentProfessors: userDoc.cognitoId,
     });
@@ -37,20 +34,17 @@ export const getAllStudent = lambda(
 // Retrieves a list of all courses in which the current
 // user is a student, prof, or moderator
 export const getAllAssociated = lambda(
-  roleAuth(
-    ['student', 'admin', 'prof'],
-    async (event, context, { userDoc }) => {
-      const cognitoId = userDoc.cognitoId;
-      const courses = await CourseModel.find({
-        $or: [
-          { currentProfessors: cognitoId },
-          { currentModerators: cognitoId },
-          { currentStudents: cognitoId },
-        ],
-      });
-      return success(courses);
-    }
-  )
+  auth(async (event, context, { userDoc }) => {
+    const cognitoId = userDoc.cognitoId;
+    const courses = await CourseModel.find({
+      $or: [
+        { currentProfessors: cognitoId },
+        { currentModerators: cognitoId },
+        { currentStudents: cognitoId },
+      ],
+    });
+    return success(courses);
+  })
 );
 
 export const addCourse = lambda(
@@ -148,13 +142,13 @@ export const getCourse = lambda(
 // Compares users across different roles within a course for overlap
 export function courseRoleIntersections(course: Course) {
   if (course.moderators?.find((x) => course.students?.includes(x))) {
-    return 'Student-Moderator Intersection: Cannot update course';
+    return "Cannot update course: A student cannot be a moderator, and vice-versa.";
   }
   if (course.currentProfessors?.find((x) => course.students?.includes(x))) {
-    return 'Professor-Student Intersection: Cannot update course';
+    return "Cannot update course: A professor cannot be a student, and vice-versa.";
   }
   if (course.currentProfessors?.find((x) => course.moderators?.includes(x))) {
-    return 'Professor-Moderator Intersection: Cannot update course';
+    return "Cannot update course: A professor cannot be a moderator, and vice-versa.";
   }
   return null;
 }

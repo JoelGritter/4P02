@@ -143,7 +143,6 @@ export default function Nav(props: Props) {
             key="admin"
             onClick={() => {
               setAdminOpen((prev) => !prev);
-              setMobileOpen(false);
             }}
           >
             <ListItemIcon>
