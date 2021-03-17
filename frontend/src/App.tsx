@@ -16,6 +16,7 @@ import Nav from './components/Nav';
 import { AmplifyAuthenticator, AmplifySignUp } from '@aws-amplify/ui-react';
 import { SnackbarProvider } from 'notistack';
 import EditCoursePage from './pages/instructorPages/EditCoursePage';
+import { Helmet } from 'react-helmet-async';
 
 const awsConfig = {
   aws_project_region: process.env.REACT_APP_AWS_PROJECT_REGION,
@@ -58,33 +59,63 @@ export const App = () => {
           <Nav>
             <Switch>
               <Route path="/login">
+                <Helmet>
+                  <title>uAssign - Login</title>
+                </Helmet>
                 <LoginPage />
               </Route>
               <Route path="/courses/create">
+                <Helmet>
+                  <title>uAssign - Create Course</title>
+                </Helmet>
                 <CreateCoursePage />
               </Route>
               <Route path="/courses/:id/edit">
+                <Helmet>
+                  <title>uAssign - Edit Course</title>
+                </Helmet>
                 <EditCoursePage />
               </Route>
               <Route path="/assignments">
+                <Helmet>
+                  <title>uAssign - Assignments</title>
+                </Helmet>
                 <AssignmentsPage />
               </Route>
               <Route path="/courses/:id">
+                <Helmet>
+                  <title>uAssign - Course Page</title>
+                </Helmet>
                 <CoursesPage />
               </Route>
               <Route path="/profile">
+                <Helmet>
+                  <title>uAssign - My Profile</title>
+                </Helmet>
                 <ProfilePage />
               </Route>
               <Route path="/tests">
+                <Helmet>
+                  <title>uAssign - Tests</title>
+                </Helmet>
                 <TestsPage />
               </Route>
               <Route path="/admin">
+                <Helmet>
+                  <title>uAssign - Admin</title>
+                </Helmet>
                 <AdminHome />
               </Route>
               <Route path="/home">
+                <Helmet>
+                  <title>uAssign - Home</title>
+                </Helmet>
                 <HomePage />
               </Route>
               <Route path="/">
+                <Helmet>
+                  <title>uAssign - Home</title>
+                </Helmet>
                 <HomePage />
               </Route>
             </Switch>
