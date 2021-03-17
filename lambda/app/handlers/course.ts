@@ -24,12 +24,35 @@ export const getAllProf = lambda(
   })
 );
 
+// Retrieves a list of all courses in which the current
+// user is a student, prof, or moderator
+export const getAssociated = lambda(
+  roleAuth(
+    ['student', 'admin', 'prof'],
+    async (event, context, { userDoc }) => {
+      const cognitoId = userDoc.cognitoId;
+      const courses = await CourseModel.find({
+        $or: [
+          { currentProfessors: cognitoId },
+          { currentModerators: cognitoId },
+          { currentStudents: cognitoId },
+        ],
+      });
+      return success(courses);
+    }
+  )
+);
+
 export const addCourse = lambda(
   roleAuth(['admin', 'prof'], async (event, context, { userDoc }) => {
     const newCourse = parseBody<Course>(event);
 
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
+
+    // reject update if user already exists in another role
+    const errmsg = courseRoleIntersections(newCourse);
+    if (errmsg != null) return unauthorized(errmsg);
 
     // add current user to this new course if user is prof
     if (reqUser.roles.includes('prof')) {
@@ -50,6 +73,10 @@ export const updateCourse = lambda(
 
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
+
+    // reject update if user already exists in another role
+    const errmsg = courseRoleIntersections(newCourse);
+    if (errmsg != null) return unauthorized(errmsg);
 
     if (
       reqUser.roles.includes('admin') ||
@@ -100,3 +127,27 @@ export const getCourse = lambda(
     }
   })
 );
+
+/*======================*/
+/*** HELPER FUNCTIONS ***/
+/*======================*/
+
+// Compares users across different roles within a course for overlap
+export function courseRoleIntersections(course: Course) {
+  if (course.moderators.filter((x) => course.students.includes(x)).length > 0) {
+    return 'Student-Moderator Intersection: Cannot update course';
+  }
+  if (
+    course.currentProfessors.filter((x) => course.students.includes(x)).length >
+    0
+  ) {
+    return 'Professor-Student Intersection: Cannot update course';
+  }
+  if (
+    course.currentProfessors.filter((x) => course.moderators.includes(x))
+      .length > 0
+  ) {
+    return 'Professor-Moderator Intersection: Cannot update course';
+  }
+  return null;
+}
