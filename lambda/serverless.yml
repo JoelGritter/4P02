@@ -163,8 +163,15 @@ functions:
           path: course/prof
           method: get
           cors: true
+  getAllStudentCourses:
+    handler: app/handlers/course.getAllStudent
+    events:
+      - http:
+          path: course/student
+          method: get
+          cors: true
   getAllAssociatedCourses:
-    handler: app/handlers/course.getAssociated
+    handler: app/handlers/course.getAllAssociated
     events:
       - http:
           path: course/associated
