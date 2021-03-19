@@ -7,6 +7,7 @@ import HomePage from './pages/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import TestsPage from './pages/TestsPage';
 import CreateCoursePage from './pages/instructorPages/CreateCoursePage';
+import CreateAssignmentPage from './pages/instructorPages/CreateAssignmentPage';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { CssBaseline, Paper } from '@material-ui/core';
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
@@ -66,7 +67,10 @@ export const App = () => {
               <Route path="/courses/:id/edit">
                 <EditCoursePage />
               </Route>
-              <Route path="/assignments">
+              <Route path="/courses/:courseId/assignments/create">
+                <CreateAssignmentPage />
+              </Route>
+              <Route path="/courses/:courseId/assignments">
                 <AssignmentsPage />
               </Route>
               <Route path="/courses/:id">

@@ -20,6 +20,15 @@ export default function CoursesPage() {
           >
             Edit Course
           </Button>
+          <Button
+            style={{ marginLeft: 5 }}
+            component={Link}
+            to={`/courses/${id}/assignments/create`}
+            variant="contained"
+            color="primary"
+          >
+            Create Assignment
+          </Button>
         </>
       )}
       {loading && <CircularProgress />}
