@@ -1,4 +1,4 @@
-import { roleAuth } from './../util/wrappers';
+import { roleAuth, auth } from './../util/wrappers';
 import AssignmentModel, { Assignment } from './../schemas/assignment.model';
 import CourseModel from './../schemas/course.model';
 import { User } from './../schemas/user.model';
@@ -14,24 +14,19 @@ export const getAll = lambda(
 );
 
 export const getAllCourseAssigns = lambda(
-  roleAuth(['admin', 'prof'], async (event, context, { userDoc }) => {
+  auth(async (event, context, { userDoc }) => {
     const resCourse = await CourseModel.findById(event.pathParameters.id);
 
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
 
-    if (
-      reqUser.roles.includes('admin') ||
-      resCourse.currentProfessors.includes(cognitoId)
-    ) {
+    if (reqUser.roles.includes('admin') || resCourse.currentProfessors.includes(cognitoId) || resCourse.students.includes(cognitoId)){
       const assignments = await AssignmentModel.find({
         courseID: event.pathParameters.id,
       });
       return success(assignments);
     } else {
-      return unauthorized(
-        'Insufficient Privileges: Cannot retrieve course assignments'
-      );
+      return unauthorized('Insufficient Privileges: Cannot retrieve course assignments');
     }
   })
 );
