@@ -11,6 +11,7 @@ import React from 'react';
 import { Switch, Route, Redirect } from 'react-router-dom';
 import useUsers from '../../api/data/use-users';
 import { del, post } from '../../api/util';
+import RequestStatus from '../../components/RequestStatus';
 import AdminCourses from './pages/AdminCourses';
 
 function UserCard({ user, mutate }: any) {
@@ -97,7 +98,7 @@ function UserCard({ user, mutate }: any) {
 }
 
 export default function AdminHome() {
-  const { users, mutate } = useUsers();
+  const { users, mutate, loading, failed } = useUsers();
   return (
     <>
       <Switch>
@@ -108,6 +109,11 @@ export default function AdminHome() {
                 <UserCard user={user} mutate={mutate}></UserCard>
               </Grid>
             ))}
+            <RequestStatus
+              loading={loading}
+              failed={failed}
+              failedMessage={'Failed to load users!'}
+            />
           </Grid>
         </Route>
         <Route path="/admin/courses">

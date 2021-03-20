@@ -1,7 +1,7 @@
 {
   "name": "u-assign",
   "version": "1.0.0",
-  "description": "A modern CS Assigments app",
+  "description": "A modern CS Assignments app",
   "main": "index.js",
   "dependencies": {},
   "devDependencies": {
@@ -27,6 +27,6 @@
     }
   },
   "lint-staged": {
-    "**/*": "prettier --write -u"
+    "*": "prettier --write -u"
   }
 }

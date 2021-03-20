@@ -1,9 +1,10 @@
-import { Button, CircularProgress, Typography } from '@material-ui/core';
+import { Button } from '@material-ui/core';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import useGet from '../api/data/use-get';
 import { Helmet } from 'react-helmet-async';
 import Course from '../api/data/models/course.model';
+import RequestStatus from '../components/RequestStatus';
 
 // TODO: Add redirect functionality/error handling if course does not exist
 export default function CoursesPage() {
@@ -28,12 +29,11 @@ export default function CoursesPage() {
             </Button>
           </>
         )}
-        {loading && <CircularProgress />}
-        {failed && (
-          <Typography variant="body1" color="error">
-            Could not load course!
-          </Typography>
-        )}
+        <RequestStatus
+          failed={failed}
+          loading={loading}
+          failedMessage="Could not load course!"
+        />
       </div>
     </>
   );
