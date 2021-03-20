@@ -43,7 +43,7 @@ export default function CreateAssignmentPage() {
       );
     } else {
       enqueueSnackbar(message ?? `Added ${assignment.name} to your course!`);
-      history.push(`/courses/${data._id}/assignments`);
+      history.push(`/courses/${courseId}/assignments/${data._id}`);
     }
   };
 
