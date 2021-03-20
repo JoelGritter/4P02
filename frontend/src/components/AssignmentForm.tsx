@@ -57,10 +57,11 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
           />
         </Grid>
         <MuiPickersUtilsProvider utils={MomentUtils}>
-          <Grid container justify="space-around" style={{ margin: 15 }}>
+          <Grid container justify="space-around" style={{ margin: 12 }}>
             <KeyboardDatePicker
               fullWidth
               margin="normal"
+              inputVariant="outlined"
               id="date-picker-dialog"
               label="Due Date"
               format="MMMM Do, YYYY"
