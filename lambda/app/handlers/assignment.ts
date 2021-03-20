@@ -48,14 +48,14 @@ export const getMyAssigns = lambda(
 
     let result = [];
 
-    userCourses.forEach((course) => {
-      async () => {
+    await Promise.all(
+      userCourses.map(async (course) => {
         const assignments = await AssignmentModel.find({
           courseID: course._id,
         });
-        result.concat(assignments);
-      };
-    });
+        result = [...result, ...assignments];
+      })
+    );
 
     return success(result);
   })
