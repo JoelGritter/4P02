@@ -220,7 +220,7 @@ functions:
           method: get
           cors: true
   getMyAssigns:
-    handler: app/handler/assignment.getMyAssigns
+    handler: app/handlers/assignment.getMyAssigns
     events:
       - http:
           path: assign/me

@@ -33,7 +33,7 @@ export const getAllCourseAssigns = lambda(
 
 // get assignments of current user, if user is a student (get courses of student, then get assignments of those courses)
 export const getMyAssigns = lambda(
-  roleAuth(['student'], async (event, context, { userDoc }) => {
+  auth(async (event, context, { userDoc }) => {
     const reqUser = userDoc as User;
 
     const userCourses = await CourseModel.find({
