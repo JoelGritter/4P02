@@ -20,13 +20,19 @@ export const getAllCourseAssigns = lambda(
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
 
-    if (reqUser.roles.includes('admin') || resCourse.currentProfessors.includes(cognitoId) || resCourse.students.includes(cognitoId)){
+    if (
+      reqUser.roles.includes('admin') ||
+      resCourse.currentProfessors.includes(cognitoId) ||
+      resCourse.students.includes(cognitoId)
+    ) {
       const assignments = await AssignmentModel.find({
         courseID: event.pathParameters.id,
       });
       return success(assignments);
     } else {
-      return unauthorized('Insufficient Privileges: Cannot retrieve course assignments');
+      return unauthorized(
+        'Insufficient Privileges: Cannot retrieve course assignments'
+      );
     }
   })
 );
@@ -42,18 +48,18 @@ export const getMyAssigns = lambda(
 
     let result = [];
 
-    userCourses.forEach(course => {
+    userCourses.forEach((course) => {
       async () => {
         const assignments = await AssignmentModel.find({
           courseID: course._id,
         });
         result.concat(assignments);
-      }
+      };
     });
 
     return success(result);
   })
-)
+);
 
 export const addAssignment = lambda(
   roleAuth(['admin', 'prof'], async (event, context, { userDoc }) => {

@@ -142,13 +142,13 @@ export const getCourse = lambda(
 // Compares users across different roles within a course for overlap
 export function courseRoleIntersections(course: Course) {
   if (course.moderators?.find((x) => course.students?.includes(x))) {
-    return "Cannot update course: A student cannot be a moderator, and vice-versa.";
+    return 'Cannot update course: A student cannot be a moderator, and vice-versa.';
   }
   if (course.currentProfessors?.find((x) => course.students?.includes(x))) {
-    return "Cannot update course: A professor cannot be a student, and vice-versa.";
+    return 'Cannot update course: A professor cannot be a student, and vice-versa.';
   }
   if (course.currentProfessors?.find((x) => course.moderators?.includes(x))) {
-    return "Cannot update course: A professor cannot be a moderator, and vice-versa.";
+    return 'Cannot update course: A professor cannot be a moderator, and vice-versa.';
   }
   return null;
 }
