@@ -32,6 +32,7 @@ export default function CreateAssignmentPage() {
   const classes = useStyles();
   const [assignment, setAssignment] = useState<Assignment>({
     courseID: courseId,
+    timestamp: Date(),
   });
   const history = useHistory();
 

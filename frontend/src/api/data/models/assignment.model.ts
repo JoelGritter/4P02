@@ -5,4 +5,5 @@ export default interface Assignment {
   dueDate?: string;
   creatorId?: string;
   posted?: boolean;
+  timestamp?: string;
 }
