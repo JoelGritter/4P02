@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
@@ -34,10 +34,6 @@ export default function CreateAssignmentPage() {
     courseID: courseId,
   });
   const history = useHistory();
-
-  useEffect(() => {
-    console.log(assignment);
-  }, [assignment]);
 
   const addAssignment = async () => {
     const { success, message, data } = await post('/assign', assignment);

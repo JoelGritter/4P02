@@ -26,12 +26,11 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
 }) => {
   const classes = useStyles();
 
-  const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-    new Date()
-  );
-
   const handleDateChange = (date: Date | any) => {
-    setSelectedDate(date);
+    setAssignment((prev: any) => ({
+      ...prev,
+      dueDate: date,
+    }));
   };
 
   const handleFormChange = (event: any) => {
@@ -40,7 +39,6 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
     setAssignment((prev: any) => ({
       ...prev,
       name: value,
-      dueDate: selectedDate,
     }));
   };
 
@@ -66,7 +64,7 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
               id="date-picker-dialog"
               label="Due Date"
               format="MMMM Do, YYYY"
-              value={selectedDate}
+              value={assignment.dueDate}
               onChange={handleDateChange}
               KeyboardButtonProps={{
                 'aria-label': 'change date',
