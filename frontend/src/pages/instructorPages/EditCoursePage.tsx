@@ -9,7 +9,7 @@ import Course from '../../api/data/models/course.model';
 import { useHistory, useParams } from 'react-router';
 import useGet from '../../api/data/use-get';
 import { Link } from 'react-router-dom';
-import { CircularProgress } from '@material-ui/core';
+import RequestStatus from '../../components/RequestStatus';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -88,8 +88,11 @@ export default function EditCoursePage() {
           </div>
         </>
       )}
-      {failed && <Typography color="error">Could not load course</Typography>}
-      {loading && <CircularProgress />}
+      <RequestStatus
+        failed={failed}
+        loading={loading}
+        failedMessage="Could not load course!"
+      />
     </div>
   );
 }

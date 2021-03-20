@@ -6,7 +6,7 @@ import Course from '../api/data/models/course.model';
 import useGet from '../api/data/use-get';
 import { PublicUser } from '../api/data/models/user.model';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { CircularProgress, Typography } from '@material-ui/core';
+import RequestStatus from './RequestStatus';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -111,12 +111,11 @@ export const CourseForm: React.FC<CreateCourseFormProps> = ({
               )}
             />
           )}
-          {profsLoading && <CircularProgress />}
-          {profsFailed && (
-            <Typography variant="body1" color="error">
-              Failed to load professors!
-            </Typography>
-          )}
+          <RequestStatus
+            loading={profsLoading}
+            failed={profsFailed}
+            failedMessage="Failed to load professors!"
+          />
         </Grid>
         {users && (
           <>
@@ -160,12 +159,13 @@ export const CourseForm: React.FC<CreateCourseFormProps> = ({
             </Grid>
           </>
         )}
-        {usersLoading && <CircularProgress />}
-        {usersFailed && (
-          <Typography variant="body1" color="error">
-            Failed to load users!
-          </Typography>
-        )}
+        <Grid item xs={12}>
+          <RequestStatus
+            loading={usersLoading}
+            failed={usersFailed}
+            failedMessage="Failed to load users!"
+          />
+        </Grid>
       </Grid>
     </div>
   );
