@@ -219,6 +219,13 @@ functions:
           path: assign/course/{id}
           method: get
           cors: true
+  getMyAssigns:
+    handler: app/handlers/assignment.getMyAssigns
+    events:
+      - http:
+          path: assign/me
+          method: get
+          cors: true
 resources:
   Resources:
     serviceUserPool:
