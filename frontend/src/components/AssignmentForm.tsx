@@ -27,7 +27,7 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
   const classes = useStyles();
 
   const [selectedDate, setSelectedDate] = React.useState<Date | null>(
-    new Date('2021-03-18T21:11:54')
+    new Date()
   );
 
   const handleDateChange = (date: Date | any) => {
