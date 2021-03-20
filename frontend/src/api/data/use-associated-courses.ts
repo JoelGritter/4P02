@@ -1,8 +1,8 @@
-import { Course } from './../../../../lambda/app/schemas/course.model';
 import { fetcher } from './../util';
 import useSWR from 'swr';
 import { apiJoin } from '../util';
 import useMe from './use-me';
+import Course from './models/course.model';
 
 export default function useAssociatedCourses() {
   const { data, mutate, error } = useSWR(apiJoin('course/associated'), fetcher);
