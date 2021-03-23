@@ -1,4 +1,4 @@
-import { roleAuth } from './../util/wrappers';
+import { roleAuth, auth } from './../util/wrappers';
 import AssignmentModel, { Assignment } from './../schemas/assignment.model';
 import CourseModel from './../schemas/course.model';
 import { User } from './../schemas/user.model';
@@ -14,7 +14,7 @@ export const getAll = lambda(
 );
 
 export const getAllCourseAssigns = lambda(
-  roleAuth(['admin', 'prof'], async (event, context, { userDoc }) => {
+  auth(async (event, context, { userDoc }) => {
     const resCourse = await CourseModel.findById(event.pathParameters.id);
 
     const reqUser = userDoc as User;
@@ -22,7 +22,8 @@ export const getAllCourseAssigns = lambda(
 
     if (
       reqUser.roles.includes('admin') ||
-      resCourse.currentProfessors.includes(cognitoId)
+      resCourse.currentProfessors.includes(cognitoId) ||
+      resCourse.students.includes(cognitoId)
     ) {
       const assignments = await AssignmentModel.find({
         courseID: event.pathParameters.id,
@@ -33,6 +34,30 @@ export const getAllCourseAssigns = lambda(
         'Insufficient Privileges: Cannot retrieve course assignments'
       );
     }
+  })
+);
+
+// get assignments of current user, if user is a student (get courses of student, then get assignments of those courses)
+export const getMyAssigns = lambda(
+  auth(async (event, context, { userDoc }) => {
+    const reqUser = userDoc as User;
+
+    const userCourses = await CourseModel.find({
+      students: userDoc.cognitoId,
+    });
+
+    let result = [];
+
+    await Promise.all(
+      userCourses.map(async (course) => {
+        const assignments = await AssignmentModel.find({
+          courseID: course._id,
+        });
+        result = [...result, ...assignments];
+      })
+    );
+
+    return success(result);
   })
 );
 

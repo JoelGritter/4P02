@@ -15,22 +15,27 @@ export const getAll = lambda(
 export const getAllPublic = lambda(
   roleAuth(['admin', 'prof'], async () => {
     const users = await UserModel.find();
-    return success(users.map(({cognitoId, email}) => ({
-      cognitoId, email
-    }))
+    return success(
+      users.map(({ cognitoId, email }) => ({
+        cognitoId,
+        email,
+      }))
+    );
   })
-)
+);
 
 // Similar reasons to above
 export const getAllProfPublic = lambda(
   roleAuth(['admin', 'prof'], async () => {
-    const users = await UserModel.find({roles: "prof"});
-    return success(users.map(({cognitoId, email}) => ({
-     cognitoId, email
-    }))
+    const users = await UserModel.find({ roles: 'prof' });
+    return success(
+      users.map(({ cognitoId, email }) => ({
+        cognitoId,
+        email,
+      }))
+    );
   })
-)
-
+);
 
 export const get = lambda(
   roleAuth(['admin'], async (event) => {

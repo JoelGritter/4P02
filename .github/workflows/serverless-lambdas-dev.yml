@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - dev
-
+    paths:
+      - 'lambda/**'
 jobs:
   deploy:
     name: deploy

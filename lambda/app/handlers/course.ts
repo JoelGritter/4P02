@@ -1,4 +1,4 @@
-import { roleAuth } from './../util/wrappers';
+import { auth, roleAuth } from './../util/wrappers';
 import CourseModel, { Course } from './../schemas/course.model';
 import UserModel, { User } from './../schemas/user.model';
 import { badRequest, parseBody, unauthorized } from '../util/rest';
@@ -14,11 +14,34 @@ export const getAll = lambda(
 
 export const getAllProf = lambda(
   roleAuth(['prof'], async (event, context, { userDoc }) => {
-    console.log({
-      currentProfessors: userDoc.cognitoId,
-    });
     const courses = await CourseModel.find({
       currentProfessors: userDoc.cognitoId,
+    });
+    return success(courses);
+  })
+);
+
+// Retrieves list of all courses in which the current user is a student
+export const getAllStudent = lambda(
+  roleAuth(['student'], async (event, context, { userDoc }) => {
+    const courses = await CourseModel.find({
+      students: userDoc.cognitoId,
+    });
+    return success(courses);
+  })
+);
+
+// Retrieves a list of all courses in which the current
+// user is a student, prof, or moderator
+export const getAllAssociated = lambda(
+  auth(async (event, context, { userDoc }) => {
+    const cognitoId = userDoc.cognitoId;
+    const courses = await CourseModel.find({
+      $or: [
+        { currentProfessors: cognitoId },
+        { currentModerators: cognitoId },
+        { currentStudents: cognitoId },
+      ],
     });
     return success(courses);
   })
@@ -31,12 +54,19 @@ export const addCourse = lambda(
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
 
+    // reject update if user already exists in another role
+    const errmsg = courseRoleIntersections(newCourse);
+    if (errmsg != null) return unauthorized(errmsg);
+
     // add current user to this new course if user is prof
     if (reqUser.roles.includes('prof')) {
       if (!newCourse.currentProfessors) {
         newCourse.currentProfessors = [];
       }
-      newCourse.currentProfessors.push(cognitoId);
+      if (!newCourse.currentProfessors.find((x) => x == cognitoId)) {
+        // prevent duplication
+        newCourse.currentProfessors.push(cognitoId);
+      }
     }
     const resCourse = await CourseModel.create(newCourse);
     return success(resCourse);
@@ -50,6 +80,10 @@ export const updateCourse = lambda(
 
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
+
+    // reject update if user already exists in another role
+    const errmsg = courseRoleIntersections(newCourse);
+    if (errmsg != null) return unauthorized(errmsg);
 
     if (
       reqUser.roles.includes('admin') ||
@@ -100,3 +134,21 @@ export const getCourse = lambda(
     }
   })
 );
+
+/*======================*/
+/*** HELPER FUNCTIONS ***/
+/*======================*/
+
+// Compares users across different roles within a course for overlap
+export function courseRoleIntersections(course: Course) {
+  if (course.moderators?.find((x) => course.students?.includes(x))) {
+    return 'Cannot update course: A student cannot be a moderator, and vice-versa.';
+  }
+  if (course.currentProfessors?.find((x) => course.students?.includes(x))) {
+    return 'Cannot update course: A professor cannot be a student, and vice-versa.';
+  }
+  if (course.currentProfessors?.find((x) => course.moderators?.includes(x))) {
+    return 'Cannot update course: A professor cannot be a moderator, and vice-versa.';
+  }
+  return null;
+}

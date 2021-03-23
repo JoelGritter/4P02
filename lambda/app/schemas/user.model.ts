@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 
-export type Role = 'student' | 'admin' | 'prof';
+export type Role = 'admin' | 'prof';
 
 export interface User extends Document {
   name: string;

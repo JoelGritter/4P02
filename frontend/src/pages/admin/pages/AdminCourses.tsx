@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import useAdminCourses from '../../../api/data/use-admin-courses';
 import CourseCard from '../../../components/CourseCard';
+import RequestStatus from '../../../components/RequestStatus';
 
 const useStyles = makeStyles((theme: Theme) => ({
   courseGrid: {
@@ -12,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 export default function AdminCourses() {
   const classes = useStyles();
-  const { courses } = useAdminCourses();
+  const { courses, loading, failed } = useAdminCourses();
   return (
     <div>
       <Box justifyContent="flex-end" display="flex">
@@ -32,6 +33,11 @@ export default function AdminCourses() {
           </Grid>
         ))}
       </Grid>
+      <RequestStatus
+        loading={loading}
+        failed={failed}
+        failedMessage="Failed to load courses!"
+      />
     </div>
   );
 }

@@ -2,10 +2,12 @@ import { Schema, model, Document } from 'mongoose';
 
 export interface Course extends Document {
   name: string;
-  studentCapacity: number;
+  // studentCapacity: number;
   // announcements: Announcement[],
   // gradebook: Assessment[],
   currentProfessors: string[];
+  moderators: string[];
+  students: string[];
   description: string;
 }
 
@@ -16,10 +18,12 @@ const CourseModel = model(
       type: String,
       required: true,
     },
-    studentCapacity: Number,
+    // studentCapacity: Number,
     // announcements: [String],
     // gradebook: [String],
-    currentProfessors: [String], // use userID to reference
+    currentProfessors: [String], // cognitoId of user
+    moderators: [String], // cognitoId of user
+    students: [String], // cognitoId of user
     description: String,
   })
 );

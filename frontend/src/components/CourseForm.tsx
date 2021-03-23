@@ -6,7 +6,7 @@ import Course from '../api/data/models/course.model';
 import useGet from '../api/data/use-get';
 import { PublicUser } from '../api/data/models/user.model';
 import Autocomplete from '@material-ui/lab/Autocomplete';
-import { CircularProgress, Typography } from '@material-ui/core';
+import RequestStatus from './RequestStatus';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -32,9 +32,27 @@ export const CourseForm: React.FC<CreateCourseFormProps> = ({
     }));
   };
 
-  const { data: users, loading, failed } = useGet<PublicUser[]>(
-    '/user/public/prof'
-  );
+  const handleStudentsChange = (e: any, value: PublicUser[]) => {
+    setCourse((prev) => ({
+      ...prev,
+      students: value.map((user) => user.cognitoId),
+    }));
+  };
+
+  const handleModeratorsChange = (e: any, value: PublicUser[]) => {
+    setCourse((prev) => ({
+      ...prev,
+      moderators: value.map((user) => user.cognitoId),
+    }));
+  };
+
+  const { data: profs, loading: profsLoading, failed: profsFailed } = useGet<
+    PublicUser[]
+  >('/user/public/prof');
+
+  const { data: users, loading: usersLoading, failed: usersFailed } = useGet<
+    PublicUser[]
+  >('/user/public');
 
   const handleFormChange = (event: any) => {
     const name = event.target.name;
@@ -73,14 +91,14 @@ export const CourseForm: React.FC<CreateCourseFormProps> = ({
           />
         </Grid>
         <Grid item xs={12}>
-          {users && (
+          {profs && (
             <Autocomplete
               multiple
               id="course-professors-autocomplete"
-              options={users}
+              options={profs}
               getOptionLabel={(user) => user?.email}
               onChange={handleProfessorsChange}
-              value={users.filter((user) =>
+              value={profs.filter((user) =>
                 course.currentProfessors?.includes(user.cognitoId)
               )}
               renderInput={(params) => (
@@ -88,16 +106,65 @@ export const CourseForm: React.FC<CreateCourseFormProps> = ({
                   {...params}
                   label="Select Professors"
                   variant="outlined"
+                  helperText="You will automatically be added to this list"
                 />
               )}
             />
           )}
-          {loading && <CircularProgress />}
-          {failed && (
-            <Typography variant="body1" color="error">
-              Failed to load professors!
-            </Typography>
-          )}
+          <RequestStatus
+            loading={profsLoading}
+            failed={profsFailed}
+            failedMessage="Failed to load professors!"
+          />
+        </Grid>
+        {users && (
+          <>
+            <Grid item xs={12}>
+              <Autocomplete
+                multiple
+                id="course-moderators-autocomplete"
+                options={users}
+                getOptionLabel={(user) => user?.email}
+                onChange={handleModeratorsChange}
+                value={users.filter((user) =>
+                  course.moderators?.includes(user.cognitoId)
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Select Moderators"
+                    variant="outlined"
+                  />
+                )}
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <Autocomplete
+                multiple
+                id="course-students-autocomplete"
+                options={users}
+                getOptionLabel={(user) => user?.email}
+                onChange={handleStudentsChange}
+                value={users.filter((user) =>
+                  course.students?.includes(user.cognitoId)
+                )}
+                renderInput={(params) => (
+                  <TextField
+                    {...params}
+                    label="Select Students"
+                    variant="outlined"
+                  />
+                )}
+              />
+            </Grid>
+          </>
+        )}
+        <Grid item xs={12}>
+          <RequestStatus
+            loading={usersLoading}
+            failed={usersFailed}
+            failedMessage="Failed to load users!"
+          />
         </Grid>
       </Grid>
     </div>

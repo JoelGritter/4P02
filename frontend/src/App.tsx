@@ -3,11 +3,10 @@ import { Switch, Route } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import AssignmentsPage from './pages/AssignmentsPage';
 import CoursesPage from './pages/CoursePage';
-import HomePage from './pages/HomePage';
+import HomePage from './pages/home/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import TestsPage from './pages/TestsPage';
 import CreateCoursePage from './pages/instructorPages/CreateCoursePage';
-import CreateAssignmentPage from './pages/instructorPages/CreateAssignmentPage';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { CssBaseline, Paper } from '@material-ui/core';
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
@@ -19,6 +18,8 @@ import { SnackbarProvider } from 'notistack';
 import EditCoursePage from './pages/instructorPages/EditCoursePage';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
+import { Helmet } from 'react-helmet-async';
+import CreateAssignmentPage from './pages/instructorPages/CreateAssignmentPage';
 
 const awsConfig = {
   aws_project_region: process.env.REACT_APP_AWS_PROJECT_REGION,
@@ -58,40 +59,73 @@ export const App = () => {
       <MuiPickersUtilsProvider utils={MomentUtils}>
         <SnackbarProvider>
           <CssBaseline />
-          <Paper style={{ height: '100vh' }}>
+          <Paper style={{ minHeight: '100vh' }}>
             <Nav>
               <Switch>
                 <Route path="/login">
+                  <Helmet>
+                    <title>uAssign - Login</title>
+                  </Helmet>
                   <LoginPage />
                 </Route>
                 <Route path="/courses/create">
+                  <Helmet>
+                    <title>uAssign - Create Course</title>
+                  </Helmet>
                   <CreateCoursePage />
                 </Route>
                 <Route path="/courses/:id/edit">
+                  <Helmet>
+                    <title>uAssign - Edit Course</title>
+                  </Helmet>
                   <EditCoursePage />
                 </Route>
                 <Route path="/courses/:courseId/assignments/create">
+                  <Helmet>
+                    <title>uAssign - Create Assignments</title>
+                  </Helmet>
                   <CreateAssignmentPage />
                 </Route>
-                <Route path="/courses/:courseId/assignments">
+                <Route path="/assignments">
+                  <Helmet>
+                    <title>uAssign - Assignments</title>
+                  </Helmet>
                   <AssignmentsPage />
                 </Route>
                 <Route path="/courses/:id">
+                  <Helmet>
+                    <title>uAssign - Course Page</title>
+                  </Helmet>
                   <CoursesPage />
                 </Route>
                 <Route path="/profile">
+                  <Helmet>
+                    <title>uAssign - My Profile</title>
+                  </Helmet>
                   <ProfilePage />
                 </Route>
                 <Route path="/tests">
+                  <Helmet>
+                    <title>uAssign - Tests</title>
+                  </Helmet>
                   <TestsPage />
                 </Route>
                 <Route path="/admin">
+                  <Helmet>
+                    <title>uAssign - Admin</title>
+                  </Helmet>
                   <AdminHome />
                 </Route>
                 <Route path="/home">
+                  <Helmet>
+                    <title>uAssign - Home</title>
+                  </Helmet>
                   <HomePage />
                 </Route>
                 <Route path="/">
+                  <Helmet>
+                    <title>uAssign - Home</title>
+                  </Helmet>
                   <HomePage />
                 </Route>
               </Switch>

@@ -9,7 +9,7 @@ import Course from '../../api/data/models/course.model';
 import { useHistory, useParams } from 'react-router';
 import useGet from '../../api/data/use-get';
 import { Link } from 'react-router-dom';
-import { CircularProgress } from '@material-ui/core';
+import RequestStatus from '../../components/RequestStatus';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -19,7 +19,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
     justifyContent: 'space-between',
   },
-  buttonContainer: {},
+  buttonContainer: {
+    marginTop: theme.spacing(3),
+    display: 'flex',
+    justifyContent: 'flex-end',
+  },
   button: {
     margin: theme.spacing(1),
   },
@@ -43,10 +47,7 @@ export default function EditCoursePage() {
   const history = useHistory();
 
   const updateCourse = async () => {
-    const { success, message, data } = await update(
-      `/course/${id}`,
-      resCourse
-    );
+    const { success, message, data } = await update(`/course/${id}`, resCourse);
     if (!success) {
       enqueueSnackbar(message ?? `Couldn't update "${resCourse.name}"!`);
     } else {
@@ -62,43 +63,36 @@ export default function EditCoursePage() {
         <>
           <div className={classes.headerContainer}>
             <Typography variant="h4">Edit Course</Typography>
-            <div className={classes.buttonContainer}>
-              <Button
-                variant="outlined"
-                color="secondary" 
-                className={classes.button}
-                component={Link}
-                to={`courses/${course._id}`}
-              >
-                Cancel
-              </Button>
-              <Button
-                variant="outlined"
-                color="secondary"
-                className={classes.button}
-                onClick={() => {
-                  setEditCourse({});
-                }}
-              >
-                Clear
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                onClick={updateCourse}
-              >
-                Save
-              </Button>
-            </div>
           </div>
           <div className={classes.fieldsContainer}>
             <CourseForm course={resCourse} setCourse={setEditCourse} />
           </div>
+          <div className={classes.buttonContainer}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              className={classes.button}
+              component={Link}
+              to={`courses/${course._id}`}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={updateCourse}
+            >
+              Save
+            </Button>
+          </div>
         </>
       )}
-      {failed && <Typography color="error">Could not load course</Typography>}
-      {loading && <CircularProgress />}
+      <RequestStatus
+        failed={failed}
+        loading={loading}
+        failedMessage="Could not load course!"
+      />
     </div>
   );
 }

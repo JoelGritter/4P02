@@ -2,12 +2,9 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import CourseCard from '../components/CourseCard';
-import Course from '../api/data/models/course.model';
-import useMe from '../api/data/use-me';
-import useProfCourses from '../api/data/use-prof-courses';
-import { Box, Button } from '@material-ui/core';
-import { Link } from 'react-router-dom';
+import useMe from '../../api/data/use-me';
+import ProfCourses from './components/ProfCourses';
+import StudentCourses from './components/StudentCourses';
 
 const drawerWidth = 240;
 
@@ -57,64 +54,8 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-function ProfCourses() {
-  const classes = useStyles();
-  const { courses: profCourses } = useProfCourses();
-
-  return (
-    <>
-      {profCourses && (
-        <>
-          <Box display="flex" justifyContent="space-between" paddingRight={1}>
-            <Typography variant="h4">Courses I'm Teaching</Typography>
-            <div>
-              <Button
-                color="primary"
-                variant="contained"
-                component={Link}
-                to="/courses/create"
-              >
-                Add course
-              </Button>
-            </div>
-          </Box>
-          <Grid
-            container
-            xs={12}
-            spacing={1}
-            className={classes.innerCoursesContainer}
-          >
-            {profCourses.map((course) => {
-              return (
-                <Grid item xs={12} key={course._id}>
-                  <CourseCard course={course} />
-                </Grid>
-              );
-            })}
-          </Grid>
-        </>
-      )}
-    </>
-  );
-}
-
 export default function HomePage() {
   const classes = useStyles();
-
-  const courseData: Course[] = [
-    {
-      name: 'firstcourse',
-    },
-    {
-      name: 'sec',
-    },
-    {
-      name: 'third',
-    },
-    {
-      name: 'fourth',
-    },
-  ] as Course[];
 
   const { me } = useMe();
 
@@ -125,22 +66,7 @@ export default function HomePage() {
       <Grid container spacing={1}>
         <Grid item md={9} className={classes.coursesContainer}>
           {isProf && <ProfCourses />}
-          <Typography variant="h4">My Courses</Typography>
-          <Grid
-            container
-            item
-            xs={12}
-            spacing={1}
-            className={classes.innerCoursesContainer}
-          >
-            {courseData.map((data, index) => {
-              return (
-                <Grid item xs={12}>
-                  <CourseCard course={data} />
-                </Grid>
-              );
-            })}
-          </Grid>
+          <StudentCourses />
         </Grid>
         <Grid
           container
