@@ -17,6 +17,8 @@ import Nav from './components/Nav';
 import { AmplifyAuthenticator, AmplifySignUp } from '@aws-amplify/ui-react';
 import { SnackbarProvider } from 'notistack';
 import EditCoursePage from './pages/instructorPages/EditCoursePage';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 
 const awsConfig = {
   aws_project_region: process.env.REACT_APP_AWS_PROJECT_REGION,
@@ -53,48 +55,50 @@ export const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <SnackbarProvider>
-        <CssBaseline />
-        <Paper style={{ height: '100vh' }}>
-          <Nav>
-            <Switch>
-              <Route path="/login">
-                <LoginPage />
-              </Route>
-              <Route path="/courses/create">
-                <CreateCoursePage />
-              </Route>
-              <Route path="/courses/:id/edit">
-                <EditCoursePage />
-              </Route>
-              <Route path="/courses/:courseId/assignments/create">
-                <CreateAssignmentPage />
-              </Route>
-              <Route path="/courses/:courseId/assignments">
-                <AssignmentsPage />
-              </Route>
-              <Route path="/courses/:id">
-                <CoursesPage />
-              </Route>
-              <Route path="/profile">
-                <ProfilePage />
-              </Route>
-              <Route path="/tests">
-                <TestsPage />
-              </Route>
-              <Route path="/admin">
-                <AdminHome />
-              </Route>
-              <Route path="/home">
-                <HomePage />
-              </Route>
-              <Route path="/">
-                <HomePage />
-              </Route>
-            </Switch>
-          </Nav>
-        </Paper>
-      </SnackbarProvider>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        <SnackbarProvider>
+          <CssBaseline />
+          <Paper style={{ height: '100vh' }}>
+            <Nav>
+              <Switch>
+                <Route path="/login">
+                  <LoginPage />
+                </Route>
+                <Route path="/courses/create">
+                  <CreateCoursePage />
+                </Route>
+                <Route path="/courses/:id/edit">
+                  <EditCoursePage />
+                </Route>
+                <Route path="/courses/:courseId/assignments/create">
+                  <CreateAssignmentPage />
+                </Route>
+                <Route path="/courses/:courseId/assignments">
+                  <AssignmentsPage />
+                </Route>
+                <Route path="/courses/:id">
+                  <CoursesPage />
+                </Route>
+                <Route path="/profile">
+                  <ProfilePage />
+                </Route>
+                <Route path="/tests">
+                  <TestsPage />
+                </Route>
+                <Route path="/admin">
+                  <AdminHome />
+                </Route>
+                <Route path="/home">
+                  <HomePage />
+                </Route>
+                <Route path="/">
+                  <HomePage />
+                </Route>
+              </Switch>
+            </Nav>
+          </Paper>
+        </SnackbarProvider>
+      </MuiPickersUtilsProvider>
     </ThemeProvider>
   );
 };

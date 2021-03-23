@@ -3,11 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Assignment from '../api/data/models/assignment.model';
-import MomentUtils from '@date-io/moment';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -56,23 +52,21 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
             onChange={handleFormChange}
           />
         </Grid>
-        <MuiPickersUtilsProvider utils={MomentUtils}>
-          <Grid container justify="space-around" style={{ margin: 12 }}>
-            <KeyboardDatePicker
-              fullWidth
-              margin="normal"
-              inputVariant="outlined"
-              id="date-picker-dialog"
-              label="Due Date"
-              format="MMMM Do, YYYY"
-              value={assignment.dueDate}
-              onChange={handleDateChange}
-              KeyboardButtonProps={{
-                'aria-label': 'change date',
-              }}
-            />
-          </Grid>
-        </MuiPickersUtilsProvider>
+        <Grid container justify="space-around" style={{ margin: 12 }}>
+          <KeyboardDatePicker
+            fullWidth
+            margin="normal"
+            inputVariant="outlined"
+            id="date-picker-dialog"
+            label="Due Date"
+            format="MMMM Do, YYYY"
+            value={assignment.dueDate}
+            onChange={handleDateChange}
+            KeyboardButtonProps={{
+              'aria-label': 'change date',
+            }}
+          />
+        </Grid>
       </Grid>
     </div>
   );
