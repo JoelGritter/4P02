@@ -26,27 +26,6 @@ export const fetcher = (url: string) =>
     }
   });
 
-export async function patch(path: string, data: any) {
-  try {
-    const response = await fetch(apiJoin(path), {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: getToken() ?? '',
-      },
-      body: JSON.stringify(data),
-    });
-    const json = await response.json();
-    return {
-      success:
-        response.status === 200 || response.status === 201 || json?.success,
-      ...json,
-    };
-  } catch (e) {
-    return { success: false };
-  }
-}
-
 export async function post(path: string, data: any) {
   try {
     const response = await fetch(apiJoin(path), {
