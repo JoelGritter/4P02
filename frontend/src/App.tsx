@@ -16,7 +16,10 @@ import Nav from './components/Nav';
 import { AmplifyAuthenticator, AmplifySignUp } from '@aws-amplify/ui-react';
 import { SnackbarProvider } from 'notistack';
 import EditCoursePage from './pages/instructorPages/EditCoursePage';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
+import MomentUtils from '@date-io/moment';
 import { Helmet } from 'react-helmet-async';
+import CreateAssignmentPage from './pages/instructorPages/CreateAssignmentPage';
 
 const awsConfig = {
   aws_project_region: process.env.REACT_APP_AWS_PROJECT_REGION,
@@ -53,75 +56,83 @@ export const App = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <SnackbarProvider>
-        <CssBaseline />
-        <Paper style={{ minHeight: '100vh' }}>
-          <Nav>
-            <Switch>
-              <Route path="/login">
-                <Helmet>
-                  <title>uAssign - Login</title>
-                </Helmet>
-                <LoginPage />
-              </Route>
-              <Route path="/courses/create">
-                <Helmet>
-                  <title>uAssign - Create Course</title>
-                </Helmet>
-                <CreateCoursePage />
-              </Route>
-              <Route path="/courses/:id/edit">
-                <Helmet>
-                  <title>uAssign - Edit Course</title>
-                </Helmet>
-                <EditCoursePage />
-              </Route>
-              <Route path="/assignments">
-                <Helmet>
-                  <title>uAssign - Assignments</title>
-                </Helmet>
-                <AssignmentsPage />
-              </Route>
-              <Route path="/courses/:id">
-                <Helmet>
-                  <title>uAssign - Course Page</title>
-                </Helmet>
-                <CoursesPage />
-              </Route>
-              <Route path="/profile">
-                <Helmet>
-                  <title>uAssign - My Profile</title>
-                </Helmet>
-                <ProfilePage />
-              </Route>
-              <Route path="/tests">
-                <Helmet>
-                  <title>uAssign - Tests</title>
-                </Helmet>
-                <TestsPage />
-              </Route>
-              <Route path="/admin">
-                <Helmet>
-                  <title>uAssign - Admin</title>
-                </Helmet>
-                <AdminHome />
-              </Route>
-              <Route path="/home">
-                <Helmet>
-                  <title>uAssign - Home</title>
-                </Helmet>
-                <HomePage />
-              </Route>
-              <Route path="/">
-                <Helmet>
-                  <title>uAssign - Home</title>
-                </Helmet>
-                <HomePage />
-              </Route>
-            </Switch>
-          </Nav>
-        </Paper>
-      </SnackbarProvider>
+      <MuiPickersUtilsProvider utils={MomentUtils}>
+        <SnackbarProvider>
+          <CssBaseline />
+          <Paper style={{ minHeight: '100vh' }}>
+            <Nav>
+              <Switch>
+                <Route path="/login">
+                  <Helmet>
+                    <title>uAssign - Login</title>
+                  </Helmet>
+                  <LoginPage />
+                </Route>
+                <Route path="/courses/create">
+                  <Helmet>
+                    <title>uAssign - Create Course</title>
+                  </Helmet>
+                  <CreateCoursePage />
+                </Route>
+                <Route path="/courses/:id/edit">
+                  <Helmet>
+                    <title>uAssign - Edit Course</title>
+                  </Helmet>
+                  <EditCoursePage />
+                </Route>
+                <Route path="/courses/:courseId/assignments/create">
+                  <Helmet>
+                    <title>uAssign - Create Assignments</title>
+                  </Helmet>
+                  <CreateAssignmentPage />
+                </Route>
+                <Route path="/assignments">
+                  <Helmet>
+                    <title>uAssign - Assignments</title>
+                  </Helmet>
+                  <AssignmentsPage />
+                </Route>
+                <Route path="/courses/:id">
+                  <Helmet>
+                    <title>uAssign - Course Page</title>
+                  </Helmet>
+                  <CoursesPage />
+                </Route>
+                <Route path="/profile">
+                  <Helmet>
+                    <title>uAssign - My Profile</title>
+                  </Helmet>
+                  <ProfilePage />
+                </Route>
+                <Route path="/tests">
+                  <Helmet>
+                    <title>uAssign - Tests</title>
+                  </Helmet>
+                  <TestsPage />
+                </Route>
+                <Route path="/admin">
+                  <Helmet>
+                    <title>uAssign - Admin</title>
+                  </Helmet>
+                  <AdminHome />
+                </Route>
+                <Route path="/home">
+                  <Helmet>
+                    <title>uAssign - Home</title>
+                  </Helmet>
+                  <HomePage />
+                </Route>
+                <Route path="/">
+                  <Helmet>
+                    <title>uAssign - Home</title>
+                  </Helmet>
+                  <HomePage />
+                </Route>
+              </Switch>
+            </Nav>
+          </Paper>
+        </SnackbarProvider>
+      </MuiPickersUtilsProvider>
     </ThemeProvider>
   );
 };
