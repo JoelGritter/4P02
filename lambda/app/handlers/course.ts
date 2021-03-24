@@ -144,10 +144,8 @@ export const getCourse = lambda(
       });
     } else {
       resCourse = await CourseModel.findOne({
-        $and: [
-          { students: cognitoId },
-          { _id: mongoose.Types.ObjectId(event.pathParameters.id) },
-        ],
+        $or: [{ students: cognitoId }, { moderators: cognitoId }],
+        _id: mongoose.Types.ObjectId(event.pathParameters.id),
       });
     }
     if (resCourse.$isEmpty('_id')) {
