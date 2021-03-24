@@ -4,6 +4,7 @@ import UserModel, { User } from './../schemas/user.model';
 import { badRequest, parseBody, unauthorized } from '../util/rest';
 import { success } from '../util/rest';
 import { lambda } from '../util/wrappers';
+import mongoose from 'mongoose';
 
 export const getAll = lambda(
   roleAuth(['admin'], async (event) => {
@@ -36,13 +37,21 @@ export const getAllStudent = lambda(
 export const getAllAssociated = lambda(
   auth(async (event, context, { userDoc }) => {
     const cognitoId = userDoc.cognitoId;
-    const courses = await CourseModel.find({
-      $or: [
-        { currentProfessors: cognitoId },
-        { currentModerators: cognitoId },
-        { currentStudents: cognitoId },
-      ],
-    });
+    const roles = userDoc.roles;
+    let courses;
+    if (roles.includes('prof') || roles.includes('admin')) {
+      courses = await CourseModel.find({
+        $or: [
+          { currentProfessors: cognitoId },
+          { moderators: cognitoId },
+          { students: cognitoId },
+        ],
+      });
+    } else {
+      courses = await CourseModel.find({
+        $or: [{ moderators: cognitoId }, { students: cognitoId }],
+      });
+    }
     return success(courses);
   })
 );
@@ -118,19 +127,31 @@ export const deleteCourse = lambda(
 );
 
 export const getCourse = lambda(
-  roleAuth(['admin', 'prof'], async (event, context, { userDoc }) => {
-    const resCourse = await CourseModel.findById(event.pathParameters.id);
-
-    const reqUser = userDoc as User;
-    const { cognitoId } = reqUser;
-
-    if (
-      reqUser.roles.includes('admin') ||
-      resCourse.currentProfessors.includes(cognitoId)
-    ) {
-      return success(resCourse);
+  auth(async (event, context, { userDoc }) => {
+    const cognitoId = userDoc.cognitoId;
+    const roles = userDoc.roles;
+    let resCourse;
+    if (roles.includes('admin')) {
+      resCourse = await CourseModel.findOne({
+        _id: mongoose.Types.ObjectId(event.pathParameters.id),
+      });
+    } else if (roles.includes('prof')) {
+      resCourse = await CourseModel.findOne({
+        $and: [
+          { currentProfessors: cognitoId },
+          { _id: mongoose.Types.ObjectId(event.pathParameters.id) },
+        ],
+      });
     } else {
-      return unauthorized('Insufficient Privileges: Cannot access course');
+      resCourse = await CourseModel.findOne({
+        $or: [{ students: cognitoId }, { moderators: cognitoId }],
+        _id: mongoose.Types.ObjectId(event.pathParameters.id),
+      });
+    }
+    if (resCourse.$isEmpty('_id')) {
+      return badRequest('Could not find associated course with given id');
+    } else {
+      return success(resCourse);
     }
   })
 );
