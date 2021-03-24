@@ -25,12 +25,7 @@ export default function StudentCourses() {
           <Box display="flex" justifyContent="space-between" paddingRight={1}>
             <Typography variant="h4">My Courses</Typography>
           </Box>
-          <Grid
-            container
-            xs={12}
-            spacing={1}
-            className={classes.innerCoursesContainer}
-          >
+          <Grid container spacing={1} className={classes.innerCoursesContainer}>
             {studentCourses.map((course) => {
               return (
                 <Grid item xs={12} key={course._id}>

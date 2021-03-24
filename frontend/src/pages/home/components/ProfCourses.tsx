@@ -36,12 +36,7 @@ export default function ProfCourses() {
               </Button>
             </div>
           </Box>
-          <Grid
-            container
-            xs={12}
-            spacing={1}
-            className={classes.innerCoursesContainer}
-          >
+          <Grid container spacing={1} className={classes.innerCoursesContainer}>
             {profCourses.map((course) => {
               return (
                 <Grid item xs={12} key={course._id}>

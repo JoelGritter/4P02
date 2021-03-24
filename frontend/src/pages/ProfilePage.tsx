@@ -1,10 +1,4 @@
-import {
-  Button,
-  createStyles,
-  TextField,
-  Card,
-  CardContent,
-} from '@material-ui/core';
+import { Button, createStyles, TextField } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import React from 'react';
@@ -14,6 +8,7 @@ import { update } from '../api/util';
 import { useState } from 'react';
 import User from '../api/data/models/user.model';
 import { useSnackbar } from 'notistack';
+import RequestStatus from '../components/RequestStatus';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,26 +22,22 @@ const useStyles = makeStyles((theme: Theme) =>
       justifyContent: 'space-between',
     },
     fieldsContainer: {
-      marginTop: theme.spacing(2),
-    },
-    card: {
-      marginTop: theme.spacing(2),
-    },
-    p: {
       marginTop: theme.spacing(1),
-      height: '14px',
+      padding: theme.spacing(1),
     },
   })
 );
 export default function ProfilePage() {
   const classes = useStyles();
-  const { me, mutate } = useMe();
+  const { me, mutate, loading, failed, success } = useMe();
   const { enqueueSnackbar } = useSnackbar();
 
   //Getter, setter
   const [user, setUser] = useState<User>({} as any);
 
-  const [edit, setEdit] = useState<boolean>(false);
+  const [manualEdit, setManualEdit] = useState<boolean>(false);
+  const incomplete = success && !me.name;
+  const edit = manualEdit || incomplete;
 
   const resUser = { ...me, ...user };
 
@@ -55,9 +46,10 @@ export default function ProfilePage() {
     if (!success) {
       enqueueSnackbar(message ?? `Couldn't make changes"`);
     } else {
-      enqueueSnackbar(message ?? `Sucessfully updated profile!`);
+      enqueueSnackbar(message ?? `Successfully updated profile!`);
+      mutate(data);
+      setManualEdit(false);
     }
-    mutate(data);
   };
 
   const textHandler = (event: any) => {
@@ -72,52 +64,37 @@ export default function ProfilePage() {
 
   return (
     <>
-      {!edit && (
-        <>
-          <div className={classes.headerContainer}>
-            <Typography variant="h4">Profile</Typography>
-            <div>
+      <RequestStatus
+        loading={loading}
+        failed={failed}
+        failedMessage="Failed to load profile!"
+      />
+      <div className={classes.headerContainer}>
+        {incomplete && <Typography variant="h4">Complete Profile</Typography>}
+        {!incomplete && <Typography variant="h4">Profile</Typography>}
+        <div>
+          {!edit && (
+            <>
               <Button
                 color="primary"
                 variant="contained"
                 className={classes.button}
                 onClick={() => {
-                  setEdit(true);
+                  setManualEdit(true);
                 }}
               >
                 Edit
               </Button>
-            </div>
-          </div>
-          <Grid item alignItems="stretch" xs={12} spacing={1}>
-            <Card className={classes.card}>
-              <CardContent>
-                <Typography variant="h5">Name Settings</Typography>
-                <p className={classes.p}>Name: {me?.name}</p>
-              </CardContent>
-            </Card>
-            <Card className={classes.card}>
-              <CardContent>
-                <Typography variant="h5">Email Settings</Typography>
-                <p className={classes.p}>Email: {me?.email}</p>
-              </CardContent>
-            </Card>
-          </Grid>
-        </>
-      )}
-      {edit && (
-        <>
-          <div className={classes.headerContainer}>
-            <Typography variant="h4">Profile</Typography>
-            <div>
+            </>
+          )}
+
+          {edit && (
+            <>
               <Button
                 variant="contained"
                 color="primary"
                 className={classes.button}
-                onClick={() => {
-                  userHandler();
-                  setEdit(false);
-                }}
+                onClick={userHandler}
               >
                 Save
               </Button>
@@ -126,34 +103,70 @@ export default function ProfilePage() {
                 variant="contained"
                 className={classes.button}
                 onClick={() => {
-                  setEdit(false);
+                  setManualEdit(false);
                 }}
               >
                 Cancel
               </Button>
-            </div>
-          </div>
-          <Grid item alignItems="stretch" xs={12} spacing={1}>
-            <Card style={{ width: '100%' }}>
-              <CardContent>
-                <Typography variant="h5">Name Settings</Typography>
-                <p className={classes.p}>Name: {me?.name}</p>
-                <div>
-                  <TextField
-                    className={classes.fieldsContainer}
-                    variant="outlined"
-                    color="primary"
-                    label="New Name"
-                    name="name"
-                    placeholder={me?.name}
-                    onChange={textHandler}
-                  />
-                </div>
-              </CardContent>
-            </Card>
-          </Grid>
-        </>
+            </>
+          )}
+        </div>
+      </div>
+      {incomplete && (
+        <Typography className={classes.headerContainer} variant="body1">
+          You need to complete your profile before proceeding!
+        </Typography>
       )}
+
+      <Grid container spacing={2} className={classes.fieldsContainer}>
+        {!edit && (
+          <>
+            <Grid item xs={12}>
+              <Typography variant="body1" color="textSecondary">
+                Email
+              </Typography>
+              <Typography variant="body1" color="textPrimary">
+                {me?.email}
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <Typography variant="body1" color="textSecondary">
+                Name
+              </Typography>
+              <Typography variant="body1" color="textPrimary">
+                {me?.name}
+              </Typography>
+            </Grid>
+          </>
+        )}
+        {edit && (
+          <>
+            <Grid item xs={12}>
+              <TextField
+                variant="filled"
+                color="primary"
+                label="Email"
+                disabled
+                name="email"
+                value={resUser?.email}
+                onChange={textHandler}
+                fullWidth
+              />
+            </Grid>
+            <Grid item xs={12}>
+              <TextField
+                variant="outlined"
+                color="primary"
+                label="Name"
+                name="name"
+                value={resUser?.name}
+                onChange={textHandler}
+                fullWidth
+              />
+            </Grid>
+          </>
+        )}
+      </Grid>
     </>
   );
 }
