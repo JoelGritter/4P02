@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Switch, Route } from 'react-router-dom';
+import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
 import AssignmentsPage from './pages/AssignmentsPage';
 import CoursesPage from './pages/CoursePage';
@@ -20,6 +20,7 @@ import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
 import { Helmet } from 'react-helmet-async';
 import CreateAssignmentPage from './pages/instructorPages/CreateAssignmentPage';
+import useMe from './api/data/use-me';
 
 const awsConfig = {
   aws_project_region: process.env.REACT_APP_AWS_PROJECT_REGION,
@@ -54,6 +55,12 @@ export const App = () => {
     })();
   }, []);
 
+  const { me, success } = useMe();
+
+  const incompleteProfile = success && !me.name;
+
+  const { pathname } = useLocation();
+
   return (
     <ThemeProvider theme={theme}>
       <MuiPickersUtilsProvider utils={MomentUtils}>
@@ -62,6 +69,9 @@ export const App = () => {
           <Paper style={{ minHeight: '100vh' }}>
             <Nav>
               <Switch>
+                {incompleteProfile && pathname !== '/profile' && (
+                  <Redirect to="/profile" />
+                )}
                 <Route path="/login">
                   <Helmet>
                     <title>uAssign - Login</title>
