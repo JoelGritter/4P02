@@ -38,7 +38,7 @@ export const getAllAssociated = lambda(
   auth(async (event, context, { userDoc }) => {
     const cognitoId = userDoc.cognitoId;
     const roles = userDoc.roles;
-    var courses;
+    let courses;
     if (roles.includes('prof') || roles.includes('admin')) {
       courses = await CourseModel.find({
         $or: [
@@ -49,7 +49,7 @@ export const getAllAssociated = lambda(
       });
     } else {
       courses = await CourseModel.find({
-        students: cognitoId,
+        $or: [{ moderators: cognitoId }, { students: cognitoId }],
       });
     }
     return success(courses);
@@ -129,16 +129,31 @@ export const deleteCourse = lambda(
 export const getCourse = lambda(
   auth(async (event, context, { userDoc }) => {
     const cognitoId = userDoc.cognitoId;
-    const resCourses = await CourseModel.find({
-      $and: [
-        { students: cognitoId },
-        { _id: mongoose.Types.ObjectId(event.pathParameters.id) },
-      ],
-    });
-    if (resCourses.length == 0) {
-      return badRequest('Could not find enrolled course with given id');
+    const roles = userDoc.roles;
+    let resCourse;
+    if (roles.includes('admin')) {
+      resCourse = await CourseModel.findOne({
+        _id: mongoose.Types.ObjectId(event.pathParameters.id),
+      });
+    } else if (roles.includes('prof')) {
+      resCourse = await CourseModel.findOne({
+        $and: [
+          { currentProfessors: cognitoId },
+          { _id: mongoose.Types.ObjectId(event.pathParameters.id) },
+        ],
+      });
     } else {
-      return success(resCourses[0]);
+      resCourse = await CourseModel.findOne({
+        $and: [
+          { students: cognitoId },
+          { _id: mongoose.Types.ObjectId(event.pathParameters.id) },
+        ],
+      });
+    }
+    if (resCourse.$isEmpty('_id')) {
+      return badRequest('Could not find associated course with given id');
+    } else {
+      return success(resCourse);
     }
   })
 );
