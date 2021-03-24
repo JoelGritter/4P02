@@ -1,6 +1,7 @@
 export interface PublicUser {
   cognitoId: string;
   email: string;
+  name: string;
 }
 
 export default interface User extends PublicUser {
