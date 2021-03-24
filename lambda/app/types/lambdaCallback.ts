@@ -1,8 +1,5 @@
 import { User } from './../schemas/user.model';
-import {
-  APIGatewayEventRequestContext,
-  APIGatewayProxyEvent,
-} from 'aws-lambda';
+import { APIGatewayProxyEvent } from 'aws-lambda';
 
 type LambdaCallbackResult = any;
 
@@ -12,6 +9,6 @@ export interface CustomOptions {
 
 export type LambdaCallback = (
   event: APIGatewayProxyEvent,
-  context: APIGatewayEventRequestContext,
+  context: any, // Can't find the correct type, thanks aws
   options: CustomOptions
 ) => Promise<LambdaCallbackResult>;

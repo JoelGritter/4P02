@@ -17,7 +17,8 @@ export async function submissionRemoved(event: any) {
 
 // Authenticators
 
-export function getAuth(event: any, context: any, callback: any) {
+export function submissionGetAuth(event: any, context: any, callback: any) {
+  context.callbackWaitsForEmptyEventLoop = false;
   authHelper(event, 'GET')
     .then((result) => {
       if (result) {
@@ -32,7 +33,8 @@ export function getAuth(event: any, context: any, callback: any) {
     });
 }
 
-export function modifyAuth(event: any, context: any, callback: any) {
+export function submissionModifyAuth(event: any, context: any, callback: any) {
+  context.callbackWaitsForEmptyEventLoop = false;
   authHelper(event, 'PUT')
     .then((result) => {
       if (result) {

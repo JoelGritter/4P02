@@ -8,7 +8,7 @@ provider:
     DOMAIN_SUFFIX: space
   apiGateway:
     binaryMediaTypes:
-      - '*/*'
+      - 'application/zip'
 
 plugins:
   - serverless-plugin-typescript

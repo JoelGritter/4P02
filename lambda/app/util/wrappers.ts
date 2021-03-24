@@ -10,6 +10,7 @@ export const lambda: (c: LambdaCallback) => LambdaCallback = (
 ) => {
   const options: CustomOptions = { userDoc: null };
   return async (event, context) => {
+    context.callbackWaitsForEmptyEventLoop = false; // Avoid timeout even when function is done
     try {
       return await callback(event, context, options);
     } catch (error) {
