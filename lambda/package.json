@@ -19,7 +19,8 @@
     "jwk-to-pem": "^2.0.4",
     "mongoose": "^5.9.10",
     "node-fetch": "^2.6.1",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "serverless-binary-cors": "0.0.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.51",
@@ -37,6 +38,7 @@
     "mocha": "^7.1.2",
     "nyc": "^15.0.1",
     "serverless": "^2.28.0",
+    "serverless-apigateway-service-proxy": "^1.14.0",
     "serverless-offline": "^5.12.1",
     "serverless-plugin-typescript": "^1.1.9",
     "sinon": "^9.0.2",

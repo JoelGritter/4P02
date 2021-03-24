@@ -6,11 +6,15 @@ provider:
   environment:
     NODE_ENV: dev
     DOMAIN_SUFFIX: space
+  apiGateway:
+    binaryMediaTypes:
+      - 'application/zip'
 
 plugins:
   - serverless-plugin-typescript
   - serverless-offline
-
+  - serverless-apigateway-service-proxy
+  - serverless-binary-cors
 package:
   include:
     - .env
@@ -226,6 +230,66 @@ functions:
           path: assign/me
           method: get
           cors: true
+  submissionGetAuth:
+    handler: app/handlers/file.submissionGetAuth
+  submissionModifyAuth:
+    handler: app/handlers/file.submissionModifyAuth
+  submissionCreated:
+    handler: app/handlers/file.submissionCreated
+    events:
+      - s3:
+        bucket:
+          Ref: S3Bucket
+        event: s3:ObjectCreated:*
+        rules:
+          - prefix: s3/submissions
+  submissionRemoved:
+    handler: app/handlers/file.submissionRemoved
+    events:
+      - s3:
+        bucket:
+          Ref: S3Bucket
+        event: s3:ObjectRemoved:*
+        rules:
+          - prefix: s3/submissions
+
+custom:
+  apiGatewayServiceProxies:
+    - s3:
+        path: s3/submissions/{courseId}/{assignmentId}/{cognitoId}/{objectKey}
+        method: put
+        action: PutObject
+        bucket:
+          Ref: S3Bucket
+        key:
+          pathParam: objectKey
+        cors: true
+        authorizationType: CUSTOM
+        authorizerId: fbu4v3
+
+    - s3:
+        path: s3/submissions/{courseId}/{assignmentId}/{cognitoId}/{objectKey}
+        method: get
+        action: GetObject
+        bucket:
+          Ref: S3Bucket
+        key:
+          pathParam: objectKey
+        cors: true
+        authorizationType: CUSTOM
+        authorizerId: neizj6
+
+    - s3:
+        path: s3/submissions/{courseId}/{assignmentId}/{cognitoId}/{objectKey}
+        method: delete
+        action: DeleteObject
+        bucket:
+          Ref: S3Bucket
+        key:
+          pathParam: objectKey
+        cors: true
+        authorizerId: fbu4v3
+
 resources:
   Resources:
     serviceUserPool:
@@ -265,3 +329,5 @@ resources:
         UserPoolId:
           Ref: serviceUserPool
         Domain: service-user-pool-domain-${opt:stage, self:provider.stage}-${self:provider.environment.DOMAIN_SUFFIX}
+    S3Bucket:
+      Type: 'AWS::S3::Bucket'

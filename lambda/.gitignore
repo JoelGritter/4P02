@@ -16,3 +16,5 @@ out-logger.json
 .DS_Store
 
 .env
+
+buckets

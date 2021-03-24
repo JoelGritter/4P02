@@ -1,6 +1,6 @@
 import { Role } from './../schemas/user.model';
 import { connectToDatabase } from './mongo';
-import { LambdaCallback } from './../types/lambdaCallback';
+import { LambdaCallback, CustomOptions } from './../types/lambdaCallback';
 import { badRequest, internalServerError, unauthorized } from './rest';
 import UserModel, { User } from '../schemas/user.model';
 import { authorizer } from '../util/auth';
@@ -8,8 +8,9 @@ import { authorizer } from '../util/auth';
 export const lambda: (c: LambdaCallback) => LambdaCallback = (
   callback: LambdaCallback
 ) => {
-  const options = {};
+  const options: CustomOptions = { userDoc: null };
   return async (event, context) => {
+    context.callbackWaitsForEmptyEventLoop = false; // Avoid timeout even when function is done
     try {
       return await callback(event, context, options);
     } catch (error) {
