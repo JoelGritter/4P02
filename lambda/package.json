@@ -19,7 +19,8 @@
     "jwk-to-pem": "^2.0.4",
     "mongoose": "^5.9.10",
     "node-fetch": "^2.6.1",
-    "request": "^2.88.2"
+    "request": "^2.88.2",
+    "serverless-binary-cors": "0.0.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.51",
