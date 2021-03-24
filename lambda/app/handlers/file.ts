@@ -77,7 +77,8 @@ async function authHelper(event: any, method: 'GET' | 'PUT'): Promise<boolean> {
     } else {
       return (
         cognitoId === reqUser.cognitoId &&
-        course.students.includes(reqUser.cognitoId)
+        (course.students.includes(reqUser.cognitoId) ||
+          (method === 'GET' && course.moderators.includes(reqUser.cognitoId)))
       );
     }
   }
