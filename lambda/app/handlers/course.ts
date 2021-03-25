@@ -148,7 +148,7 @@ export const getCourse = lambda(
         _id: mongoose.Types.ObjectId(event.pathParameters.id),
       });
     }
-    if (resCourse == null) {
+    if (resCourse) {
       return badRequest('Could not find associated course with given id');
     } else {
       return success(resCourse);
