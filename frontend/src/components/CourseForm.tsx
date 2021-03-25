@@ -96,7 +96,10 @@ export const CourseForm: React.FC<CreateCourseFormProps> = ({
               multiple
               id="course-professors-autocomplete"
               options={profs}
-              getOptionLabel={(user) => user?.email}
+              getOptionLabel={(user) => {
+                if (user?.name === undefined) return user?.email;
+                else return user?.name + ' <' + user?.email + '>';
+              }}
               onChange={handleProfessorsChange}
               value={profs.filter((user) =>
                 course.currentProfessors?.includes(user.cognitoId)
@@ -124,7 +127,10 @@ export const CourseForm: React.FC<CreateCourseFormProps> = ({
                 multiple
                 id="course-moderators-autocomplete"
                 options={users}
-                getOptionLabel={(user) => user?.email}
+                getOptionLabel={(user) => {
+                  if (user?.name === undefined) return user?.email;
+                  else return user?.name + ' <' + user?.email + '>';
+                }}
                 onChange={handleModeratorsChange}
                 value={users.filter((user) =>
                   course.moderators?.includes(user.cognitoId)
@@ -143,7 +149,10 @@ export const CourseForm: React.FC<CreateCourseFormProps> = ({
                 multiple
                 id="course-students-autocomplete"
                 options={users}
-                getOptionLabel={(user) => user?.email}
+                getOptionLabel={(user) => {
+                  if (user?.name === undefined) return user?.email;
+                  else return user?.name + ' <' + user?.email + '>';
+                }}
                 onChange={handleStudentsChange}
                 value={users.filter((user) =>
                   course.students?.includes(user.cognitoId)
