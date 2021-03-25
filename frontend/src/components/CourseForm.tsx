@@ -97,8 +97,8 @@ export const CourseForm: React.FC<CreateCourseFormProps> = ({
               id="course-professors-autocomplete"
               options={profs}
               getOptionLabel={(user) => {
-                if (user?.name === undefined) return user?.email;
-                else return user?.name + ' <' + user?.email + '>';
+                if (user.name) return user.name + ' <' + user.email + '>';
+                else return user.email;
               }}
               onChange={handleProfessorsChange}
               value={profs.filter((user) =>
@@ -128,8 +128,8 @@ export const CourseForm: React.FC<CreateCourseFormProps> = ({
                 id="course-moderators-autocomplete"
                 options={users}
                 getOptionLabel={(user) => {
-                  if (user?.name === undefined) return user?.email;
-                  else return user?.name + ' <' + user?.email + '>';
+                  if (user.name) return user.name + ' <' + user.email + '>';
+                  else return user.email;
                 }}
                 onChange={handleModeratorsChange}
                 value={users.filter((user) =>
@@ -150,8 +150,8 @@ export const CourseForm: React.FC<CreateCourseFormProps> = ({
                 id="course-students-autocomplete"
                 options={users}
                 getOptionLabel={(user) => {
-                  if (user?.name === undefined) return user?.email;
-                  else return user?.name + ' <' + user?.email + '>';
+                  if (user.name) return user.name + ' <' + user.email + '>';
+                  else return user.email;
                 }}
                 onChange={handleStudentsChange}
                 value={users.filter((user) =>
