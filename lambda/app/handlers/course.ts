@@ -149,9 +149,9 @@ export const getCourse = lambda(
       });
     }
     if (resCourse) {
-      return badRequest('Could not find associated course with given id');
-    } else {
       return success(resCourse);
+    } else {
+      return badRequest('Could not find associated course with given id');
     }
   })
 );
