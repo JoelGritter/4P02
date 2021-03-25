@@ -16,9 +16,10 @@ export const getAllPublic = lambda(
   roleAuth(['admin', 'prof'], async () => {
     const users = await UserModel.find();
     return success(
-      users.map(({ cognitoId, email }) => ({
+      users.map(({ cognitoId, email, name }) => ({
         cognitoId,
         email,
+        name,
       }))
     );
   })
@@ -29,9 +30,10 @@ export const getAllProfPublic = lambda(
   roleAuth(['admin', 'prof'], async () => {
     const users = await UserModel.find({ roles: 'prof' });
     return success(
-      users.map(({ cognitoId, email }) => ({
+      users.map(({ cognitoId, email, name }) => ({
         cognitoId,
         email,
+        name,
       }))
     );
   })

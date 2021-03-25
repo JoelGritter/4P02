@@ -69,7 +69,10 @@ function UserCard({ user, mutate }: any) {
   return (
     <Card variant="outlined">
       <CardContent>
-        <Typography variant="body1">{user.email}</Typography>
+        <Typography variant="body1">{user.name}</Typography>
+        <Typography variant="body1" color="textSecondary">
+          {user.email}
+        </Typography>
         <FormControlLabel
           control={
             <Checkbox
