@@ -35,7 +35,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 }));
 
 export default function AssignmentsPage() {
-  const { courseId, id }: { courseId: string; id: string } = useParams();
+  const { id }: { courseId: string; id: string } = useParams();
   const { data: assignment, loading, failed } = useGet<Assignment | any>(
     `/assign/${id}`
   );

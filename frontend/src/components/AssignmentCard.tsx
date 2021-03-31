@@ -29,7 +29,7 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({ assignment }) => {
   return (
     <Card className={classes.root}>
       <Link
-        to={`/assignment/${assignment.courseID}`}
+        to={`/courses/${assignment.courseID}/assignments/${assignment._id}`}
         style={{ textDecoration: 'none' }}
       >
         <CardActionArea>
