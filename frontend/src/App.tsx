@@ -96,9 +96,9 @@ export const App = () => {
                   </Helmet>
                   <CreateAssignmentPage />
                 </Route>
-                <Route path="/assignments">
+                <Route path="/courses/:courseId/assignments/:id">
                   <Helmet>
-                    <title>uAssign - Assignments</title>
+                    <title>uAssign - Assignment</title>
                   </Helmet>
                   <AssignmentsPage />
                 </Route>
