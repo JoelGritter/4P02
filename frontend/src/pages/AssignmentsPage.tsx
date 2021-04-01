@@ -34,8 +34,8 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
 }));
 
-export default function AssignmentsPage() {
-  const { id }: { courseId: string; id: string } = useParams();
+export default function EditAssignmentPage() {
+  const { courseId, id }: { courseId: string; id: string } = useParams();
   const { data: assignment, loading, failed } = useGet<Assignment | any>(
     `/assign/${id}`
   );
@@ -55,7 +55,7 @@ export default function AssignmentsPage() {
               <Typography variant="h4">{assignment.name}</Typography>
               <Button
                 component={Link}
-                to={`/courses/${id}/edit`}
+                to={`/courses/${courseId}/assignments/${id}/edit`}
                 variant="contained"
                 color="primary"
               >

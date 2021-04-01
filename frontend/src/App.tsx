@@ -6,6 +6,7 @@ import CoursesPage from './pages/CoursePage';
 import HomePage from './pages/home/HomePage';
 import ProfilePage from './pages/ProfilePage';
 import TestsPage from './pages/TestsPage';
+import EditAssignmentPage from './pages/instructorPages/EditAssignmentPage';
 import CreateCoursePage from './pages/instructorPages/CreateCoursePage';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { CssBaseline, Paper } from '@material-ui/core';
@@ -95,6 +96,12 @@ export const App = () => {
                     <title>uAssign - Create Assignments</title>
                   </Helmet>
                   <CreateAssignmentPage />
+                </Route>
+                <Route path="/courses/:courseId/assignments/:id/edit">
+                  <Helmet>
+                    <title>uAssign - Edit Assignments</title>
+                  </Helmet>
+                  <EditAssignmentPage />
                 </Route>
                 <Route path="/courses/:courseId/assignments/:id">
                   <Helmet>

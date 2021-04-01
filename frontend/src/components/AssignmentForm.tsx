@@ -13,7 +13,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 
 interface CreateAssignmentFormProps {
   assignment: Assignment;
-  setAssignment: Dispatch<SetStateAction<Assignment>>;
+  setAssignment: Dispatch<SetStateAction<Assignment>> | any;
 }
 
 export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({

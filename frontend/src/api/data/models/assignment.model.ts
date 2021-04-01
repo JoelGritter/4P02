@@ -7,3 +7,13 @@ export default interface Assignment {
   posted?: boolean;
   timestamp?: string;
 }
+
+export const emptyAssignment: Assignment = {
+  name: '',
+  _id: '',
+  courseID: '',
+  dueDate: '',
+  creatorId: '',
+  posted: false,
+  timestamp: '',
+};
