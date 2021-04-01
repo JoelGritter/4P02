@@ -29,7 +29,7 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({ assignment }) => {
   return (
     <Card className={classes.root}>
       <Link
-        to={`/assignment/${assignment.courseID}`}
+        to={`/courses/${assignment.courseID}/assignments/${assignment._id}`}
         style={{ textDecoration: 'none' }}
       >
         <CardActionArea>
@@ -43,7 +43,6 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({ assignment }) => {
               {assignment.name}
             </Typography>
             <Typography variant="body1" color="textSecondary" component="h6">
-              {/* {assignment?.dueDate} */}
               {moment(assignment?.dueDate).format('DD-MM-YYYY')}
             </Typography>
           </CardContent>

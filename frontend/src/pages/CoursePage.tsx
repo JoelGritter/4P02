@@ -9,7 +9,6 @@ import RequestStatus from '../components/RequestStatus';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AssignmentCard from '../components/AssignmentCard';
-// import Assignment from '../api/data/models/assignment.model';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
