@@ -9,6 +9,12 @@ provider:
   apiGateway:
     binaryMediaTypes:
       - 'application/zip'
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - 's3:GetObject'
+      Resource:
+        Fn::Join: ['', [Fn::GetAtt: [S3Bucket, Arn], '/*']]
 
 plugins:
   - serverless-plugin-typescript

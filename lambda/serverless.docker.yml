@@ -13,6 +13,11 @@ provider:
     images:
       generic:
         path: ./
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - 's3:GetObject'
+      Resource: arn:aws:s3:::uassign-api-dev-s3bucket-1ubat74rzbquo
 
 plugins:
   - serverless-offline
@@ -32,5 +37,16 @@ functions:
     events:
       - http:
           path: notes2
+          method: get
+          cors: true
+  runTest:
+    image:
+      name: generic
+      command: app/handlers/test.runTest
+      entryPoint:
+        - '/lambda-entrypoint.sh'
+    events:
+      - http:
+          path: test
           method: get
           cors: true
