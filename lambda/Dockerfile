@@ -1,6 +1,7 @@
 FROM public.ecr.aws/lambda/nodejs:12
 
-RUN sudo apt-get install unzip
+RUN yum update -y && yum install unzip -y
+RUN yum install python3 -y
 
 COPY ./ ./
 RUN npm install

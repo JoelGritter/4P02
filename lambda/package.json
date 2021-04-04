@@ -22,7 +22,8 @@
     "mongoose": "^5.11.1",
     "node-fetch": "^2.6.1",
     "request": "^2.88.2",
-    "serverless-binary-cors": "0.0.1"
+    "serverless-binary-cors": "0.0.1",
+    "shelljs": "^0.8.4"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.51",
@@ -30,6 +31,7 @@
     "@types/dotenv-safe": "^8.1.0",
     "@types/lambda-tester": "^3.6.0",
     "@types/mocha": "^7.0.2",
+    "@types/shelljs": "^0.8.8",
     "@types/sinon": "^9.0.0",
     "@types/supertest": "^2.0.8",
     "chai": "^4.2.0",
