@@ -43,7 +43,7 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({ assignment }) => {
               {assignment.name}
             </Typography>
             <Typography variant="body1" color="textSecondary" component="h6">
-              {moment(assignment?.dueDate).format('DD-MM-YYYY')}
+              {moment(assignment?.closeDate).format('DD-MM-YYYY')}
             </Typography>
           </CardContent>
         </CardActionArea>

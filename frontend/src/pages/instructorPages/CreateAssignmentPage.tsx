@@ -5,7 +5,9 @@ import Typography from '@material-ui/core/Typography';
 import { useSnackbar } from 'notistack';
 import { AssignmentForm } from '../../components/AssignmentForm';
 import { post } from '../../api/util';
-import Assignment from '../../api/data/models/assignment.model';
+import Assignment, {
+  emptyAssignment,
+} from '../../api/data/models/assignment.model';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
 
@@ -30,10 +32,7 @@ export default function CreateAssignmentPage() {
   const { courseId }: { courseId: string } = useParams();
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
-  const [assignment, setAssignment] = useState<Assignment>({
-    courseID: courseId,
-    timestamp: Date(),
-  });
+  const [assignment, setAssignment] = useState<Assignment>(emptyAssignment);
   const history = useHistory();
 
   const addAssignment = async () => {
@@ -59,6 +58,7 @@ export default function CreateAssignmentPage() {
             className={classes.button}
             onClick={() => {
               setAssignment({
+                ...emptyAssignment,
                 courseID: courseId,
               });
             }}

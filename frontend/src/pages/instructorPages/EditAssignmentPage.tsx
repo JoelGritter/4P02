@@ -3,7 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { useSnackbar } from 'notistack';
-import { update } from '../../api/util';
+import { put, update } from '../../api/util';
 import { useHistory, useParams } from 'react-router';
 import useGet from '../../api/data/use-get';
 import { Link } from 'react-router-dom';
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     margin: theme.spacing(1),
   },
   fieldsContainer: {
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(3),
   },
 }));
 
@@ -47,7 +47,7 @@ export default function EditCoursePage() {
   const history = useHistory();
 
   const updateAssignment = async () => {
-    const { success, message, data } = await update(
+    const { success, message, data } = await put(
       `/assign/${id}`,
       resAssignment
     );
@@ -79,7 +79,7 @@ export default function EditCoursePage() {
               color="secondary"
               className={classes.button}
               component={Link}
-              to={`courses/${assignment.courseID}/assignments/${assignment._id}`}
+              to={`/courses/${assignment.courseID}/assignments/${assignment._id}`}
             >
               Cancel
             </Button>
