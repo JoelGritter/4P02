@@ -1,3 +1,0 @@
-DB=mongodb+srv://lambdauser:xPZGBz1QasMBg7iZ@cosclmscluster.vf8f3.mongodb.net/uassign?retryWrites=true&w=majority
-USER_POOL_ID=us-east-1_rxv5ynpIW
-USER_POOL_CLIENT_ID=arn:aws:cognito-idp:us-east-1:284229871053:userpool/us-east-1_rxv5ynpIW

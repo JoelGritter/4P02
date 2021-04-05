@@ -1,7 +1,7 @@
 import { roleAuth, auth } from './../util/wrappers';
 import AssignmentModel, { Assignment } from './../schemas/assignment.model';
 import SubmissionModel, { Submission } from './../schemas/submission.model';
-import CourseModel, { Course } from './../schemas/course.model';
+import CourseModel from './../schemas/course.model';
 import { User } from './../schemas/user.model';
 import { badRequest, parseBody, unauthorized } from '../util/rest';
 import { success } from '../util/rest';
@@ -60,8 +60,8 @@ export const submit = lambda(
         sub.owner = cognitoId;
         sub.assignID = aID;
         sub.submissionDate = new Date();  // Handle sub date on backend -> circumvent frontend canoodling
-        delete sub.grade;                 // students trying to give themselves a grade? HA!
-        delete sub.feedback;
+        sub.grade = 0;                    // students trying to give themselves a grade? HA! Get dunked on kiddo.
+        sub.feedback = '';
 
         // validate submission date
         const assign = await AssignmentModel.findById(aID);
@@ -73,7 +73,7 @@ export const submit = lambda(
         }
 
         // find if submission for this assignment from this user already exists
-        const updatedSubmission = SubmissionModel.findOneAndUpdate(
+        const updatedSubmission = await SubmissionModel.findOneAndUpdate(
             {
                 owner: cognitoId,
                 assignID: aID,
@@ -88,7 +88,7 @@ export const submit = lambda(
     })
 );
 
-// updates given submission with grade + feedback
+// updates submission for given assignment with specified owner with grade + feedback
 export const grade = lambda(
     auth(async (event, context, {userDoc}) => {
         const aID = event.pathParameters.id
@@ -99,10 +99,16 @@ export const grade = lambda(
         if (await validateElevatedPrivileges(assignment, reqUser)) {
             // submission grade mandatory - feedback optional
             if (!graded.grade) return badRequest('Cannot grade: submission grade required');
-            // add validation to grading? - owner, assignID, submission date, answers should not be changed
-            const updatedSubmission = SubmissionModel.findOneAndUpdate(
+
+            // prevent modification of user submitted properties
+            delete graded.answers;
+            delete graded.assignID;
+            delete graded.attachments;
+            delete graded.submissionDate;
+        
+            const updatedSubmission = await SubmissionModel.findOneAndUpdate(
                 {
-                    owner: cognitoId,
+                    owner: graded.owner,
                     assignID: aID,
                 },
                 graded,

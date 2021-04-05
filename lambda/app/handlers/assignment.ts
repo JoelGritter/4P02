@@ -73,9 +73,19 @@ export const addAssignment = lambda(
     const { cognitoId } = reqUser;
     
     newAssignment.createdBy = cognitoId;              //List who created a given assignment
-    let errmsg = validateAssignDetails(newAssignment);  // validate assignment property values
+    if (!newAssignment.openDate) newAssignment.openDate = new Date();   // default open date is now, default close date is 24hrs from now
+    else newAssignment.openDate = new Date(newAssignment.openDate);
+    if (!newAssignment.closeDate) {
+      newAssignment.closeDate = new Date();
+      newAssignment.closeDate.setDate(newAssignment.openDate.getDate() + 1);
+    }
+    else newAssignment.closeDate = new Date(newAssignment.closeDate);
+    if (newAssignment.lateDate) newAssignment.lateDate = new Date(newAssignment.lateDate);
+    if (!newAssignment.maxGrade) newAssignment.maxGrade = 100.0;  // default grade scale to 100 points (percentage compatibility)
+    if (!newAssignment.weight) newAssignment.weight = 0.05;       // default assignment weight to 5% (idk why, don't ask)
+    let errmsg = validateAssignDetails(newAssignment);            // validate assignment property values
     if (errmsg != null) return badRequest(errmsg);
-
+    
     if (
       reqUser.roles.includes('admin') ||
       resCourse.currentProfessors.includes(cognitoId)
@@ -110,6 +120,9 @@ export const updateAssignment = lambda(
 
       // maintain assignment creator and validate dates
       newAssignment.createdBy = resAssignment.createdBy;
+      newAssignment.openDate ? newAssignment.openDate = new Date(newAssignment.openDate) : newAssignment.openDate = resAssignment.openDate;
+      newAssignment.closeDate ? newAssignment.closeDate = new Date(newAssignment.closeDate) : newAssignment.closeDate = resAssignment.closeDate;
+      newAssignment.lateDate ? newAssignment.lateDate = new Date(newAssignment.lateDate) : newAssignment.lateDate = resAssignment.lateDate;
       let errmsg = validateAssignDetails(newAssignment);
       if (errmsg != null) return badRequest(errmsg);
 
@@ -183,28 +196,17 @@ export const getAssignment = lambda(
 
 // validate assignment dates for sensibility
 export function validateAssignDetails(assign: Assignment) {
-  // handle missing date data
-  // default open date is now, default close date is 24hrs from now
-  if (!assign.openDate) assign.openDate = new Date();
-  if (!assign.closeDate) assign.closeDate.setDate(assign.closeDate.getDate() + 1);
-
-  // check sensible selection for late date
+  // check sensible selection for dates
   if (assign.closeDate < assign.openDate){
     return 'Operation failed: Assignment close date must be after open date';
   }
   if (assign.lateDate < assign.openDate || assign.lateDate > assign.closeDate) {
     return 'Operation failed: Assignment late date must be between open and close dates';
   }
-
-  // default grade scale to 100 points (percentage compatibility)
-  if (!assign.maxGrade) assign.maxGrade = 100.0;
   if (assign.maxGrade < 1) {
     return 'Assignment must be worth at least 1 mark';
   }
-
-  // default assignment weight to 5% (idk why, don't ask)
   // zero weight assignments are a judgement call, perhaps could come in handy
-  if (!assign.weight) assign.weight = 0.05;
   if (!(assign.weight >= 0 && assign.weight <= 1.0)) {
     return 'Assignment must account for a percentage of course grade within 0% - 100% range';
   }
