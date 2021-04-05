@@ -230,6 +230,48 @@ functions:
           path: assign/me
           method: get
           cors: true
+  getAllSubmissions:
+    handler: app/handlers/submission.getAll
+    events:
+      - http:
+          path: assign/submissions/all
+          method: get
+          cors: true
+  getAssignSubmissions:
+    handler: app/handlers/submission.getAssignmentSubmissions
+    events:
+      - http:
+          path: assign/submissions/{id}
+          method: get
+          cors: true
+  getMySubmission:
+    handler: app/handlers/submission.getMySubmission
+    events:
+      - http:
+          path: assign/sub/{id}
+          method: get
+          cors: true
+  submit:
+    handler: app/handlers/submission.submit
+    events:
+      - http:
+          path: assign/sub/{id}
+          method: put
+          cors: true
+  grade:
+    handler: app/handlers/submission.grade
+    events:
+      - http:
+          path: assign/sub/{id}
+          method: patch
+          cors: true
+  deleteAssignSubmissions:
+    handler: app/handlers/submission.deleteAssignmentSubmissions
+    events:
+      - http:
+          path: assign/submissions/{id}
+          method: delete
+          cors: true
   submissionGetAuth:
     handler: app/handlers/file.submissionGetAuth
   submissionModifyAuth:
