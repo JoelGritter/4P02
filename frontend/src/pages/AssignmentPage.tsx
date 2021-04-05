@@ -81,9 +81,7 @@ export default function AssignmentPage() {
                       Late Due
                     </Typography>
                     <Typography variant="body1">
-                      {moment(
-                        assignment?.lateDate ?? assignment?.closeDate
-                      ).format('LL - h:mm a')}
+                      {moment(assignment?.closeDate).format('LL - h:mm a')}
                     </Typography>
                   </Box>
                 </>

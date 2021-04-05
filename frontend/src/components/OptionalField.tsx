@@ -44,8 +44,8 @@ const OptionalField: React.FC<OptionalFieldProps> = ({
         <Component
           value={value}
           {...otherProps}
-          onChange={(e: any) => {
-            setValue(e.target.value);
+          onChange={(d: any) => {
+            setValue(d);
           }}
           {...children}
         ></Component>
