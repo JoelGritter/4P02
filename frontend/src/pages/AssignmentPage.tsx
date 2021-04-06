@@ -36,11 +36,7 @@ export default function AssignmentPage() {
   const { data: assignment, loading, failed } = useGet<Assignment>(
     `/assign/${id}`
   );
-  const {
-    data: course,
-    loading: courseLoading,
-    failed: courseFailed,
-  } = useGet<Course>(`course/${courseId}`);
+  const { data: course } = useGet<Course>(`course/${courseId}`);
   const classes = useStyles();
 
   return (

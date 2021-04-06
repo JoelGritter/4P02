@@ -1,3 +1,5 @@
+import { nanoid } from 'nanoid';
+
 export default interface Assignment {
   _id?: string;
   name: string; // Assignment title
@@ -11,8 +13,7 @@ export default interface Assignment {
   weight: number; // percentage weight of final mark for this assignment
   attachments: string[]; // File ID's for attached files
   questions: string[]; // Plaintext questions for this assignment
-  testInputs: string[]; // inputs for automated code testing
-  testOutputs: string[]; // expected outputs for automated testing
+  testCases: TestCase[];
 }
 
 export const emptyAssignment: Assignment = {
@@ -25,6 +26,21 @@ export const emptyAssignment: Assignment = {
   weight: 0,
   attachments: [],
   questions: [],
-  testInputs: [],
-  testOutputs: [],
+  testCases: [],
 };
+
+export interface TestCase {
+  id?: string; // Front end needs
+  input: string;
+  output: string;
+  hidden: boolean;
+}
+
+export function emptyTestCaseWithNewId(): TestCase {
+  return {
+    input: '',
+    output: '',
+    hidden: true,
+    id: nanoid(),
+  };
+}

@@ -1,11 +1,4 @@
-import classes from '*.module.css';
-import {
-  Box,
-  Checkbox,
-  FormControlLabel,
-  makeStyles,
-  OutlinedInput,
-} from '@material-ui/core';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
 import React from 'react';
 
 interface OptionalFieldProps {

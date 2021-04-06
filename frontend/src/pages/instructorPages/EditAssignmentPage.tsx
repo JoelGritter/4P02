@@ -1,14 +1,16 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { useSnackbar } from 'notistack';
-import { put, update } from '../../api/util';
+import { put } from '../../api/util';
 import { useHistory, useParams } from 'react-router';
 import useGet from '../../api/data/use-get';
 import { Link } from 'react-router-dom';
 import RequestStatus from '../../components/RequestStatus';
-import Assignment from '../../api/data/models/assignment.model';
+import Assignment, {
+  emptyAssignment,
+} from '../../api/data/models/assignment.model';
 import { AssignmentForm } from '../../components/AssignmentForm';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -41,9 +43,18 @@ export default function EditCoursePage() {
   const { data: assignment, loading, failed, mutate } = useGet<
     Assignment | any
   >(`/assign/${id}`);
-  const [editAssignment, setEditAssignment] = useState<Assignment | any>({});
+  const [editAssignment, setEditAssignment] = useState<Assignment>(
+    emptyAssignment
+  );
 
-  const resAssignment = { ...assignment, ...editAssignment };
+  useEffect(() => {
+    setEditAssignment((prev) => ({
+      ...prev,
+      ...assignment,
+    }));
+  }, [assignment]);
+
+  const resAssignment = editAssignment;
   const history = useHistory();
 
   const updateAssignment = async () => {

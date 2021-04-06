@@ -1,5 +1,11 @@
 import { Schema, model, Document } from 'mongoose';
 
+export interface TestCase {
+  input: string;
+  output: string;
+  hidden: boolean;
+}
+
 export interface Assignment extends Document {
   name: string; // Assignment title
   description: string; // assignment description
@@ -12,8 +18,7 @@ export interface Assignment extends Document {
   weight: number; // percentage weight of final mark for this assignment
   attachments: string[]; // File ID's for attached files
   questions: string[]; // Plaintext questions for this assignment
-  testInputs: string[]; // inputs for automated code testing
-  testOutputs: string[]; // expected outputs for automated testing
+  testCases: TestCase[]; // inputs, output pairs for automated code testing
 }
 
 const AssignmentModel = model(
@@ -50,7 +55,17 @@ const AssignmentModel = model(
       required: true,
     },
     attachments: [String],
-    questions: [String]
+    questions: [String],
+    testCases: {
+      type: [
+        {
+          input: String,
+          output: String,
+          hidden: Boolean,
+        },
+      ],
+      default: [],
+    },
   })
 );
 
