@@ -5,9 +5,10 @@ import useGet from '../api/data/use-get';
 import Assignment from '../api/data/models/assignment.model';
 import { Helmet } from 'react-helmet-async';
 import Typography from '@material-ui/core/Typography';
-import { Button } from '@material-ui/core';
+import { Box, Button } from '@material-ui/core';
 import RequestStatus from '../components/RequestStatus';
 import moment from 'moment';
+import Course from '../api/data/models/course.model';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -17,31 +18,26 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    margin: theme.spacing(1),
   },
-  assignHeader: {
-    margin: theme.spacing(1),
-  },
+  assignHeader: {},
   subHeader: {
     color: 'grey',
-    margin: theme.spacing(1),
     marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
   },
   dueContainer: {},
   createCourseButton: {
-    marginLeft: 5,
     height: 75,
   },
 }));
 
-export default function AssignmentsPage() {
-  const { id }: { courseId: string; id: string } = useParams();
-  const { data: assignment, loading, failed } = useGet<Assignment | any>(
+export default function AssignmentPage() {
+  const { courseId, id }: { courseId: string; id: string } = useParams();
+  const { data: assignment, loading, failed } = useGet<Assignment>(
     `/assign/${id}`
   );
+  const { data: course } = useGet<Course>(`course/${courseId}`);
   const classes = useStyles();
-
-  console.log(assignment);
 
   return (
     <>
@@ -55,7 +51,7 @@ export default function AssignmentsPage() {
               <Typography variant="h4">{assignment.name}</Typography>
               <Button
                 component={Link}
-                to={`/courses/${id}/edit`}
+                to={`/courses/${courseId}/assignments/${id}/edit`}
                 variant="contained"
                 color="primary"
               >
@@ -63,12 +59,29 @@ export default function AssignmentsPage() {
               </Button>
             </div>
             <Typography className={classes.subHeader}>
-              course name - code
+              {course?.name}
             </Typography>
             <div className={classes.dueContainer}>
-              <Typography variant="h5" className={classes.assignHeader}>
-                Due {moment(assignment?.dueDate).format('LL - h:mm a')}
+              <Typography variant="body1" color="textSecondary">
+                Due
               </Typography>
+              <Typography variant="body1">
+                {moment(assignment?.lateDate ?? assignment?.closeDate).format(
+                  'LL - h:mm a'
+                )}
+              </Typography>
+              {assignment?.lateDate && (
+                <>
+                  <Box marginTop={1}>
+                    <Typography variant="body1" color="textSecondary">
+                      Late Due
+                    </Typography>
+                    <Typography variant="body1">
+                      {moment(assignment?.closeDate).format('LL - h:mm a')}
+                    </Typography>
+                  </Box>
+                </>
+              )}
             </div>
           </>
         )}
