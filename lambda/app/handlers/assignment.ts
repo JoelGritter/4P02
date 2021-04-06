@@ -127,6 +127,11 @@ export const updateAssignment = lambda(
       newAssignment.closeDate
         ? (newAssignment.closeDate = new Date(newAssignment.closeDate))
         : (newAssignment.closeDate = resAssignment.closeDate);
+      if (newAssignment.lateDate === undefined)
+        newAssignment.lateDate = resAssignment.lateDate;
+      if (newAssignment.lateDate == null) {
+      } else if (newAssignment)
+        newAssignment.lateDate = new Date(newAssignment.lateDate);
       let errmsg = validateAssignDetails(newAssignment);
       if (errmsg != null) return badRequest(errmsg);
 
