@@ -120,9 +120,13 @@ export const updateCourse = lambda(
   })
 );
 
+// delete course -> assignments -> submissions (files?)
 export const deleteCourse = lambda(
   roleAuth(['admin'], async (event) => {
-    return badRequest('Unsupported: Cannot delete course');
+    const cID = event.pathParameters.id;
+    const deletedCourses = await CourseModel.findByIdAndDelete(cID);
+    return success(deletedCourses);
+    //return badRequest('Unsupported: Cannot delete course');
   })
 );
 
