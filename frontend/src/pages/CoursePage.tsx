@@ -5,6 +5,7 @@ import useGet from '../api/data/use-get';
 import { Helmet } from 'react-helmet-async';
 import Course from '../api/data/models/course.model';
 import Assignment from '../api/data/models/assignment.model';
+import User from '../api/data/models/user.model';
 import RequestStatus from '../components/RequestStatus';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
@@ -45,6 +46,9 @@ export default function CoursesPage() {
     loading: loadingAssignments,
     failed: failedAssignments,
   } = useGet<Assignment | any>(`/assign/course/${id}`);
+  const { data: user, loading: loadingUser, failed: failedUser } = useGet<User>(
+    `/user/me`
+  );
   const classes = useStyles();
 
   return (
@@ -76,16 +80,18 @@ export default function CoursesPage() {
                 <Typography variant="h5" className={classes.assignHeader}>
                   Assignments
                 </Typography>
-                <Tooltip title="Add Assignment">
-                  <IconButton
-                    className={classes.createCourseButton}
-                    component={Link}
-                    to={`/courses/${id}/assignments/create`}
-                    color="primary"
-                  >
-                    <AddIcon />
-                  </IconButton>
-                </Tooltip>
+                {user.roles?.includes('prof') && (
+                  <Tooltip title="Add Assignment">
+                    <IconButton
+                      className={classes.createCourseButton}
+                      component={Link}
+                      to={`/courses/${id}/assignments/create`}
+                      color="primary"
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
               </Box>
               {assignment.map((assignments: Assignment) => {
                 return <AssignmentCard assignment={assignments} />;
@@ -94,8 +100,8 @@ export default function CoursesPage() {
           </>
         )}
         <RequestStatus
-          failed={failedCourse || failedAssignments}
-          loading={loadingCourse || loadingAssignments}
+          failed={failedCourse || failedAssignments || failedUser}
+          loading={loadingCourse || loadingAssignments || loadingUser}
           failedMessage="Could not load course!"
         />
       </div>

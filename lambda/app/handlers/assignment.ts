@@ -178,7 +178,7 @@ export const deleteAssignment = lambda(
 
 // returns a specific assignment for a specific course for an admin or professor
 export const getAssignment = lambda(
-  roleAuth(['admin', 'prof'], async (event, context, { userDoc }) => {
+  auth(async (event, context, { userDoc }) => {
     const resAssignment = await AssignmentModel.findById(
       event.pathParameters.id
     );
@@ -190,7 +190,8 @@ export const getAssignment = lambda(
     if (
       reqUser.roles.includes('admin') ||
       resAssignment.createdBy === cognitoId ||
-      resCourse.currentProfessors.includes(cognitoId)
+      resCourse.currentProfessors.includes(cognitoId) ||
+      resCourse.students.includes(cognitoId)
     ) {
       return success(resAssignment);
     } else {
