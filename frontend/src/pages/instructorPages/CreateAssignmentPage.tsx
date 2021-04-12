@@ -36,6 +36,7 @@ export default function CreateAssignmentPage() {
   const history = useHistory();
 
   const addAssignment = async () => {
+    assignment.courseID = courseId;
     const { success, message, data } = await post('/assign', assignment);
     if (!success) {
       enqueueSnackbar(
