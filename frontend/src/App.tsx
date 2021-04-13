@@ -1,27 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
-import AssignmentPage from './pages/AssignmentPage';
-import CoursesPage from './pages/CoursePage';
-import HomePage from './pages/home/HomePage';
-import ProfilePage from './pages/ProfilePage';
-import TestsPage from './pages/TestsPage';
-import EditAssignmentPage from './pages/instructorPages/EditAssignmentPage';
-import CreateCoursePage from './pages/instructorPages/CreateCoursePage';
+import React, { useState } from 'react';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import { CssBaseline, Paper } from '@material-ui/core';
+import { CssBaseline } from '@material-ui/core';
 import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
-import Amplify, { Auth } from 'aws-amplify';
-import AdminHome from './pages/admin/AdminHome';
-import Nav from './components/Nav';
+import Amplify from 'aws-amplify';
+
 import { AmplifyAuthenticator, AmplifySignUp } from '@aws-amplify/ui-react';
 import { SnackbarProvider } from 'notistack';
-import EditCoursePage from './pages/instructorPages/EditCoursePage';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import MomentUtils from '@date-io/moment';
-import { Helmet } from 'react-helmet-async';
-import CreateAssignmentPage from './pages/instructorPages/CreateAssignmentPage';
-import useMe from './api/data/use-me';
+import Main from './Main';
 
 const awsConfig = {
   aws_project_region: process.env.REACT_APP_AWS_PROJECT_REGION,
@@ -35,7 +22,6 @@ Amplify.configure(awsConfig);
 
 export const App = () => {
   const [darkMode] = useState(false);
-  const [jwtToken, setJwtToken] = useState<string | null>(null);
 
   const theme = createMuiTheme({
     palette: {
@@ -49,147 +35,60 @@ export const App = () => {
     },
   });
 
-  useEffect(() => {
-    (async () => {
-      const data = await Auth.currentSession();
-      const _jwtToken = data.getIdToken().getJwtToken();
-      setJwtToken(_jwtToken);
-      localStorage.setItem('jwtToken', 'Bearer ' + _jwtToken);
-    })();
-  }, [jwtToken]);
-
-  const { me, success } = useMe();
-
-  const incompleteProfile = success && !me.name;
-
-  const { pathname } = useLocation();
-
   return (
     <>
-      {jwtToken && (
-        <>
-          <ThemeProvider theme={theme}>
-            <MuiPickersUtilsProvider utils={MomentUtils}>
-              <SnackbarProvider>
-                <CssBaseline />
-                <Paper style={{ minHeight: '100vh' }}>
-                  <Nav>
-                    <Switch>
-                      {incompleteProfile && pathname !== '/profile' && (
-                        <Redirect to="/profile" />
-                      )}
-                      <Route path="/login">
-                        <Helmet>
-                          <title>uAssign - Login</title>
-                        </Helmet>
-                        <LoginPage />
-                      </Route>
-                      <Route path="/courses/create">
-                        <Helmet>
-                          <title>uAssign - Create Course</title>
-                        </Helmet>
-                        <CreateCoursePage />
-                      </Route>
-                      <Route path="/courses/:id/edit">
-                        <Helmet>
-                          <title>uAssign - Edit Course</title>
-                        </Helmet>
-                        <EditCoursePage />
-                      </Route>
-                      <Route path="/courses/:courseId/assignments/create">
-                        <Helmet>
-                          <title>uAssign - Create Assignments</title>
-                        </Helmet>
-                        <CreateAssignmentPage />
-                      </Route>
-                      <Route path="/courses/:courseId/assignments/:id/edit">
-                        <Helmet>
-                          <title>uAssign - Edit Assignments</title>
-                        </Helmet>
-                        <EditAssignmentPage />
-                      </Route>
-                      <Route path="/courses/:courseId/assignments/:id">
-                        <Helmet>
-                          <title>uAssign - Assignment</title>
-                        </Helmet>
-                        <AssignmentPage />
-                      </Route>
-                      <Route path="/courses/:id">
-                        <Helmet>
-                          <title>uAssign - Course Page</title>
-                        </Helmet>
-                        <CoursesPage />
-                      </Route>
-                      <Route path="/profile">
-                        <Helmet>
-                          <title>uAssign - My Profile</title>
-                        </Helmet>
-                        <ProfilePage />
-                      </Route>
-                      <Route path="/tests">
-                        <Helmet>
-                          <title>uAssign - Tests</title>
-                        </Helmet>
-                        <TestsPage />
-                      </Route>
-                      <Route path="/admin">
-                        <Helmet>
-                          <title>uAssign - Admin</title>
-                        </Helmet>
-                        <AdminHome />
-                      </Route>
-                      <Route path="/home">
-                        <Helmet>
-                          <title>uAssign - Home</title>
-                        </Helmet>
-                        <HomePage />
-                      </Route>
-                      <Route path="/">
-                        <Helmet>
-                          <title>uAssign - Home</title>
-                        </Helmet>
-                        <HomePage />
-                      </Route>
-                    </Switch>
-                  </Nav>
-                </Paper>
-              </SnackbarProvider>
-            </MuiPickersUtilsProvider>
-          </ThemeProvider>
-        </>
-      )}
+      <ThemeProvider theme={theme}>
+        <MuiPickersUtilsProvider utils={MomentUtils}>
+          <SnackbarProvider>
+            <CssBaseline />
+            <Main />
+          </SnackbarProvider>
+        </MuiPickersUtilsProvider>
+      </ThemeProvider>
     </>
   );
 };
 
 function AuthWrapper() {
-  const [authState, setAuthState] = React.useState();
-  const [user, setUser] = React.useState();
+  const [authState, setAuthState] = React.useState<any>();
+  const [jwtToken, setJwtToken] = useState<string | null>(null);
 
   React.useEffect(() => {
-    return onAuthUIStateChange((nextAuthState: any, authData: any) => {
+    onAuthUIStateChange((nextAuthState, authData: any) => {
       setAuthState(nextAuthState);
-      setUser(authData);
+      const _jwtToken = authData?.signInUserSession?.idToken?.jwtToken;
+      if (_jwtToken) {
+        localStorage.setItem('jwtToken', 'Bearer ' + _jwtToken);
+        const tokenFromStorage = localStorage.getItem('jwtToken');
+        setJwtToken(tokenFromStorage);
+      } else {
+        setJwtToken(null);
+      }
     });
   }, []);
 
-  return authState === AuthState.SignedIn && user ? (
-    <App />
-  ) : (
-    <AmplifyAuthenticator>
-      <AmplifySignUp
-        slot="sign-up"
-        usernameAlias="email"
-        formFields={[
-          {
-            type: 'email',
-          },
-          {
-            type: 'password',
-          },
-        ]}
-      />
-    </AmplifyAuthenticator>
+  const loggedIn = authState === AuthState.SignedIn;
+
+  return (
+    <>
+      {loggedIn && jwtToken && <App />}
+      {!loggedIn && (
+        <AmplifyAuthenticator>
+          <AmplifySignUp
+            slot="sign-up"
+            usernameAlias="email"
+            formFields={[
+              {
+                type: 'email',
+              },
+              {
+                type: 'password',
+              },
+            ]}
+          />
+        </AmplifyAuthenticator>
+      )}
+    </>
   );
 }
 

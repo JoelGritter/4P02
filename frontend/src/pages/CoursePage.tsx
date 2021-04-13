@@ -42,7 +42,7 @@ export default function CoursesPage() {
     failed: failedCourse,
   } = useGet<Course>(`/course/${id}`);
   const {
-    data: assignment,
+    data: assignments,
     loading: loadingAssignments,
     failed: failedAssignments,
   } = useGet<Assignment | any>(`/assign/course/${id}`);
@@ -57,7 +57,7 @@ export default function CoursesPage() {
         <title>uAssign - {course?.name || 'Course Loading...'}</title>
       </Helmet>
       <div className={classes.root}>
-        {assignment && course && (
+        {assignments && course && (
           <>
             <div className={classes.header}>
               <Typography variant="h4">{course.name}</Typography>
@@ -93,8 +93,8 @@ export default function CoursesPage() {
                   </Tooltip>
                 )}
               </Box>
-              {assignment.map((assignments: Assignment) => {
-                return <AssignmentCard assignment={assignments} />;
+              {assignments.map((a: Assignment) => {
+                return <AssignmentCard assignment={a} key={a._id} />;
               })}
             </div>
           </>
