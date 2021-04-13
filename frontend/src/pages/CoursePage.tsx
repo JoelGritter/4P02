@@ -61,16 +61,18 @@ export default function CoursesPage() {
           <>
             <div className={classes.header}>
               <Typography variant="h4">{course.name}</Typography>
-              <Tooltip title="Edit Course">
-                <IconButton
-                  className={classes.createCourseButton}
-                  component={Link}
-                  to={`/courses/${id}/edit`}
-                  color="primary"
-                >
-                  <EditIcon />
-                </IconButton>
-              </Tooltip>
+              {user.roles?.includes('prof') && (
+                <Tooltip title="Edit Course">
+                  <IconButton
+                    className={classes.createCourseButton}
+                    component={Link}
+                    to={`/courses/${id}/edit`}
+                    color="primary"
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
             </div>
             <Typography className={classes.subHeader}>
               {course.description}
