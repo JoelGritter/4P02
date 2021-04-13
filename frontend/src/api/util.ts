@@ -47,7 +47,7 @@ export async function post(path: string, data: any) {
   }
 }
 
-export async function postFile(path: string, file: File) {
+export async function putFile(path: string, file: File) {
   try {
     const response = await fetch(apiJoin(path), {
       method: 'PUT',
@@ -58,10 +58,10 @@ export async function postFile(path: string, file: File) {
       body: file,
     });
     return {
-      postSuccess: response.status === 200 || response.status === 201,
+      success: response.status === 200 || response.status === 201,
     };
   } catch (e) {
-    return { postSuccess: false };
+    return { success: false };
   }
 }
 

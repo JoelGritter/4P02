@@ -14,7 +14,7 @@ import RequestStatus from '../components/RequestStatus';
 import moment from 'moment';
 import Course from '../api/data/models/course.model';
 import { useSnackbar } from 'notistack';
-import { postFile, put } from '../api/util';
+import { putFile, put } from '../api/util';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -64,7 +64,7 @@ export default function AssignmentPage() {
     } else {
       submission.attachments = [file.name];
 
-      const { postSuccess } = await postFile(
+      const { success: postSuccess } = await putFile(
         `/s3/submissions/${courseId}/${id}/${user.cognitoId}/${file.name}`,
         file
       );
