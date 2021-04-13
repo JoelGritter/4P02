@@ -56,12 +56,10 @@ function AuthWrapper() {
   React.useEffect(() => {
     onAuthUIStateChange((nextAuthState, authData: any) => {
       setAuthState(nextAuthState);
-      console.log({ authData, nextAuthState });
       const _jwtToken = authData?.signInUserSession?.idToken?.jwtToken;
       if (_jwtToken) {
         localStorage.setItem('jwtToken', 'Bearer ' + _jwtToken);
         const tokenFromStorage = localStorage.getItem('jwtToken');
-        console.log({ tokenFromStorage });
         setJwtToken(tokenFromStorage);
       } else {
         setJwtToken(null);
@@ -70,8 +68,6 @@ function AuthWrapper() {
   }, []);
 
   const loggedIn = authState === AuthState.SignedIn;
-
-  console.log(loggedIn);
 
   return (
     <>
