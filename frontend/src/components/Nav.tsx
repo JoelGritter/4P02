@@ -27,6 +27,7 @@ import {
 import { logout } from '../api/auth';
 import useMe from '../api/data/use-me';
 import { Collapse } from '@material-ui/core';
+import { cache } from 'swr';
 
 const drawerWidth = 240;
 
@@ -181,7 +182,14 @@ export default function Nav(props: Props) {
             </ListItem>
           </List>
         </Collapse>
-        <ListItem button key="logout" onClick={logout}>
+        <ListItem
+          button
+          key="logout"
+          onClick={() => {
+            cache.clear();
+            logout();
+          }}
+        >
           <ListItemIcon>
             <ExitToAppIcon />
           </ListItemIcon>
