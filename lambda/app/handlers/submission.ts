@@ -108,7 +108,8 @@ export const grade = lambda(
       // prevent modification of user submitted properties
       delete graded.answers;
       delete graded.assignID;
-      delete graded.attachments;
+      delete graded.codeZip;
+      //delete graded.attachments;
       delete graded.submissionDate;
 
       const updatedSubmission = await SubmissionModel.findOneAndUpdate(

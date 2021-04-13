@@ -61,8 +61,10 @@ export default function AssignmentPage() {
   const sendSubmission = async () => {
     if (file.size === 0) {
       enqueueSnackbar(`No file selected to submit!`);
+    } else if (file.type !== 'application/x-zip-compressed') {
+      enqueueSnackbar(`File must be a zip file!`);
     } else {
-      submission.attachments = [file.name];
+      submission.codeZip = file.name;
 
       const { success: postSuccess } = await putFile(
         `/s3/submissions/${courseId}/${id}/${user.cognitoId}/${file.name}`,
@@ -132,7 +134,7 @@ export default function AssignmentPage() {
                   </Typography>
                   <Typography variant="body1" color="textSecondary">
                     {' '}
-                    File submitted - {oldSub[0]?.attachments[0]}
+                    File submitted - {oldSub[0]?.codeZip}
                   </Typography>
                 </>
               )}

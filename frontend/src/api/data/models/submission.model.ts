@@ -2,7 +2,8 @@ export default interface Submission {
   _owner?: string; // cognitoID of submitter
   assignID?: string; // ID for assignment this submission obj belongs to
   submissionDate: Date; // date of submission
-  attachments: string[]; // array of file ID's for student submitted attachments
+  codeZip: String;
+  //attachments: string[]; // array of file ID's for student submitted attachments
   answers: string[]; // student submitted plaintext answers to assignment questions
   grade: number; // marker assigned grade
   feedback: string; // marker feedback (global to entire submission)
@@ -11,7 +12,7 @@ export default interface Submission {
 
 export const emptySubmission: Submission = {
   submissionDate: new Date(),
-  attachments: [],
+  codeZip: '',
   answers: [],
   grade: 0,
   feedback: '',
