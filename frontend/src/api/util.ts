@@ -47,26 +47,21 @@ export async function post(path: string, data: any) {
   }
 }
 
-export async function postFile(file: any) {
+export async function postFile(path: string, file: File) {
   try {
-    const formData = new FormData();
-    formData.append('file', file);
-    formData.append('filename', file.name);
-    const response = await fetch(apiJoin('files'), {
-      method: 'POST',
+    const response = await fetch(apiJoin(path), {
+      method: 'PUT',
       headers: {
+        'Content-Type': file.type,
         Authorization: getToken() ?? '',
       },
-      body: formData,
+      body: file,
     });
-    const json = await response.json();
     return {
-      success:
-        response.status === 200 || response.status === 201 || json?.success,
-      ...json,
+      postSuccess: response.status === 200 || response.status === 201,
     };
   } catch (e) {
-    return { success: false };
+    return { postSuccess: false };
   }
 }
 
