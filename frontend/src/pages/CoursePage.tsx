@@ -1,14 +1,17 @@
-import { Button } from '@material-ui/core';
+import { Box, IconButton, Tooltip } from '@material-ui/core';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import useGet from '../api/data/use-get';
 import { Helmet } from 'react-helmet-async';
 import Course from '../api/data/models/course.model';
 import Assignment from '../api/data/models/assignment.model';
+import User from '../api/data/models/user.model';
 import RequestStatus from '../components/RequestStatus';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import AssignmentCard from '../components/AssignmentCard';
+import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -18,21 +21,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    margin: theme.spacing(1),
   },
   assignHeader: {
-    margin: theme.spacing(1),
+    marginTop: theme.spacing(2),
   },
   subHeader: {
     color: 'grey',
-    margin: theme.spacing(1),
     marginTop: theme.spacing(2),
   },
   assignmentContainer: {},
-  createCourseButton: {
-    marginLeft: 5,
-    height: 75,
-  },
+  createCourseButton: {},
 }));
 
 // TODO: Add redirect functionality/error handling if course does not exist
@@ -44,10 +42,13 @@ export default function CoursesPage() {
     failed: failedCourse,
   } = useGet<Course>(`/course/${id}`);
   const {
-    data: assignment,
+    data: assignments,
     loading: loadingAssignments,
     failed: failedAssignments,
   } = useGet<Assignment | any>(`/assign/course/${id}`);
+  const { data: user, loading: loadingUser, failed: failedUser } = useGet<User>(
+    `/user/me`
+  );
   const classes = useStyles();
 
   return (
@@ -56,45 +57,53 @@ export default function CoursesPage() {
         <title>uAssign - {course?.name || 'Course Loading...'}</title>
       </Helmet>
       <div className={classes.root}>
-        {assignment && course && (
+        {assignments && course && (
           <>
             <div className={classes.header}>
               <Typography variant="h4">{course.name}</Typography>
-              <Button
-                component={Link}
-                to={`/courses/${id}/edit`}
-                variant="contained"
-                color="primary"
-              >
-                Edit Course
-              </Button>
+              {user.roles?.includes('prof') && (
+                <Tooltip title="Edit Course">
+                  <IconButton
+                    className={classes.createCourseButton}
+                    component={Link}
+                    to={`/courses/${id}/edit`}
+                    color="primary"
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
+              )}
             </div>
             <Typography className={classes.subHeader}>
               {course.description}
             </Typography>
             <div className={classes.assignmentContainer}>
-              <Typography variant="h5" className={classes.assignHeader}>
-                Assignments
-              </Typography>
-              {assignment.map((assignments: Assignment) => {
-                return <AssignmentCard assignment={assignments} />;
+              <Box display="flex" justifyContent="space-between">
+                <Typography variant="h5" className={classes.assignHeader}>
+                  Assignments
+                </Typography>
+                {user.roles?.includes('prof') && (
+                  <Tooltip title="Add Assignment">
+                    <IconButton
+                      className={classes.createCourseButton}
+                      component={Link}
+                      to={`/courses/${id}/assignments/create`}
+                      color="primary"
+                    >
+                      <AddIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </Box>
+              {assignments.map((a: Assignment) => {
+                return <AssignmentCard assignment={a} key={a._id} />;
               })}
-              <Button
-                className={classes.createCourseButton}
-                component={Link}
-                fullWidth
-                to={`/courses/${id}/assignments/create`}
-                variant="contained"
-                color="primary"
-              >
-                Create Assignment
-              </Button>
             </div>
           </>
         )}
         <RequestStatus
-          failed={failedCourse || failedAssignments}
-          loading={loadingCourse || loadingAssignments}
+          failed={failedCourse || failedAssignments || failedUser}
+          loading={loadingCourse || loadingAssignments || loadingUser}
           failedMessage="Could not load course!"
         />
       </div>
