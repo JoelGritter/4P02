@@ -1,11 +1,14 @@
+import SubmissionModel, { Submission } from './../schemas/submission.model';
+import { lambda, auth } from './../util/wrappers';
 import { S3 } from '@aws-sdk/client-s3';
-import { success } from '../util/rest';
+import { badRequest, success, unauthorized } from '../util/rest';
 import fs from 'fs';
 import util from 'util';
 import cp from 'child_process';
 import { cat, cd, echo, exec } from 'shelljs';
+import AssignmentModel from '../schemas/assignment.model';
+import CourseModel from '../schemas/course.model';
 const execAsync = util.promisify(cp.exec);
-const spawnAsync = util.promisify(cp.spawn);
 
 const input = '1\n2\n3\n'; // Test case input
 const output = '1\n2\n3\n'; // Test case expected output
@@ -25,6 +28,39 @@ function doThing(): Promise<any> {
     });
   });
 }
+
+export const getTestResults = lambda(
+  auth(async (event, context, { userDoc }) => {
+    const submissionId = event.pathParameters.submissionId;
+
+    const submission = await SubmissionModel.findById(submissionId);
+
+    if (!submission) {
+      return badRequest('Submission does not exists');
+    }
+
+    const assignment = await AssignmentModel.findById(submission.assignID);
+
+    const course = await CourseModel.findById(assignment.courseID);
+
+    if (!assignment) {
+      return badRequest('Assignment does not exist');
+    }
+
+    if (!course) {
+      return badRequest('Course does not exist');
+    }
+
+    if (
+      course.students.includes(userDoc.cognitoId) ||
+      course.moderators.includes(userDoc.cognitoId) ||
+      course.currentProfessors.includes(userDoc.cognitoId)
+    ) {
+    } else {
+      return unauthorized('You do not have access to this course');
+    }
+  })
+);
 
 export const runTest = async (event) => {
   const s3 = new S3({ region: 'us-east-1' });
