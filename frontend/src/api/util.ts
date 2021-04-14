@@ -65,6 +65,24 @@ export async function putFile(path: string, file: File) {
   }
 }
 
+export async function deleteFile(path: string, file: File) {
+  try {
+    const response = await fetch(apiJoin(path), {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': file.type,
+        Authorization: getToken() ?? '',
+      },
+      body: file,
+    });
+    return {
+      success: response.status === 200 || response.status === 201,
+    };
+  } catch (e) {
+    return { success: false };
+  }
+}
+
 export async function put(path: string, data: any) {
   try {
     const response = await fetch(apiJoin(path), {
