@@ -61,7 +61,7 @@ export default function CoursesPage() {
           <>
             <div className={classes.header}>
               <Typography variant="h4">{course.name}</Typography>
-              {user.roles?.includes('prof') && (
+              {course?.currentProfessors?.includes(user.cognitoId) && (
                 <Tooltip title="Edit Course">
                   <IconButton
                     className={classes.createCourseButton}
@@ -82,7 +82,7 @@ export default function CoursesPage() {
                 <Typography variant="h5" className={classes.assignHeader}>
                   Assignments
                 </Typography>
-                {user.roles?.includes('prof') && (
+                {course?.currentProfessors?.includes(user.cognitoId) && (
                   <Tooltip title="Add Assignment">
                     <IconButton
                       className={classes.createCourseButton}
