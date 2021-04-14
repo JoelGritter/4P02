@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Link, useParams } from 'react-router-dom';
 import useGet from '../api/data/use-get';
+import useGets from '../api/data/use-gets';
 import Assignment from '../api/data/models/assignment.model';
 import User from '../api/data/models/user.model';
 import Submission, {
@@ -15,6 +16,7 @@ import moment from 'moment';
 import Course from '../api/data/models/course.model';
 import { useSnackbar } from 'notistack';
 import { putFile, put } from '../api/util';
+import SubmissionCard from '../components/SubmissionCard';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -53,6 +55,11 @@ export default function AssignmentPage() {
   const { data: user, loading: loadingUser, failed: failedUser } = useGet<User>(
     `/user/me`
   );
+  const {
+    data: submissions,
+    loading: loadingSubmissions,
+    failed: failedSubmissions,
+  } = useGets<Submission>(`/assign/submissions/${courseId}/${id}`);
 
   const handleFileChange = (e: any) => {
     setFile(e.target.files[0]);
@@ -177,6 +184,9 @@ export default function AssignmentPage() {
           loading={loadingAssign || loadingUser}
           failedMessage="Could not load course!"
         />
+        {submissions?.map((s: Submission) => {
+          return <SubmissionCard submission={s} key={s._id} />;
+        })}
       </div>
     </>
   );
