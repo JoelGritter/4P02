@@ -17,9 +17,7 @@ import { useSnackbar } from 'notistack';
 import { putFile, deleteFile, put, post } from '../api/util';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    margin: theme.spacing(1),
-  },
+  root: {},
   header: {
     display: 'flex',
     flexDirection: 'row',
@@ -48,11 +46,13 @@ export default function AssignmentPage() {
   const [file, setFile] = useState(new File([], 'null'));
   const [submission] = useState<Submission>(emptySubmission);
   const { data: course } = useGet<Course>(`course/${courseId}`);
-  const { data: oldSub } = useGet<any>(`assign/sub/${id}`);
+  const { data: oldSub, mutate: mutateSub } = useGet<any>(`assign/sub/${id}`);
   const classes = useStyles();
   const { data: user, loading: loadingUser, failed: failedUser } = useGet<User>(
     `/user/me`
   );
+
+  const zeroSub: Submission = oldSub?.length > 0 && oldSub[0];
 
   const handleFileChange = (e: any) => {
     setFile(e.target.files[0]);
@@ -93,19 +93,19 @@ export default function AssignmentPage() {
 
       const { success, message } = await put(`/assign/sub/${id}`, submission);
       if (!success) {
-        enqueueSnackbar(
-          message ?? `Could not complete submission for ${assignment.name}!`
-        );
-        const { success: delSuccess } = await deleteFile(
-          `/s3/submissions/${courseId}/${id}/${user.cognitoId}/${file.name}`,
-          file
-        );
-        console.log(delSuccess);
+        // enqueueSnackbar(
+        //   message ?? `Could not complete submission for ${assignment.name}!`
+        // );
+        // const { success: delSuccess } = await deleteFile(
+        //   `/s3/submissions/${courseId}/${id}/${user.cognitoId}/${file.name}`,
+        //   file
+        // );
+        // console.log(delSuccess);
       } else {
         enqueueSnackbar(
           message ?? `Successfully completed submission for ${assignment.name}!`
         );
-        window.location.reload(false);
+        mutateSub();
       }
     }
   };
@@ -168,14 +168,29 @@ export default function AssignmentPage() {
                 <>
                   <Box marginTop={1}>
                     <Typography variant="body1">
-                      {' '}
                       Submission made on{' '}
-                      {moment(oldSub[0]?.submissionDate).format('LL - h:mm a')}
+                      {moment(zeroSub?.submissionDate).format('LL - h:mm a')}
                     </Typography>
                     <Typography variant="body1" color="textSecondary">
-                      {' '}
-                      File submitted - {oldSub[0]?.codeZip}
+                      File submitted - {zeroSub?.codeZip}
                     </Typography>
+                    <Button
+                      color="primary"
+                      onClick={async () => {
+                        console.log({ oldSub });
+                        const {
+                          data: { signedUrl },
+                        } = await post('fileGetUrl', {
+                          assignmentId: assignment._id,
+                          courseId: course._id,
+                          objectKey: zeroSub.codeZip,
+                        });
+
+                        window.open(signedUrl, '_blank');
+                      }}
+                    >
+                      Download File
+                    </Button>
                   </Box>
                 </>
               )}

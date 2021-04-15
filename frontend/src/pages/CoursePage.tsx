@@ -14,9 +14,7 @@ import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles((theme: Theme) => ({
-  root: {
-    margin: theme.spacing(1),
-  },
+  root: {},
   header: {
     display: 'flex',
     flexDirection: 'row',
