@@ -14,7 +14,7 @@ import RequestStatus from '../components/RequestStatus';
 import moment from 'moment';
 import Course from '../api/data/models/course.model';
 import { useSnackbar } from 'notistack';
-import { putFile, deleteFile, put } from '../api/util';
+import { putFile, deleteFile, put, post } from '../api/util';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -66,10 +66,25 @@ export default function AssignmentPage() {
     } else {
       submission.codeZip = file.name;
 
-      const { success: postSuccess } = await putFile(
-        `/s3/submissions/${courseId}/${id}/${user.cognitoId}/${file.name}`,
-        file
-      );
+      const {
+        data: { signedUrl },
+        success: signedSuccess,
+        message: signedMessage,
+      } = await post('filePutUrl', {
+        assignmentId: assignment._id,
+        courseId,
+        objectKey: file.name,
+        contentType: file.type,
+      });
+
+      if (!signedSuccess) {
+        enqueueSnackbar(
+          signedMessage ?? `Could not upload ${file.name} to the server!`
+        );
+        return;
+      }
+
+      const { success: postSuccess } = await putFile(signedUrl, file);
 
       if (!postSuccess) {
         enqueueSnackbar(`Could not upload ${file.name} to the server!`);
