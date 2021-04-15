@@ -50,3 +50,14 @@ functions:
           path: test
           method: get
           cors: true
+  getTestResult:
+    image:
+      name: generic
+      command: app/handlers/test.getTestResult
+      entryPoint:
+        - '/lambda-entrypoint.sh'
+    events:
+      - http:
+          path: sub/{assignmentId}
+          method: get
+          cors: true

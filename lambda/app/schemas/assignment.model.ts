@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 
-export interface TestCase {
+export interface TestCase extends Document {
   input: string;
   output: string;
   hidden: boolean;
@@ -65,6 +65,10 @@ const AssignmentModel = model(
         },
       ],
       default: [],
+    },
+    testCaseResults: {
+      type: Object,
+      default: {},
     },
   })
 );

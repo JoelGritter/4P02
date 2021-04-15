@@ -1,7 +1,63 @@
+import { lambda, auth } from './../util/wrappers';
 import { connectToDatabase } from './../util/mongo';
 import { authorizer } from './../util/auth';
 import CourseModel from '../schemas/course.model';
 import UserModel from '../schemas/user.model';
+import { S3 } from 'aws-sdk';
+import { success, unauthorized } from '../util/rest';
+const s3 = new S3({ region: 'us-east-1' });
+
+// Functions
+
+const buck = (objectKey: string) => ({
+  Bucket: 'uassign-api-dev-s3bucket-1ubat74rzbquo',
+  Key: objectKey,
+});
+
+export const signedPutUrl = lambda(
+  auth(async (event, context, { userDoc }) => {
+    return success('wut');
+    // const { courseId, assignmentId, objectKey } = event.pathParameters;
+
+    // const course = await CourseModel.findById(courseId);
+
+    // if (course.students.includes(userDoc.cognitoId)) {
+    //   const signedUrl = s3.getSignedUrl(
+    //     'putObject',
+    //     buck(
+    //       `submissions/${courseId}}/${assignmentId}/${userDoc.cognitoId}/${objectKey}`
+    //     )
+    //   );
+    //   return success({ signedUrl });
+    // } else {
+    //   return unauthorized();
+    // }
+  })
+);
+
+export const signedGetUrl = lambda(
+  auth(async (event, context, { userDoc }) => {
+    const { courseId, assignmentId, objectKey } = event.pathParameters;
+
+    const course = await CourseModel.findById(courseId);
+
+    if (
+      course.students.includes(userDoc.cognitoId) ||
+      course.moderators.includes(userDoc.cognitoId) ||
+      course.currentProfessors.includes(userDoc.cognitoId)
+    ) {
+      const signedUrl = s3.getSignedUrl(
+        'getObject',
+        buck(
+          `submissions/${courseId}}/${assignmentId}/${userDoc.cognitoId}/${objectKey}`
+        )
+      );
+      return success({ signedUrl });
+    } else {
+      return unauthorized();
+    }
+  })
+);
 
 // Triggers
 

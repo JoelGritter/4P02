@@ -278,6 +278,20 @@ functions:
           path: assign/submissions/{id}
           method: delete
           cors: true
+  signedGetUrl:
+    handler: app/handlers/file.signedPutUrl
+    events:
+      - http:
+          path: plzWorkWtf
+          method: get
+          cors: true
+  # signedPutUrl:
+  #   handler: app/handlers/file.signedPutUrl
+  #   events:
+  #     - http:
+  #         path: filePut/sub/{courseId}/{assignmentId}/{objectKey}
+  #         method: get
+  #         cors: true
   submissionGetAuth:
     handler: app/handlers/file.submissionGetAuth
   submissionModifyAuth:
@@ -300,43 +314,6 @@ functions:
         event: s3:ObjectRemoved:*
         rules:
           - prefix: s3/submissions
-
-custom:
-  apiGatewayServiceProxies:
-    - s3:
-        path: s3/submissions/{courseId}/{assignmentId}/{cognitoId}/{objectKey}
-        method: put
-        action: PutObject
-        bucket:
-          Ref: S3Bucket
-        key:
-          pathParam: objectKey
-        cors: true
-        authorizationType: CUSTOM
-        authorizerId: fbu4v3
-
-    - s3:
-        path: s3/submissions/{courseId}/{assignmentId}/{cognitoId}/{objectKey}
-        method: get
-        action: GetObject
-        bucket:
-          Ref: S3Bucket
-        key:
-          pathParam: objectKey
-        cors: true
-        authorizationType: CUSTOM
-        authorizerId: neizj6
-
-    - s3:
-        path: s3/submissions/{courseId}/{assignmentId}/{cognitoId}/{objectKey}
-        method: delete
-        action: DeleteObject
-        bucket:
-          Ref: S3Bucket
-        key:
-          pathParam: objectKey
-        cors: true
-        authorizerId: fbu4v3
 
 resources:
   Resources:
