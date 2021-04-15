@@ -100,7 +100,6 @@ export default function AssignmentPage() {
         //   `/s3/submissions/${courseId}/${id}/${user.cognitoId}/${file.name}`,
         //   file
         // );
-        // console.log(delSuccess);
       } else {
         enqueueSnackbar(
           message ?? `Successfully completed submission for ${assignment.name}!`
@@ -177,7 +176,6 @@ export default function AssignmentPage() {
                     <Button
                       color="primary"
                       onClick={async () => {
-                        console.log({ oldSub });
                         const {
                           data: { signedUrl },
                         } = await post('fileGetUrl', {
