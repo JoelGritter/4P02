@@ -14,7 +14,7 @@ import RequestStatus from '../components/RequestStatus';
 import moment from 'moment';
 import Course from '../api/data/models/course.model';
 import { useSnackbar } from 'notistack';
-import { putFile, put } from '../api/util';
+import { putFile, deleteFile, put } from '../api/util';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -61,7 +61,7 @@ export default function AssignmentPage() {
   const sendSubmission = async () => {
     if (file.size === 0) {
       enqueueSnackbar(`No file selected to submit!`);
-    } else if (file.type !== 'application/x-zip-compressed') {
+    } else if (!file.type.includes('zip')) {
       enqueueSnackbar(`File must be a zip file!`);
     } else {
       submission.codeZip = file.name;
@@ -76,12 +76,16 @@ export default function AssignmentPage() {
         return;
       }
 
-      enqueueSnackbar(`Uploaded ${file.name} to the server!`);
       const { success, message } = await put(`/assign/sub/${id}`, submission);
       if (!success) {
         enqueueSnackbar(
           message ?? `Could not complete submission for ${assignment.name}!`
         );
+        const { success: delSuccess } = await deleteFile(
+          `/s3/submissions/${courseId}/${id}/${user.cognitoId}/${file.name}`,
+          file
+        );
+        console.log(delSuccess);
       } else {
         enqueueSnackbar(
           message ?? `Successfully completed submission for ${assignment.name}!`
@@ -97,11 +101,11 @@ export default function AssignmentPage() {
         <title>uAssign - {assignment?.name || 'Course Loading...'}</title>
       </Helmet>
       <div className={classes.root}>
-        {assignment && user && oldSub && (
+        {assignment && user && oldSub && course && (
           <>
             <div className={classes.header}>
               <Typography variant="h4">{assignment.name}</Typography>
-              {user.roles?.includes('prof') && (
+              {course?.currentProfessors?.includes(user.cognitoId) && (
                 <Button
                   component={Link}
                   to={`/courses/${courseId}/assignments/${id}/edit`}
@@ -117,46 +121,21 @@ export default function AssignmentPage() {
             </Typography>
             <div className={classes.dueContainer}>
               <Typography variant="body1" color="textSecondary">
-                Due
+                Open Date
               </Typography>
               <Typography variant="body1">
-                {moment(assignment?.lateDate ?? assignment?.closeDate).format(
-                  'LL - h:mm a'
-                )}
+                {moment(assignment?.openDate).format('LL - h:mm a')}
               </Typography>
-
-              {oldSub.length !== 0 && (
-                <>
-                  <Typography variant="body1">
-                    {' '}
-                    Submission made on{' '}
-                    {moment(oldSub[0]?.submissionDate).format('LL - h:mm a')}
-                  </Typography>
-                  <Typography variant="body1" color="textSecondary">
-                    {' '}
-                    File submitted - {oldSub[0]?.codeZip}
-                  </Typography>
-                </>
-              )}
-
-              {oldSub && (
-                <>
-                  <input
-                    type="file"
-                    name="chooseFile"
-                    onChange={handleFileChange}
-                  />
-
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={sendSubmission}
-                  >
-                    Submit
-                  </Button>
-                </>
-              )}
-
+              <Box marginTop={1}>
+                <Typography variant="body1" color="textSecondary">
+                  Due Date
+                </Typography>
+                <Typography variant="body1">
+                  {moment(assignment?.lateDate ?? assignment?.closeDate).format(
+                    'LL - h:mm a'
+                  )}
+                </Typography>
+              </Box>
               {assignment?.lateDate && (
                 <>
                   <Box marginTop={1}>
@@ -169,6 +148,56 @@ export default function AssignmentPage() {
                   </Box>
                 </>
               )}
+
+              {oldSub.length !== 0 && (
+                <>
+                  <Box marginTop={1}>
+                    <Typography variant="body1">
+                      {' '}
+                      Submission made on{' '}
+                      {moment(oldSub[0]?.submissionDate).format('LL - h:mm a')}
+                    </Typography>
+                    <Typography variant="body1" color="textSecondary">
+                      {' '}
+                      File submitted - {oldSub[0]?.codeZip}
+                    </Typography>
+                  </Box>
+                </>
+              )}
+
+              {new Date(assignment.closeDate).getTime() >
+                new Date().getTime() &&
+                !user.roles?.includes('prof') &&
+                oldSub && (
+                  <>
+                    <Box marginTop={1}>
+                      <input
+                        type="file"
+                        name="chooseFile"
+                        onChange={handleFileChange}
+                      />
+
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        onClick={sendSubmission}
+                      >
+                        Submit
+                      </Button>
+                    </Box>
+                  </>
+                )}
+
+              <Box marginTop={1}>
+                <Button
+                  component={Link}
+                  to={`/courses/${courseId}`}
+                  variant="contained"
+                  color="primary"
+                >
+                  Back to Course
+                </Button>
+              </Box>
             </div>
           </>
         )}
