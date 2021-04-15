@@ -13,6 +13,7 @@ provider:
     - Effect: Allow
       Action:
         - 's3:GetObject'
+        - 's3:PutObject'
       Resource:
         Fn::Join: ['', [Fn::GetAtt: [S3Bucket, Arn], '/*']]
 
@@ -279,19 +280,19 @@ functions:
           method: delete
           cors: true
   signedGetUrl:
+    handler: app/handlers/file.signedGetUrl
+    events:
+      - http:
+          path: fileGetUrl
+          method: post
+          cors: true
+  signedPutUrl:
     handler: app/handlers/file.signedPutUrl
     events:
       - http:
-          path: plzWorkWtf
-          method: get
+          path: filePutUrl
+          method: post
           cors: true
-  # signedPutUrl:
-  #   handler: app/handlers/file.signedPutUrl
-  #   events:
-  #     - http:
-  #         path: filePut/sub/{courseId}/{assignmentId}/{objectKey}
-  #         method: get
-  #         cors: true
   submissionGetAuth:
     handler: app/handlers/file.submissionGetAuth
   submissionModifyAuth:
@@ -356,3 +357,11 @@ resources:
         Domain: service-user-pool-domain-${opt:stage, self:provider.stage}-${self:provider.environment.DOMAIN_SUFFIX}
     S3Bucket:
       Type: 'AWS::S3::Bucket'
+      Properties:
+        CorsConfiguration:
+          CorsRules:
+            - AllowedHeaders: ['*']
+              AllowedMethods: [GET, PUT]
+              AllowedOrigins: ['*']
+              Id: UAssignDevS3Cors
+              MaxAge: '3600'
