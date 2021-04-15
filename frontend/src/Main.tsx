@@ -30,12 +30,6 @@ export default function Main() {
             {incompleteProfile && pathname !== '/profile' && (
               <Redirect to="/profile" />
             )}
-            <Route path="/login">
-              <Helmet>
-                <title>uAssign - Login</title>
-              </Helmet>
-              <LoginPage />
-            </Route>
             <Route path="/courses/create">
               <Helmet>
                 <title>uAssign - Create Course</title>
