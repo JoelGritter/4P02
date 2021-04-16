@@ -5,7 +5,6 @@ import useGet from '../api/data/use-get';
 import { Helmet } from 'react-helmet-async';
 import Course from '../api/data/models/course.model';
 import Assignment from '../api/data/models/assignment.model';
-import User from '../api/data/models/user.model';
 import RequestStatus from '../components/RequestStatus';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
