@@ -39,17 +39,6 @@ functions:
           path: notes2
           method: get
           cors: true
-  runTest:
-    image:
-      name: generic
-      command: app/handlers/test.runTest
-      entryPoint:
-        - '/lambda-entrypoint.sh'
-    events:
-      - http:
-          path: test
-          method: get
-          cors: true
   getTestResult:
     image:
       name: generic
@@ -58,6 +47,6 @@ functions:
         - '/lambda-entrypoint.sh'
     events:
       - http:
-          path: sub/{assignmentId}
-          method: get
+          path: getTestResult
+          method: post
           cors: true

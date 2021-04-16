@@ -1,5 +1,8 @@
 import { roleAuth, auth } from './../util/wrappers';
-import AssignmentModel, { Assignment } from './../schemas/assignment.model';
+import AssignmentModel, {
+  Assignment,
+  filterAssignmentForStudent,
+} from './../schemas/assignment.model';
 import SubmissionModel, { Submission } from './../schemas/submission.model';
 import CourseModel from './../schemas/course.model';
 import { User } from './../schemas/user.model';
@@ -25,13 +28,17 @@ export const getAllCourseAssigns = lambda(
     if (
       reqUser.roles.includes('admin') ||
       resCourse.currentProfessors.includes(cognitoId) ||
-      resCourse.moderators.includes(cognitoId) ||
-      resCourse.students.includes(cognitoId)
+      resCourse.moderators.includes(cognitoId)
     ) {
       const assignments = await AssignmentModel.find({
         courseID: event.pathParameters.id,
       });
       return success(assignments);
+    } else if (resCourse.students.includes(cognitoId)) {
+      const assignments = await AssignmentModel.find({
+        courseID: event.pathParameters.id,
+      });
+      return assignments.map(filterAssignmentForStudent);
     } else {
       return unauthorized(
         'Insufficient Privileges: Cannot retrieve course assignments'
@@ -49,7 +56,7 @@ export const getMyAssigns = lambda(
       students: userDoc.cognitoId,
     });
 
-    let result = [];
+    let result: Assignment[] = [];
 
     await Promise.all(
       userCourses.map(async (course) => {
@@ -60,7 +67,7 @@ export const getMyAssigns = lambda(
       })
     );
 
-    return success(result);
+    return success(result.map(filterAssignmentForStudent));
   })
 );
 
@@ -190,10 +197,11 @@ export const getAssignment = lambda(
     if (
       reqUser.roles.includes('admin') ||
       resAssignment.createdBy === cognitoId ||
-      resCourse.currentProfessors.includes(cognitoId) ||
-      resCourse.students.includes(cognitoId)
+      resCourse.currentProfessors.includes(cognitoId)
     ) {
       return success(resAssignment);
+    } else if (resCourse.students.includes(cognitoId)) {
+      return success(filterAssignmentForStudent(resAssignment));
     } else {
       return unauthorized('Insufficient Privileges: Cannot access assignment');
     }

@@ -1,9 +1,13 @@
 import { TestCase } from './../schemas/assignment.model';
-import { TestCaseResult } from './../schemas/submission.model';
+import {
+  TestCaseResult,
+  Submission,
+  filterSubmissionForStudent,
+} from './../schemas/submission.model';
 import SubmissionModel from './../schemas/submission.model';
 import { lambda, auth } from './../util/wrappers';
 import { S3 } from '@aws-sdk/client-s3';
-import { badRequest, success, unauthorized } from '../util/rest';
+import { badRequest, parseBody, success, unauthorized } from '../util/rest';
 import fs from 'fs';
 import util from 'util';
 import cp from 'child_process';
@@ -38,8 +42,7 @@ function runCode(
 
 export const getTestResult = lambda(
   auth(async (event, context, { userDoc }) => {
-    const assignmentId = event.pathParameters.assignmentId;
-    const testCaseId = event.pathParameters.testCaseId;
+    const { assignmentId, testCaseId } = parseBody<any>(event);
 
     const submission = await SubmissionModel.findOne({
       owner: userDoc.cognitoId,
@@ -66,20 +69,48 @@ export const getTestResult = lambda(
       !(
         course.students.includes(userDoc.cognitoId) ||
         course.moderators.includes(userDoc.cognitoId) ||
-        course.currentProfessors.includes(userDoc.cognitoId)
+        course.currentProfessors.includes(userDoc.cognitoId) ||
+        userDoc.roles.includes('admin')
       )
     ) {
       return unauthorized('You do not have access to this course');
     }
 
-    const testCase = assignment.testCases.find((c) => c._id === testCaseId);
+    let fltr = (x: Submission) => x;
 
-    if (!testCase) {
-      return badRequest('Test case does not exist');
+    if (
+      !(
+        course.moderators.includes(userDoc.cognitoId) ||
+        course.currentProfessors.includes(userDoc.cognitoId) ||
+        userDoc.roles.includes('admin')
+      )
+    ) {
+      fltr = filterSubmissionForStudent;
     }
 
-    if (submission.testCaseResults[testCase._id]) {
-      return success(submission, 'Test run already completed');
+    const testCase = assignment.testCases.find((test) => {
+      console.log({
+        testDotId: test._id,
+        testCaseId,
+        same: test._id == testCaseId,
+      });
+      return test._id == testCaseId;
+    });
+
+    if (!testCase) {
+      return badRequest(
+        'Test case does not exist' +
+          JSON.stringify({
+            testCaseId,
+            testCase,
+            testCases: assignment.testCases,
+            someId: assignment.testCases[0]._id,
+          })
+      );
+    }
+
+    if (submission.testCaseResults[testCase._id.toString()]) {
+      return success(fltr(submission), 'Test run already completed');
     }
 
     const s3 = new S3({ region: 'us-east-1' });
@@ -87,7 +118,7 @@ export const getTestResult = lambda(
     // Get and unzip file
     const zipObj = await s3.getObject({
       Bucket: 'uassign-api-dev-s3bucket-1ubat74rzbquo',
-      Key: `s3/submissions/${course._id}}/${assignment._id}/${userDoc.cognitoId}/${submission.codeZip}`,
+      Key: `submissions/${course._id}}/${assignment._id}/${userDoc.cognitoId}/${submission.codeZip}`,
     });
 
     const body = zipObj.Body;
@@ -95,7 +126,7 @@ export const getTestResult = lambda(
     const codePath = `/tmp/code${submission._id}`;
     const codeZipPath = `/tmp/code${submission._id}.zip`;
 
-    const writeStream = fs.createWriteStream(codePath);
+    const writeStream = fs.createWriteStream(codeZipPath);
 
     await (body as any).pipe(writeStream as any);
 
@@ -106,6 +137,6 @@ export const getTestResult = lambda(
     submission.testCaseResults[testCaseId] = res;
     submission.save();
 
-    return success(submission);
+    return success(fltr(submission));
   })
 );

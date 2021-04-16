@@ -1,4 +1,5 @@
 import { Schema, model, Document } from 'mongoose';
+import { filterAssignmentForStudent } from './assignment.model';
 
 export interface TestCaseResult extends Document {
   input: string;
@@ -19,6 +20,20 @@ export interface Submission extends Document {
   feedback: string; // marker feedback (global to entire submission)
   outputs: string[]; // automated test outputs for this submission
   testCaseResults: { [key: string]: TestCaseResult };
+}
+
+export function filterSubmissionForStudent(submission: Submission): Submission {
+  const testCaseResults = { ...submission.testCaseResults };
+  for (const key in testCaseResults) {
+    const resCase = { ...testCaseResults[key] };
+    if (resCase.hidden) {
+      delete resCase.input;
+      delete resCase.expectedOutput;
+      delete resCase.actualOutput;
+    }
+    testCaseResults[key] = resCase as any;
+  }
+  return { ...submission.toObject(), testCaseResults } as Submission;
 }
 
 const SubmissionModel = model(
@@ -42,6 +57,10 @@ const SubmissionModel = model(
     grade: Number,
     feedback: String,
     outputs: [String],
+    testCaseResults: {
+      type: Object,
+      default: {},
+    },
   })
 );
 

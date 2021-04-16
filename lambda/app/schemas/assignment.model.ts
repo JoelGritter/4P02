@@ -21,6 +21,20 @@ export interface Assignment extends Document {
   testCases: TestCase[]; // inputs, output pairs for automated code testing
 }
 
+// Removes sensitive info, like hidden test case input/output
+export function filterAssignmentForStudent(assignment: Assignment): Assignment {
+  const resAssign = { ...assignment.toObject() };
+  for (let i = 0; i < resAssign.testCases.length; i++) {
+    const tCase = { ...resAssign.testCases[i] };
+    if (tCase.hidden) {
+      delete tCase.input;
+      delete tCase.output;
+    }
+    resAssign.testCases[i] = tCase as any;
+  }
+  return resAssign as Assignment;
+}
+
 const AssignmentModel = model(
   'Assignment',
   new Schema<Assignment>({
