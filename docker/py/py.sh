@@ -1,1 +1,0 @@
-(cat in.txt | python main.py) > out.txt

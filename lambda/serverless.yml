@@ -9,6 +9,13 @@ provider:
   apiGateway:
     binaryMediaTypes:
       - 'application/zip'
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - 's3:GetObject'
+        - 's3:PutObject'
+      Resource:
+        Fn::Join: ['', [Fn::GetAtt: [S3Bucket, Arn], '/*']]
 
 plugins:
   - serverless-plugin-typescript
@@ -272,6 +279,20 @@ functions:
           path: assign/submissions/{id}
           method: delete
           cors: true
+  signedGetUrl:
+    handler: app/handlers/file.signedGetUrl
+    events:
+      - http:
+          path: fileGetUrl
+          method: post
+          cors: true
+  signedPutUrl:
+    handler: app/handlers/file.signedPutUrl
+    events:
+      - http:
+          path: filePutUrl
+          method: post
+          cors: true
   submissionGetAuth:
     handler: app/handlers/file.submissionGetAuth
   submissionModifyAuth:
@@ -294,43 +315,6 @@ functions:
         event: s3:ObjectRemoved:*
         rules:
           - prefix: s3/submissions
-
-custom:
-  apiGatewayServiceProxies:
-    - s3:
-        path: s3/submissions/{courseId}/{assignmentId}/{cognitoId}/{objectKey}
-        method: put
-        action: PutObject
-        bucket:
-          Ref: S3Bucket
-        key:
-          pathParam: objectKey
-        cors: true
-        authorizationType: CUSTOM
-        authorizerId: fbu4v3
-
-    - s3:
-        path: s3/submissions/{courseId}/{assignmentId}/{cognitoId}/{objectKey}
-        method: get
-        action: GetObject
-        bucket:
-          Ref: S3Bucket
-        key:
-          pathParam: objectKey
-        cors: true
-        authorizationType: CUSTOM
-        authorizerId: neizj6
-
-    - s3:
-        path: s3/submissions/{courseId}/{assignmentId}/{cognitoId}/{objectKey}
-        method: delete
-        action: DeleteObject
-        bucket:
-          Ref: S3Bucket
-        key:
-          pathParam: objectKey
-        cors: true
-        authorizerId: fbu4v3
 
 resources:
   Resources:
@@ -373,3 +357,11 @@ resources:
         Domain: service-user-pool-domain-${opt:stage, self:provider.stage}-${self:provider.environment.DOMAIN_SUFFIX}
     S3Bucket:
       Type: 'AWS::S3::Bucket'
+      Properties:
+        CorsConfiguration:
+          CorsRules:
+            - AllowedHeaders: ['*']
+              AllowedMethods: [GET, PUT]
+              AllowedOrigins: ['*']
+              Id: UAssignDevS3Cors
+              MaxAge: '3600'

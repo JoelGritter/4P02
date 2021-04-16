@@ -22,16 +22,6 @@ export const getAllProf = lambda(
   })
 );
 
-// Retrieves list of all courses in which the current user is a student
-export const getAllStudent = lambda(
-  roleAuth(['student'], async (event, context, { userDoc }) => {
-    const courses = await CourseModel.find({
-      students: userDoc.cognitoId,
-    });
-    return success(courses);
-  })
-);
-
 // Retrieves a list of all courses in which the current
 // user is a student, prof, or moderator
 export const getAllAssociated = lambda(

@@ -47,13 +47,13 @@ export async function post(path: string, data: any) {
   }
 }
 
+// 'path' needs be be the whole path
 export async function putFile(path: string, file: File) {
   try {
-    const response = await fetch(apiJoin(path), {
+    const response = await fetch(path, {
       method: 'PUT',
       headers: {
         'Content-Type': file.type,
-        Authorization: getToken() ?? '',
       },
       body: file,
     });
