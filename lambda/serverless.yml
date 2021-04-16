@@ -255,7 +255,7 @@ functions:
     handler: app/handlers/submission.getMySubmission
     events:
       - http:
-          path: assign/sub/{id}
+          path: assign/sub/{assignmentId}
           method: get
           cors: true
   submit:

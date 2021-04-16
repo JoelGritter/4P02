@@ -38,7 +38,7 @@ export const getAllCourseAssigns = lambda(
       const assignments = await AssignmentModel.find({
         courseID: event.pathParameters.id,
       });
-      return assignments.map(filterAssignmentForStudent);
+      return success(assignments.map(filterAssignmentForStudent));
     } else {
       return unauthorized(
         'Insufficient Privileges: Cannot retrieve course assignments'

@@ -23,13 +23,18 @@ export const getAll = lambda(
 // get individual student submission for given assignment
 export const getMySubmission = lambda(
   auth(async (event, context, { userDoc }) => {
-    const aID = event.pathParameters.id;
+    const { assignmentId } = event.pathParameters;
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
     const submission = await SubmissionModel.findOne({
       owner: cognitoId,
-      assignID: aID,
+      assignID: assignmentId,
     });
+
+    if (!submission) {
+      return badRequest('Could not find submission!');
+    }
+
     return success(filterSubmissionForStudent(submission));
   })
 );
