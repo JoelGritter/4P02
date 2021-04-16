@@ -23,7 +23,8 @@
     "node-fetch": "^2.6.1",
     "request": "^2.88.2",
     "serverless-binary-cors": "0.0.1",
-    "shelljs": "^0.8.4"
+    "shelljs": "^0.8.4",
+    "uuid": "^3.4.0"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.51",

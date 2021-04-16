@@ -15,6 +15,7 @@ import { cat, cd, echo, exec } from 'shelljs';
 import AssignmentModel from '../schemas/assignment.model';
 import CourseModel from '../schemas/course.model';
 const execAsync = util.promisify(cp.exec);
+import { v4 as uuidv4 } from 'uuid';
 
 function runCode(
   codePath: string,
@@ -25,7 +26,7 @@ function runCode(
     cd(codePath);
     exec('touch compile_and_run.sh', () => {
       exec(`chmod +x compile_and_run.sh`);
-      echo(testCase.input).exec('./compile_and_run.sh', (c, s, e) => {
+      echo(testCase.input).exec('env -i sh compile_and_run.sh', (c, s, e) => {
         const actualOutput = cat('out.txt').trim();
         const expectedOutput = testCase.output.trim();
         resolve({
@@ -89,11 +90,7 @@ export const getTestResult = lambda(
     }
 
     const testCase = assignment.testCases.find((test) => {
-      console.log({
-        testDotId: test._id,
-        testCaseId,
-        same: test._id == testCaseId,
-      });
+      // This does need to be ==
       return test._id == testCaseId;
     });
 
@@ -122,20 +119,23 @@ export const getTestResult = lambda(
     });
 
     const body = zipObj.Body;
+    const uid = uuidv4();
+    const codePath = `/tmp/code${uid}`;
+    const codeZipPath = `/tmp/code${uid}.zip`;
 
-    const codePath = `/tmp/code${submission._id}`;
-    const codeZipPath = `/tmp/code${submission._id}.zip`;
+    await execAsync(`rm -rf ${codeZipPath}`);
+    await execAsync(`rm -rf ${codePath}`);
 
     const writeStream = fs.createWriteStream(codeZipPath);
 
     await (body as any).pipe(writeStream as any);
-
     await execAsync(`unzip -j ${codeZipPath} -d ${codePath}`);
 
     const res = await runCode(codePath, testCase);
 
     submission.testCaseResults[testCaseId] = res;
-    submission.save();
+    submission.markModified('testCaseResults');
+    await submission.save();
 
     return success(fltr(submission));
   })
