@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import AssignmentCard from '../components/AssignmentCard';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
+import useMe from '../api/data/use-me';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -22,10 +23,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   assignHeader: {
     marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(1),
   },
   subHeader: {
     color: 'grey',
-    marginTop: theme.spacing(2),
+    marginTop: theme.spacing(1),
   },
   assignmentContainer: {},
   createCourseButton: {},
@@ -44,9 +46,7 @@ export default function CoursesPage() {
     loading: loadingAssignments,
     failed: failedAssignments,
   } = useGet<Assignment | any>(`/assign/course/${id}`);
-  const { data: user, loading: loadingUser, failed: failedUser } = useGet<User>(
-    `/user/me`
-  );
+  const { isProf } = useMe();
   const classes = useStyles();
 
   return (
@@ -59,7 +59,7 @@ export default function CoursesPage() {
           <>
             <div className={classes.header}>
               <Typography variant="h4">{course.name}</Typography>
-              {course?.currentProfessors?.includes(user.cognitoId) && (
+              {isProf && (
                 <Tooltip title="Edit Course">
                   <IconButton
                     className={classes.createCourseButton}
@@ -80,7 +80,7 @@ export default function CoursesPage() {
                 <Typography variant="h5" className={classes.assignHeader}>
                   Assignments
                 </Typography>
-                {course?.currentProfessors?.includes(user.cognitoId) && (
+                {isProf && (
                   <Tooltip title="Add Assignment">
                     <IconButton
                       className={classes.createCourseButton}
@@ -100,8 +100,8 @@ export default function CoursesPage() {
           </>
         )}
         <RequestStatus
-          failed={failedCourse || failedAssignments || failedUser}
-          loading={loadingCourse || loadingAssignments || loadingUser}
+          failed={failedCourse || failedAssignments}
+          loading={loadingCourse || loadingAssignments}
           failedMessage="Could not load course!"
         />
       </div>

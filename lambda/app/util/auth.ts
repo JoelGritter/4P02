@@ -44,7 +44,7 @@ export function validateToken(
             if (!decodedJwt) {
               return resolve({
                 valid: false,
-                message: 'Invalid token 1',
+                message: 'Unauthorized: Invalid token 1',
               });
             }
 
@@ -53,7 +53,7 @@ export function validateToken(
             if (!pem) {
               return resolve({
                 valid: false,
-                message: 'Invalid token 2',
+                message: 'Unauthorized: Invalid token 2',
               });
             }
 
@@ -61,7 +61,7 @@ export function validateToken(
               if (err) {
                 return resolve({
                   valid: false,
-                  message: 'Invalid token 3',
+                  message: 'Unauthorized: Invalid token 3',
                 });
               } else {
                 return resolve({
@@ -73,11 +73,11 @@ export function validateToken(
           } else {
             return resolve({
               valid: false,
-              message: 'Download error',
+              message: 'Unauthorized: Download error',
             });
           }
         } catch (e) {
-          resolve({ valid: false, message: 'Exception' });
+          resolve({ valid: false, message: 'Unauthorized: Auth Exception' });
         }
       }
     );

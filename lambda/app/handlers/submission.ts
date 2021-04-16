@@ -23,7 +23,7 @@ export const getAll = lambda(
 // get individual student submission for given assignment
 export const getMySubmission = lambda(
   auth(async (event, context, { userDoc }) => {
-    const { assignmentId } = event.pathParameters;
+    const { id: assignmentId } = event.pathParameters;
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
     const submission = await SubmissionModel.findOne({
