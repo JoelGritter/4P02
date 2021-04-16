@@ -18,3 +18,6 @@ out-logger.json
 .env
 
 buckets
+
+# Other
+dist

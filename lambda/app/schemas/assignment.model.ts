@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 
-export interface TestCase {
+export interface TestCase extends Document {
   input: string;
   output: string;
   hidden: boolean;
@@ -19,6 +19,20 @@ export interface Assignment extends Document {
   attachments: string[]; // File ID's for attached files
   questions: string[]; // Plaintext questions for this assignment
   testCases: TestCase[]; // inputs, output pairs for automated code testing
+}
+
+// Removes sensitive info, like hidden test case input/output
+export function filterAssignmentForStudent(assignment: Assignment): Assignment {
+  const resAssign = { ...assignment.toObject() };
+  for (let i = 0; i < resAssign.testCases.length; i++) {
+    const tCase = { ...resAssign.testCases[i] };
+    if (tCase.hidden) {
+      delete tCase.input;
+      delete tCase.output;
+    }
+    resAssign.testCases[i] = tCase as any;
+  }
+  return resAssign as Assignment;
 }
 
 const AssignmentModel = model(
@@ -65,6 +79,10 @@ const AssignmentModel = model(
         },
       ],
       default: [],
+    },
+    testCaseResults: {
+      type: Object,
+      default: {},
     },
   })
 );

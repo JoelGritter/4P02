@@ -1,6 +1,9 @@
 import { roleAuth, auth } from './../util/wrappers';
 import AssignmentModel, { Assignment } from './../schemas/assignment.model';
-import SubmissionModel, { Submission } from './../schemas/submission.model';
+import SubmissionModel, {
+  filterSubmissionForStudent,
+  Submission,
+} from './../schemas/submission.model';
 import CourseModel from './../schemas/course.model';
 import { User } from './../schemas/user.model';
 import { badRequest, parseBody, unauthorized } from '../util/rest';
@@ -23,11 +26,11 @@ export const getMySubmission = lambda(
     const aID = event.pathParameters.id;
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
-    const submission = await SubmissionModel.find({
+    const submission = await SubmissionModel.findOne({
       owner: cognitoId,
       assignID: aID,
     });
-    return success(submission);
+    return success(filterSubmissionForStudent(submission));
   })
 );
 
@@ -36,7 +39,6 @@ export const getAssignmentSubmissions = lambda(
   auth(async (event, context, { userDoc }) => {
     const aID = event.pathParameters.id;
     const reqUser = userDoc as User;
-    const { cognitoId } = reqUser;
     const assignment = await AssignmentModel.findById(aID);
     if (await validateElevatedPrivileges(assignment, reqUser)) {
       const subs = await SubmissionModel.find({
@@ -86,7 +88,7 @@ export const submit = lambda(
         upsert: true,
       }
     );
-    return success(updatedSubmission);
+    return success(filterSubmissionForStudent(updatedSubmission));
   })
 );
 

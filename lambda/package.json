@@ -9,18 +9,21 @@
     "start": "npm run local",
     "deploy": "serverless deploy",
     "test": "cross-env NODE_ENV=dev mocha -r ts-node/register tests/*.test.ts --exit",
-    "coverage": "nyc --reporter lcov npm run test"
+    "coverage": "nyc --reporter lcov npm run test",
+    "bld": "tsc --outDir dist"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.11.0",
     "amazon-cognito-identity-js": "^4.5.12",
     "aws-sdk": "^2.853.0",
     "dotenv": "^8.2.0",
     "jsonwebtoken": "^8.5.1",
     "jwk-to-pem": "^2.0.4",
-    "mongoose": "^5.9.10",
+    "mongoose": "^5.11.1",
     "node-fetch": "^2.6.1",
     "request": "^2.88.2",
-    "serverless-binary-cors": "0.0.1"
+    "serverless-binary-cors": "0.0.1",
+    "shelljs": "^0.8.4"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.51",
@@ -28,7 +31,7 @@
     "@types/dotenv-safe": "^8.1.0",
     "@types/lambda-tester": "^3.6.0",
     "@types/mocha": "^7.0.2",
-    "@types/mongoose": "^5.7.14",
+    "@types/shelljs": "^0.8.8",
     "@types/sinon": "^9.0.0",
     "@types/supertest": "^2.0.8",
     "chai": "^4.2.0",
@@ -45,7 +48,7 @@
     "ts-node": "^8.9.1",
     "tslint": "^6.1.2",
     "tslint-config-airbnb": "^5.11.2",
-    "typescript": "^3.8.3"
+    "typescript": "^4.2.3"
   },
   "repository": {
     "type": "git",
