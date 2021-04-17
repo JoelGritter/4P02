@@ -16,6 +16,7 @@ import { useSnackbar } from 'notistack';
 import { putFile, put, post } from '../api/util';
 import useMe from '../api/data/use-me';
 import TestCases from '../components/TestCases';
+import SubmissionCard from '../components/SubmissionCard';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -48,6 +49,9 @@ export default function AssignmentPage() {
     loading: loadingCourse,
     failed: failedCourse,
   } = useGet<Course>(`course/${courseId}`);
+  const { data: submissions } = useGet<Submission[]>(
+    `/assign/submissions/${id}/`
+  );
 
   const { isProf } = useMe();
   return (
@@ -111,6 +115,16 @@ export default function AssignmentPage() {
             )}
           </div>
           {!isProf && <StudentAssignmentPage />}
+          {isProf &&
+            submissions?.map((s: Submission) => {
+              return (
+                <SubmissionCard
+                  submission={s}
+                  courseID={courseId}
+                  key={s._id}
+                />
+              );
+            })}
         </>
       )}
       <RequestStatus

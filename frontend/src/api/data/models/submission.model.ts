@@ -1,6 +1,6 @@
 export default interface Submission {
   _id?: string;
-  _owner?: string; // cognitoID of submitter
+  owner?: string; // cognitoID of submitter
   assignID?: string; // ID for assignment this submission obj belongs to
   submissionDate: Date; // date of submission
   codeZip: String;

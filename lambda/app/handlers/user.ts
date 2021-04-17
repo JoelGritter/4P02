@@ -53,6 +53,19 @@ export const get = lambda(
   })
 );
 
+export const getPublic = lambda(
+  auth(async (event, context, { userDoc }) => {
+    const userID = event.pathParameters.id;
+
+    const res = await UserModel.findOne({ cognitoId: userID });
+
+    if (res.initialized) delete res.initialized;
+    if (res.roles) delete res.roles;
+
+    return success(res);
+  })
+);
+
 export const me = lambda(
   auth(async (event, context, { userDoc }) => {
     return success(userDoc);
