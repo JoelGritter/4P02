@@ -30,6 +30,7 @@ export const emptyAssignment: Assignment = {
 };
 
 export interface TestCase {
+  _id?: string;
   id?: string; // Front end needs
   input: string;
   output: string;

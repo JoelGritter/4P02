@@ -8,7 +8,16 @@ export default interface Submission {
   answers: string[]; // student submitted plaintext answers to assignment questions
   grade: number; // marker assigned grade
   feedback: string; // marker feedback (global to entire submission)
-  outputs: string[]; // automated test outputs for this submission
+  outputs: string[]; // automat1ed test outputs for this submission
+  testCaseResults: { [key: string]: TestCaseResult };
+}
+
+export interface TestCaseResult extends Document {
+  input: string;
+  expectedOutput: string;
+  actualOutput: string;
+  correct: boolean;
+  hidden: boolean;
 }
 
 export const emptySubmission: Submission = {
@@ -18,4 +27,5 @@ export const emptySubmission: Submission = {
   grade: 0,
   feedback: '',
   outputs: [],
+  testCaseResults: {},
 };

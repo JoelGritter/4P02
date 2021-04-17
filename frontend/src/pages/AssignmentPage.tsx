@@ -15,6 +15,7 @@ import Course from '../api/data/models/course.model';
 import { useSnackbar } from 'notistack';
 import { putFile, put, post } from '../api/util';
 import useMe from '../api/data/use-me';
+import TestCases from '../components/TestCases';
 import SubmissionCard from '../components/SubmissionCard';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -203,7 +204,7 @@ function StudentAssignmentPage() {
 
   return (
     <>
-      {oldSub && (
+      {oldSub && assignment && assignment._id && (
         <>
           <Box marginTop={1}>
             <Typography variant="body1">
@@ -229,6 +230,11 @@ function StudentAssignmentPage() {
               </Button>
             </Typography>
           </Box>
+          <TestCases
+            assignment={assignment}
+            submission={oldSub}
+            mutateSub={mutateSub}
+          />
         </>
       )}
 
