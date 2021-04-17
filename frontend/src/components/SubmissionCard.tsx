@@ -4,7 +4,6 @@ import { Button, Card } from '@material-ui/core/';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Submission from '../api/data/models/submission.model';
-import Course from '../api/data/models/course.model';
 import moment from 'moment';
 import useGet from '../api/data/use-get';
 import User from '../api/data/models/user.model';
@@ -32,11 +31,9 @@ const SubmissionCard: React.FC<SubmissionCardProps> = ({
 }) => {
   const classes = useStyles();
 
-  const {
-    data: submissionUser,
-    loading: loadingUser,
-    failed: failedUser,
-  } = useGet<User>(`/user/public/${submission?.owner}`);
+  const { data: submissionUser } = useGet<User>(
+    `/user/public/${submission?.owner}`
+  );
 
   return (
     <Card className={classes.root}>
