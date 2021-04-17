@@ -167,6 +167,16 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
             onChange={handleFormChange}
           />
         </Grid>
+        <Grid item xs={12}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            name="description"
+            label="Description"
+            value={assignment.description}
+            onChange={handleFormChange}
+          />
+        </Grid>
         <Grid item xs={12} md={6}>
           <KeyboardDatePicker
             fullWidth
