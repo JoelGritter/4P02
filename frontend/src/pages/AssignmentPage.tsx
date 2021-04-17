@@ -59,7 +59,7 @@ export default function AssignmentPage() {
     data: submissions,
     loading: loadingSubmissions,
     failed: failedSubmissions,
-  } = useGets<Submission>(`/assign/submissions/${courseId}/${id}`);
+  } = useGets<Submission>(`/assign/submissions/${id}/`);
 
   const handleFileChange = (e: any) => {
     setFile(e.target.files[0]);

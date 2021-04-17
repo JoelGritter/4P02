@@ -5,6 +5,8 @@ import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Submission from '../api/data/models/submission.model';
 import moment from 'moment';
+import useGet from '../api/data/use-get';
+import User from '../api/data/models/user.model';
 
 const useStyles = makeStyles({
   root: {
@@ -24,11 +26,17 @@ interface SubmissionCardProps {
 const SubmissionCard: React.FC<SubmissionCardProps> = ({ submission }) => {
   const classes = useStyles();
 
+  const {
+    data: submissionUser,
+    loading: loadingUser,
+    failed: failedUser,
+  } = useGet<User>(`/user/public/${submission?.owner}`);
+
   return (
     <Card className={classes.root}>
       <CardContent className={classes.contentContainer}>
         <Typography gutterBottom variant="h5" color="primary" component="h5">
-          {submission._owner}
+          {submissionUser?.name}
         </Typography>
         <Typography variant="h6" color="textSecondary">
           {moment(submission?.submissionDate).format('MMMM Do YYYY, h:mm:ss a')}
