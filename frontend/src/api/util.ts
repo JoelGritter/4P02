@@ -1,9 +1,13 @@
 import urlJoin from 'url-join';
 import { getToken } from './auth';
-const { REACT_APP_API_BASE }: any = process.env;
+const { REACT_APP_API_BASE, REACT_APP_TESTS_API_BASE }: any = process.env;
 
 export function apiJoin(...parts: string[]) {
   return urlJoin(REACT_APP_API_BASE, ...parts);
+}
+
+export function testApiJoin(...parts: string[]) {
+  return urlJoin(REACT_APP_TESTS_API_BASE, ...parts);
 }
 
 export const fetcher = (url: string) =>
@@ -29,6 +33,27 @@ export const fetcher = (url: string) =>
 export async function post(path: string, data: any) {
   try {
     const response = await fetch(apiJoin(path), {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: getToken() ?? '',
+      },
+      body: JSON.stringify(data),
+    });
+    const json = await response.json();
+    return {
+      success:
+        response.status === 200 || response.status === 201 || json?.success,
+      ...json,
+    };
+  } catch (e) {
+    return { success: false };
+  }
+}
+
+export async function testsApiPost(path: string, data: any) {
+  try {
+    const response = await fetch(testApiJoin(path), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
