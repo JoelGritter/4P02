@@ -47,10 +47,28 @@ export async function post(path: string, data: any) {
   }
 }
 
+// 'path' needs be be the whole path
 export async function putFile(path: string, file: File) {
   try {
-    const response = await fetch(apiJoin(path), {
+    const response = await fetch(path, {
       method: 'PUT',
+      headers: {
+        'Content-Type': file.type,
+      },
+      body: file,
+    });
+    return {
+      success: response.status === 200 || response.status === 201,
+    };
+  } catch (e) {
+    return { success: false };
+  }
+}
+
+export async function deleteFile(path: string, file: File) {
+  try {
+    const response = await fetch(apiJoin(path), {
+      method: 'DELETE',
       headers: {
         'Content-Type': file.type,
         Authorization: getToken() ?? '',

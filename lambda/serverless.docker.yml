@@ -1,0 +1,52 @@
+service: uassign-docker
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  environment:
+    NODE_ENV: dev
+    DOMAIN_SUFFIX: space
+  apiGateway:
+    binaryMediaTypes:
+      - 'application/zip'
+  ecr:
+    images:
+      generic:
+        path: ./
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - 's3:GetObject'
+      Resource: arn:aws:s3:::uassign-api-dev-s3bucket-1ubat74rzbquo/*
+
+plugins:
+  - serverless-offline
+  - serverless-apigateway-service-proxy
+  - serverless-binary-cors
+package:
+  include:
+    - .env
+
+functions:
+  allNotesDocker:
+    image:
+      name: generic
+      command: app/handler.getAllNotes
+      entryPoint:
+        - '/lambda-entrypoint.sh'
+    events:
+      - http:
+          path: notes2
+          method: get
+          cors: true
+  getTestResult:
+    image:
+      name: generic
+      command: app/handlers/test.getTestResult
+      entryPoint:
+        - '/lambda-entrypoint.sh'
+    events:
+      - http:
+          path: getTestResult
+          method: post
+          cors: true

@@ -1,6 +1,9 @@
 import { roleAuth, auth } from './../util/wrappers';
 import AssignmentModel, { Assignment } from './../schemas/assignment.model';
-import SubmissionModel, { Submission } from './../schemas/submission.model';
+import SubmissionModel, {
+  filterSubmissionForStudent,
+  Submission,
+} from './../schemas/submission.model';
 import CourseModel from './../schemas/course.model';
 import { User } from './../schemas/user.model';
 import { badRequest, parseBody, unauthorized } from '../util/rest';
@@ -20,14 +23,19 @@ export const getAll = lambda(
 // get individual student submission for given assignment
 export const getMySubmission = lambda(
   auth(async (event, context, { userDoc }) => {
-    const aID = event.pathParameters.id;
+    const { id: assignmentId } = event.pathParameters;
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
-    const submission = await SubmissionModel.find({
+    const submission = await SubmissionModel.findOne({
       owner: cognitoId,
-      assignID: aID,
+      assignID: assignmentId,
     });
-    return success(submission);
+
+    if (!submission) {
+      return badRequest('Could not find submission!');
+    }
+
+    return success(filterSubmissionForStudent(submission));
   })
 );
 
@@ -36,7 +44,6 @@ export const getAssignmentSubmissions = lambda(
   auth(async (event, context, { userDoc }) => {
     const aID = event.pathParameters.id;
     const reqUser = userDoc as User;
-    const { cognitoId } = reqUser;
     const assignment = await AssignmentModel.findById(aID);
     if (await validateElevatedPrivileges(assignment, reqUser)) {
       const subs = await SubmissionModel.find({
@@ -86,7 +93,7 @@ export const submit = lambda(
         upsert: true,
       }
     );
-    return success(updatedSubmission);
+    return success(filterSubmissionForStudent(updatedSubmission));
   })
 );
 

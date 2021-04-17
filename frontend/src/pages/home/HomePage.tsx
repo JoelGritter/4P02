@@ -64,7 +64,7 @@ export default function HomePage() {
   return (
     <>
       <Grid container spacing={1}>
-        <Grid item md={9} className={classes.coursesContainer}>
+        <Grid item xs={12} md={9} className={classes.coursesContainer}>
           {isProf && <ProfCourses />}
           <StudentCourses />
         </Grid>
