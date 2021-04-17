@@ -27,8 +27,8 @@ export default function DeleteCoursePage() {
       enqueueSnackbar(message ?? `Couldn't delete "${course.name}"!`);
     } else {
       enqueueSnackbar(message ?? `Course "${course.name}" deleted!`);
+      history.push(`/admin/courses`);
     }
-    history.push(`/admin/courses`);
   };
 
   return (
