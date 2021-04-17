@@ -4,8 +4,8 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
-
 import { BrowserRouter as Router } from 'react-router-dom';
+import ScrollToTop from './components/ScrollToTop';
 
 ReactDOM.render(
   <React.StrictMode>
@@ -14,6 +14,7 @@ ReactDOM.render(
         <title>uAssign</title>
       </Helmet>
       <Router>
+        <ScrollToTop />
         <App />
       </Router>
     </HelmetProvider>
