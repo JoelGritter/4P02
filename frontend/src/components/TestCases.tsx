@@ -106,7 +106,6 @@ const TestCases: React.FC<TestCasesProps> = ({
                   <pre>{currResCase.expectedOutput}</pre>
                   <Typography variant="body1">Your Output</Typography>
                   <pre>{currResCase.actualOutput}</pre>
-                  <pre></pre>
                 </>
               )}
             </>
