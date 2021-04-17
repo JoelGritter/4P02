@@ -11,6 +11,7 @@ import Typography from '@material-ui/core/Typography';
 import AssignmentCard from '../components/AssignmentCard';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
+import DeleteIcon from '@material-ui/icons/Delete';
 import useMe from '../api/data/use-me';
 
 const useStyles = makeStyles((theme: Theme) => ({
@@ -19,6 +20,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  headerIcons: {
+    float: 'right',
   },
   assignHeader: {
     marginTop: theme.spacing(2),
@@ -45,7 +49,8 @@ export default function CoursesPage() {
     loading: loadingAssignments,
     failed: failedAssignments,
   } = useGet<Assignment | any>(`/assign/course/${id}`);
-  const { isProf } = useMe();
+
+  const { isProf, isAdmin } = useMe();
   const classes = useStyles();
 
   return (
@@ -58,18 +63,32 @@ export default function CoursesPage() {
           <>
             <div className={classes.header}>
               <Typography variant="h4">{course.name}</Typography>
-              {isProf && (
-                <Tooltip title="Edit Course">
-                  <IconButton
-                    className={classes.createCourseButton}
-                    component={Link}
-                    to={`/courses/${id}/edit`}
-                    color="primary"
-                  >
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-              )}
+              <div className={classes.headerIcons}>
+                {isProf && (
+                  <Tooltip title="Edit Course">
+                    <IconButton
+                      className={classes.createCourseButton}
+                      component={Link}
+                      to={`/courses/${id}/edit`}
+                      color="primary"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+                {isAdmin && (
+                  <Tooltip title="Delete Course">
+                    <IconButton
+                      className={classes.createCourseButton}
+                      component={Link}
+                      to={`/courses/${id}/delete`}
+                      color="primary"
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                )}
+              </div>
             </div>
             <Typography className={classes.subHeader}>
               {course.description}
