@@ -15,7 +15,6 @@ import EditCoursePage from './pages/instructorPages/EditCoursePage';
 import { Helmet } from 'react-helmet-async';
 import CreateAssignmentPage from './pages/instructorPages/CreateAssignmentPage';
 import useMe from './api/data/use-me';
-import DeleteCoursePage from './pages/admin/pages/DeleteCoursePage';
 
 export default function Main() {
   const { me, success } = useMe();
@@ -48,12 +47,6 @@ export default function Main() {
                 <title>uAssign - Edit Course</title>
               </Helmet>
               <EditCoursePage />
-            </Route>
-            <Route path="/courses/:id/delete">
-              <Helmet>
-                <title>uAssign - Delete Course</title>
-              </Helmet>
-              <DeleteCoursePage />
             </Route>
             <Route path="/courses/:courseId/assignments/create">
               <Helmet>

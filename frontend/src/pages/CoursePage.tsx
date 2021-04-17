@@ -1,4 +1,3 @@
-import { Box, IconButton, Tooltip } from '@material-ui/core';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import useGet from '../api/data/use-get';
@@ -7,12 +6,29 @@ import Course from '../api/data/models/course.model';
 import Assignment from '../api/data/models/assignment.model';
 import RequestStatus from '../components/RequestStatus';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import Typography from '@material-ui/core/Typography';
+import {
+  Box,
+  Button,
+  IconButton,
+  Tooltip,
+  Typography,
+} from '@material-ui/core';
 import AssignmentCard from '../components/AssignmentCard';
-import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import DeleteIcon from '@material-ui/icons/Delete';
+import {
+  Add as AddIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+} from '@material-ui/icons/';
 import useMe from '../api/data/use-me';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@material-ui/core/';
+import { useSnackbar } from 'notistack';
+import { useHistory } from 'react-router';
+import { del } from '../api/util';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -32,11 +48,68 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: 'grey',
     marginTop: theme.spacing(1),
   },
+  paper: {
+    width: '80%',
+    maxHeight: 435,
+  },
   assignmentContainer: {},
   createCourseButton: {},
 }));
 
-// TODO: Add redirect functionality/error handling if course does not exist
+export interface ConfirmationDialogRawProps {
+  classes: Record<'paper', string>;
+  id: string;
+  keepMounted: boolean;
+  open: boolean;
+  onClose: (value?: boolean) => void;
+}
+
+function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
+  const { onClose, open, ...other } = props;
+  const radioGroupRef = React.useRef<HTMLElement>(null);
+
+  const handleEntering = () => {
+    if (radioGroupRef.current != null) {
+      radioGroupRef.current.focus();
+    }
+  };
+
+  const handleCancel = () => {
+    onClose(false);
+  };
+
+  const handleOk = () => {
+    onClose(true);
+  };
+
+  return (
+    <Dialog
+      disableBackdropClick
+      disableEscapeKeyDown
+      maxWidth="xs"
+      onEntering={handleEntering}
+      aria-labelledby="confirmation-dialog-title"
+      open={open}
+      {...other}
+    >
+      <DialogTitle id="confirmation-dialog-title">Confirm Deletion</DialogTitle>
+      <DialogContent dividers>
+        <Typography variant="body1">
+          Please confirm that you want to delete this course:
+        </Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={handleCancel} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleOk} color="primary">
+          Ok
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
+
 export default function CoursesPage() {
   const { id } = useParams() as any;
   const {
@@ -52,6 +125,33 @@ export default function CoursesPage() {
 
   const { isProf, isAdmin } = useMe();
   const classes = useStyles();
+  const { enqueueSnackbar } = useSnackbar();
+  const history = useHistory();
+  const [open, setOpen] = React.useState(false);
+
+  const handleDeleteButton = async () => {
+    setOpen(true);
+  };
+
+  const deleteCourse = async () => {
+    const { success, message } = await del(`/course/${course._id}`, course);
+    if (!success) {
+      enqueueSnackbar(message ?? `Couldn't delete "${course.name}"!`);
+    } else {
+      enqueueSnackbar(message ?? `Course "${course.name}" deleted!`);
+      history.push(`/admin/courses`);
+    }
+  };
+
+  const handleClose = (deleteConfirm?: boolean) => {
+    setOpen(false);
+
+    if (deleteConfirm) {
+      deleteCourse();
+    } else {
+      enqueueSnackbar(`Deletion cancelled`);
+    }
+  };
 
   return (
     <>
@@ -77,16 +177,29 @@ export default function CoursesPage() {
                   </Tooltip>
                 )}
                 {isAdmin && (
-                  <Tooltip title="Delete Course">
-                    <IconButton
-                      className={classes.createCourseButton}
-                      component={Link}
-                      to={`/courses/${id}/delete`}
-                      color="primary"
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
+                  <>
+                    <Tooltip title="Delete Course">
+                      <IconButton
+                        className={classes.createCourseButton}
+                        component={IconButton}
+                        color="primary"
+                        onClick={() => {
+                          handleDeleteButton();
+                        }}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <ConfirmationDialogRaw
+                      classes={{
+                        paper: classes.paper,
+                      }}
+                      id="delete-confirm-dialog"
+                      keepMounted
+                      open={open}
+                      onClose={handleClose}
+                    />
+                  </>
                 )}
               </div>
             </div>
