@@ -15,8 +15,8 @@ import moment from 'moment';
 import Course from '../api/data/models/course.model';
 import { useSnackbar } from 'notistack';
 import { putFile, put, post } from '../api/util';
-import SubmissionCard from '../components/SubmissionCard';
 import useMe from '../api/data/use-me';
+import SubmissionCard from '../components/SubmissionCard';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -49,6 +49,11 @@ export default function AssignmentPage() {
     loading: loadingCourse,
     failed: failedCourse,
   } = useGet<Course>(`course/${courseId}`);
+  const {
+    data: submissions,
+    loading: loadingSubmissions,
+    failed: failedSubmissions,
+  } = useGets<Submission>(`/assign/submissions/${id}/`);
 
   const { isProf } = useMe();
   return (
@@ -112,6 +117,16 @@ export default function AssignmentPage() {
             )}
           </div>
           {!isProf && <StudentAssignmentPage />}
+          {isProf &&
+            submissions?.map((s: Submission) => {
+              return (
+                <SubmissionCard
+                  submission={s}
+                  courseID={courseId}
+                  key={s._id}
+                />
+              );
+            })}
         </>
       )}
       <RequestStatus
@@ -133,11 +148,6 @@ function StudentAssignmentPage() {
   const { data: oldSub, mutate: mutateSub } = useGet<Submission>(
     `assign/sub/${id}`
   );
-  const {
-    data: submissions,
-    loading: loadingSubmissions,
-    failed: failedSubmissions,
-  } = useGets<Submission>(`/assign/submissions/${id}/`);
 
   const handleFileChange = (e: any) => {
     setFile(e.target.files[0]);
@@ -245,15 +255,6 @@ function StudentAssignmentPage() {
             </Box>
           </>
         )}
-        <RequestStatus
-          failed={failedAssign || failedUser}
-          loading={loadingAssign || loadingUser}
-          failedMessage="Could not load course!"
-        />
-        {submissions?.map((s: Submission) => {
-          return <SubmissionCard submission={s} key={s._id} />;
-        })}
-      </div>
     </>
   );
 }
