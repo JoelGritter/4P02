@@ -69,6 +69,13 @@ functions:
           path: user
           method: post
           cors: true
+  getPublicUser:
+    handler: app/handlers/user.getPublic
+    events:
+      - http:
+          path: user/public/{id}
+          method: get
+          cors: true
   getAllUsers:
     handler: app/handlers/user.getAll
     events:
