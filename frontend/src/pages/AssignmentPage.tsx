@@ -48,11 +48,9 @@ export default function AssignmentPage() {
     loading: loadingCourse,
     failed: failedCourse,
   } = useGet<Course>(`course/${courseId}`);
-  const {
-    data: submissions,
-    loading: loadingSubmissions,
-    failed: failedSubmissions,
-  } = useGet<Submission[]>(`/assign/submissions/${id}/`);
+  const { data: submissions } = useGet<Submission[]>(
+    `/assign/submissions/${id}/`
+  );
 
   const { isProf } = useMe();
   return (
