@@ -8,7 +8,7 @@ import Submission, {
 } from '../api/data/models/submission.model';
 import { Helmet } from 'react-helmet-async';
 import Typography from '@material-ui/core/Typography';
-import { Box, Button, Link as MatLink } from '@material-ui/core';
+import { Box, Button, Divider, Link as MatLink } from '@material-ui/core';
 import RequestStatus from '../components/RequestStatus';
 import moment from 'moment';
 import Course from '../api/data/models/course.model';
@@ -26,11 +26,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'space-between',
     marginBottom: theme.spacing(2),
   },
+  description: {
+    marginBottom: theme.spacing(2),
+  },
   assignHeader: {},
   subHeader: {
     marginBottom: theme.spacing(1),
   },
-  dueContainer: {},
+  dueContainer: {
+    marginTop: theme.spacing(2),
+  },
   createCourseButton: {
     height: 75,
   },
@@ -83,7 +88,12 @@ export default function AssignmentPage() {
               </Button>
             )}
           </div>
-
+          <div className={classes.description}>
+            <Typography variant="body1" color="textPrimary">
+              {assignment?.description}
+            </Typography>
+          </div>
+          <Divider />
           <div className={classes.dueContainer}>
             <Typography variant="body1" color="textSecondary">
               Open Date

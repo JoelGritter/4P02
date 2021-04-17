@@ -179,7 +179,7 @@ export const deleteAssignment = lambda(
       );
       return success(deleteRes);
     } else {
-      return unauthorized('Insufficient Privileges: Cannot update assignment');
+      return unauthorized('Insufficient Privileges: Cannot delete assignment');
     }
   })
 );
