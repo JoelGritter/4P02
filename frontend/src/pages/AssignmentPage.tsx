@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { Link, useParams } from 'react-router-dom';
 import useGet from '../api/data/use-get';
-import useGets from '../api/data/use-gets';
 import Assignment from '../api/data/models/assignment.model';
 import Submission, {
   emptySubmission,
@@ -53,7 +52,7 @@ export default function AssignmentPage() {
     data: submissions,
     loading: loadingSubmissions,
     failed: failedSubmissions,
-  } = useGets<Submission>(`/assign/submissions/${id}/`);
+  } = useGet<Submission[]>(`/assign/submissions/${id}/`);
 
   const { isProf } = useMe();
   return (
