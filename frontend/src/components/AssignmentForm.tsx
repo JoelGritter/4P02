@@ -7,7 +7,7 @@ import Assignment, {
   emptyTestCaseWithNewId,
   TestCase,
 } from '../api/data/models/assignment.model';
-import { KeyboardDatePicker } from '@material-ui/pickers';
+import { KeyboardDateTimePicker } from '@material-ui/pickers';
 import OptionalField from './OptionalField';
 import {
   Button,
@@ -168,12 +168,12 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
           />
         </Grid>
         <Grid item xs={12} md={6}>
-          <KeyboardDatePicker
+          <KeyboardDateTimePicker
             fullWidth
             margin="normal"
             inputVariant="outlined"
             label="Open Date"
-            format="MMMM Do, YYYY"
+            format="MMMM Do, YYYY - hh:mm a"
             value={assignment.openDate}
             onChange={handleDateChange('openDate')}
             KeyboardButtonProps={{
@@ -183,13 +183,13 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
         </Grid>
 
         <Grid item xs={12} md={6}>
-          <KeyboardDatePicker
+          <KeyboardDateTimePicker
             fullWidth
             margin="normal"
             inputVariant="outlined"
             id="date-picker-dialog"
             label="Close Date"
-            format="MMMM Do, YYYY"
+            format="MMMM Do, YYYY - hh:mm a"
             value={assignment.closeDate}
             onChange={handleDateChange('closeDate')}
             helperText="Assignment will not be available for submission after this date"
@@ -200,7 +200,7 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
         </Grid>
         <Grid item xs={12}>
           <OptionalField
-            component={KeyboardDatePicker}
+            component={KeyboardDateTimePicker}
             defaultValue={emptyAssignment.lateDate}
             fullWidth
             margin="normal"
@@ -208,7 +208,7 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
             id="date-picker-dialog"
             label="Late Date"
             optionLabel="Allow lates"
-            format="MMMM Do, YYYY"
+            format="MMMM Do, YYYY - hh:mm a"
             value={assignment.lateDate}
             helperText="Submissions after this date are considered late"
             setValue={handleDateChange('lateDate')}
