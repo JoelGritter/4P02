@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { Breadcrumbs, Grid, Button, Typography } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 import { put } from '../../api/util';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, Route } from 'react-router';
 import useGet from '../../api/data/use-get';
 import { Link } from 'react-router-dom';
 import RequestStatus from '../../components/RequestStatus';
@@ -12,6 +11,7 @@ import Assignment, {
   emptyAssignment,
 } from '../../api/data/models/assignment.model';
 import { AssignmentForm } from '../../components/AssignmentForm';
+import Course from '../../api/data/models/course.model';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -32,6 +32,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   fieldsContainer: {
     marginTop: theme.spacing(3),
   },
+  breadCrumbs: {
+    textDecoration: 'none',
+    color: 'rgba(0, 0, 0, 0.54)',
+  },
 }));
 
 export default function EditCoursePage() {
@@ -43,6 +47,7 @@ export default function EditCoursePage() {
   const { data: assignment, loading, failed, mutate } = useGet<
     Assignment | any
   >(`/assign/${id}`);
+  const { data: course } = useGet<Course>(`course/${courseId}`);
   const [editAssignment, setEditAssignment] = useState<Assignment>(
     emptyAssignment
   );
@@ -73,8 +78,58 @@ export default function EditCoursePage() {
 
   return (
     <div className={classes.root}>
-      {assignment && (
+      {assignment && course && (
         <>
+          <Grid item xs={12} md={9}>
+            <Route>
+              {({ location }) => {
+                const pathnames = history.location.pathname
+                  .split('/')
+                  .filter((x) => x);
+
+                return (
+                  <Breadcrumbs aria-label="breadcrumb">
+                    <Link
+                      color="textSecondary"
+                      to="/"
+                      className={classes.breadCrumbs}
+                    >
+                      Home
+                    </Link>
+                    {pathnames.map((value, index) => {
+                      const last = index === pathnames.length - 1;
+                      const to = `${pathnames.slice(index, index + 1)}`;
+
+                      return last ? (
+                        <Typography color="textPrimary" key={to}>
+                          {to === course._id
+                            ? course.name
+                            : to === assignment._id
+                            ? assignment.name
+                            : to}
+                        </Typography>
+                      ) : (
+                        <Link
+                          to={(location) => ({
+                            ...location,
+                            pathname: location.pathname.split(to)[0] + to,
+                          })}
+                          key={to}
+                          className={classes.breadCrumbs}
+                        >
+                          {to === course._id
+                            ? course.name
+                            : to === assignment._id
+                            ? assignment.name
+                            : to}
+                        </Link>
+                      );
+                    })}
+                  </Breadcrumbs>
+                );
+              }}
+            </Route>
+          </Grid>
           <div className={classes.headerContainer}>
             <Typography variant="h4">Edit Assignment</Typography>
           </div>

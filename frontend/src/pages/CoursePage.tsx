@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, Route } from 'react-router-dom';
 import useGet from '../api/data/use-get';
 import { Helmet } from 'react-helmet-async';
 import Course from '../api/data/models/course.model';
@@ -56,6 +56,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   assignmentContainer: {},
   createCourseButton: {},
+  breadCrumbs: {
+    textDecoration: 'none',
+    color: 'rgba(0, 0, 0, 0.54)',
+  },
 }));
 
 export interface ConfirmationDialogRawProps {
@@ -164,17 +168,47 @@ export default function CoursesPage() {
         {assignments && course && (
           <>
             <Grid item xs={12} md={9}>
-              <Breadcrumbs aria-label="breadcrumb">
-                <Typography
-                  color="inherit"
-                  component={Link}
-                  to={'/'}
-                  style={{ textDecoration: 'none' }}
-                >
-                  Home
-                </Typography>
-                <Typography color="textPrimary">{course.name}</Typography>
-              </Breadcrumbs>
+              <div className={classes.root}>
+                <Route>
+                  {({ location }) => {
+                    const pathnames = history.location.pathname
+                      .split('/')
+                      .filter((x) => x);
+
+                    return (
+                      <Breadcrumbs aria-label="breadcrumb">
+                        <Link
+                          color="inherit"
+                          to="/"
+                          className={classes.breadCrumbs}
+                        >
+                          Home
+                        </Link>
+                        {pathnames.map((value, index) => {
+                          const last = index === pathnames.length - 1;
+                          const to = `${pathnames.slice(index, index + 1)}`;
+
+                          return last ? (
+                            <Typography color="textPrimary" key={to}>
+                              {to === course._id ? course.name : to}
+                            </Typography>
+                          ) : (
+                            <Link
+                              to={(location) => ({
+                                ...location,
+                                pathname: location.pathname.split(to)[0] + to,
+                              })}
+                              className={classes.breadCrumbs}
+                            >
+                              {to === course._id ? course.name : to}
+                            </Link>
+                          );
+                        })}
+                      </Breadcrumbs>
+                    );
+                  }}
+                </Route>
+              </div>
             </Grid>
 
             <div className={classes.header}>

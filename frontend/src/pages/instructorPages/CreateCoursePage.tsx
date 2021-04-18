@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { Breadcrumbs, Typography, Grid, Button } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 import { CourseForm } from '../../components/CourseForm';
 import { post } from '../../api/util';
 import Course, { emptyCourse } from '../../api/data/models/course.model';
-import { useHistory } from 'react-router';
+import { useHistory, Route } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -26,6 +26,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   fieldsContainer: {
     marginTop: theme.spacing(2),
+  },
+  breadCrumbs: {
+    textDecoration: 'none',
+    color: 'rgba(0, 0, 0, 0.54)',
   },
 }));
 
@@ -49,6 +53,48 @@ export default function CreateCoursePage() {
 
   return (
     <div className={classes.root}>
+      <Grid item xs={12} md={9}>
+        <Route>
+          {({ location }) => {
+            const pathnames = history.location.pathname
+              .split('/')
+              .filter((x) => x);
+
+            return (
+              <Breadcrumbs aria-label="breadcrumb">
+                <Link
+                  color="textSecondary"
+                  to="/"
+                  className={classes.breadCrumbs}
+                >
+                  Home
+                </Link>
+                {pathnames.map((value, index) => {
+                  const last = index === pathnames.length - 1;
+                  const to = `${pathnames.slice(index, index + 1)}`;
+
+                  return last ? (
+                    <Typography color="textPrimary" key={to}>
+                      {to}
+                    </Typography>
+                  ) : (
+                    <Link
+                      to={(location) => ({
+                        ...location,
+                        pathname: location.pathname.split(to)[0] + to,
+                      })}
+                      key={to}
+                      className={classes.breadCrumbs}
+                    >
+                      {to}
+                    </Link>
+                  );
+                })}
+              </Breadcrumbs>
+            );
+          }}
+        </Route>
+      </Grid>
       <div className={classes.headerContainer}>
         <Typography variant="h4">Create Course</Typography>
       </div>

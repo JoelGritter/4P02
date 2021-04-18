@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { Breadcrumbs, Grid, Button, Typography } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 import { CourseForm } from '../../components/CourseForm';
 import { update } from '../../api/util';
 import Course from '../../api/data/models/course.model';
-import { useHistory, useParams } from 'react-router';
+import { useHistory, useParams, Route } from 'react-router';
 import useGet from '../../api/data/use-get';
 import { Link } from 'react-router-dom';
 import RequestStatus from '../../components/RequestStatus';
@@ -29,6 +28,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   fieldsContainer: {
     marginTop: theme.spacing(2),
+  },
+  breadCrumbs: {
+    textDecoration: 'none',
+    color: 'rgba(0, 0, 0, 0.54)',
   },
 }));
 
@@ -61,6 +64,49 @@ export default function EditCoursePage() {
     <div className={classes.root}>
       {course && (
         <>
+          <Grid item xs={12} md={9}>
+            <div className={classes.root}>
+              <Route>
+                {({ location }) => {
+                  const pathnames = history.location.pathname
+                    .split('/')
+                    .filter((x) => x);
+
+                  return (
+                    <Breadcrumbs aria-label="breadcrumb">
+                      <Link
+                        color="inherit"
+                        to="/"
+                        className={classes.breadCrumbs}
+                      >
+                        Home
+                      </Link>
+                      {pathnames.map((value, index) => {
+                        const last = index === pathnames.length - 1;
+                        const to = `${pathnames.slice(index, index + 1)}`;
+
+                        return last ? (
+                          <Typography color="textPrimary" key={to}>
+                            {to === course._id ? course.name : to}
+                          </Typography>
+                        ) : (
+                          <Link
+                            to={(location) => ({
+                              ...location,
+                              pathname: location.pathname.split(to)[0] + to,
+                            })}
+                            className={classes.breadCrumbs}
+                          >
+                            {to === course._id ? course.name : to}
+                          </Link>
+                        );
+                      })}
+                    </Breadcrumbs>
+                  );
+                }}
+              </Route>
+            </div>
+          </Grid>
           <div className={classes.headerContainer}>
             <Typography variant="h4">Edit Course</Typography>
           </div>

@@ -1,6 +1,11 @@
-import { Button, createStyles, TextField } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import {
+  Button,
+  createStyles,
+  TextField,
+  Breadcrumbs,
+  Typography,
+  Grid,
+} from '@material-ui/core';
 import React from 'react';
 import useMe from '../api/data/use-me';
 import { makeStyles, Theme } from '@material-ui/core/styles';
@@ -9,6 +14,8 @@ import { useState } from 'react';
 import User from '../api/data/models/user.model';
 import { useSnackbar } from 'notistack';
 import RequestStatus from '../components/RequestStatus';
+import { Route, useHistory } from 'react-router';
+import { Link as RouterLink } from 'react-router-dom';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,10 +32,15 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(1),
       padding: theme.spacing(1),
     },
+    breadCrumbs: {
+      textDecoration: 'none',
+      color: 'rgba(0, 0, 0, 0.54)',
+    },
   })
 );
 export default function ProfilePage() {
   const classes = useStyles();
+  const history = useHistory();
   const { me, mutate, loading, failed, success } = useMe();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -69,6 +81,48 @@ export default function ProfilePage() {
         failed={failed}
         failedMessage="Failed to load profile!"
       />
+      <Grid item xs={12} md={9}>
+        <Route>
+          {({ location }) => {
+            const pathnames = history.location.pathname
+              .split('/')
+              .filter((x) => x);
+
+            return (
+              <Breadcrumbs aria-label="breadcrumb">
+                <RouterLink
+                  color="textSecondary"
+                  to="/"
+                  className={classes.breadCrumbs}
+                >
+                  Home
+                </RouterLink>
+                {pathnames.map((value, index) => {
+                  const last = index === pathnames.length - 1;
+                  const to = `${pathnames.slice(index, index + 1)}`;
+
+                  return last ? (
+                    <Typography color="textPrimary" key={to}>
+                      {to}
+                    </Typography>
+                  ) : (
+                    <RouterLink
+                      to={(location) => ({
+                        ...location,
+                        pathname: location.pathname.split(to)[0] + to,
+                      })}
+                      key={to}
+                      className={classes.breadCrumbs}
+                    >
+                      {to}
+                    </RouterLink>
+                  );
+                })}
+              </Breadcrumbs>
+            );
+          }}
+        </Route>
+      </Grid>
       <div className={classes.headerContainer}>
         {incomplete && <Typography variant="h4">Complete Profile</Typography>}
         {!incomplete && <Typography variant="h4">Profile</Typography>}

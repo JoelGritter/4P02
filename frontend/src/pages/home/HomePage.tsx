@@ -3,6 +3,8 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import useMe from '../../api/data/use-me';
 import ProfCourses from './components/ProfCourses';
 import StudentCourses from './components/StudentCourses';
+import { Route, useHistory } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -49,6 +51,10 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(2),
     },
+    breadCrumbs: {
+      textDecoration: 'none',
+      color: 'rgba(0, 0, 0, 0.54)',
+    },
   })
 );
 
@@ -57,15 +63,55 @@ export default function HomePage() {
 
   const { me } = useMe();
 
+  const history = useHistory();
+
   const isProf = me?.roles?.includes('prof');
 
   return (
     <>
       <Grid container spacing={1}>
         <Grid item xs={12} md={9}>
-          <Breadcrumbs aria-label="breadcrumb">
-            <Typography color="textPrimary">Home</Typography>
-          </Breadcrumbs>
+          <div className={classes.root}>
+            <Route>
+              {({ location }) => {
+                const pathnames = history.location.pathname
+                  .split('/')
+                  .filter((x) => x);
+
+                return (
+                  <Breadcrumbs aria-label="breadcrumb">
+                    <Link
+                      color="inherit"
+                      to="/"
+                      className={classes.breadCrumbs}
+                    >
+                      Home
+                    </Link>
+                    {pathnames.map((value, index) => {
+                      const last = index === pathnames.length - 1;
+                      const to = `${pathnames.slice(index, index + 1)}`;
+
+                      return last ? (
+                        <Typography color="textPrimary" key={to}>
+                          {to}
+                        </Typography>
+                      ) : (
+                        <Link
+                          to={(location) => ({
+                            ...location,
+                            pathname: location.pathname.split(to)[0] + to,
+                          })}
+                          className={classes.breadCrumbs}
+                        >
+                          {to}
+                        </Link>
+                      );
+                    })}
+                  </Breadcrumbs>
+                );
+              }}
+            </Route>
+          </div>
         </Grid>
         <Grid item xs={12} md={9} className={classes.coursesContainer}>
           {isProf && <ProfCourses />}

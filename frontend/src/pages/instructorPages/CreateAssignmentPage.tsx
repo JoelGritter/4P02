@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
-import Typography from '@material-ui/core/Typography';
+import { Breadcrumbs, Typography, Grid, Button } from '@material-ui/core';
 import { useSnackbar } from 'notistack';
 import { AssignmentForm } from '../../components/AssignmentForm';
 import { post } from '../../api/util';
@@ -9,7 +8,10 @@ import Assignment, {
   emptyAssignment,
 } from '../../api/data/models/assignment.model';
 import { useParams } from 'react-router-dom';
-import { useHistory } from 'react-router';
+import { useHistory, Route } from 'react-router';
+import { Link } from 'react-router-dom';
+import useGet from '../../api/data/use-get';
+import Course from '../../api/data/models/course.model';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -26,6 +28,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   fieldsContainer: {
     marginTop: theme.spacing(2),
   },
+  breadCrumbs: {
+    textDecoration: 'none',
+    color: 'rgba(0, 0, 0, 0.54)',
+  },
 }));
 
 export default function CreateAssignmentPage() {
@@ -33,6 +39,7 @@ export default function CreateAssignmentPage() {
   const { enqueueSnackbar } = useSnackbar();
   const classes = useStyles();
   const [assignment, setAssignment] = useState<Assignment>(emptyAssignment);
+  const { data: course } = useGet<Course>(`course/${courseId}`);
   const history = useHistory();
 
   const addAssignment = async () => {
@@ -50,6 +57,50 @@ export default function CreateAssignmentPage() {
 
   return (
     <div className={classes.root}>
+      {course && (
+        <Grid item xs={12} md={9}>
+          <Route>
+            {({ location }) => {
+              const pathnames = history.location.pathname
+                .split('/')
+                .filter((x) => x);
+
+              return (
+                <Breadcrumbs aria-label="breadcrumb">
+                  <Link
+                    color="textSecondary"
+                    to="/"
+                    className={classes.breadCrumbs}
+                  >
+                    Home
+                  </Link>
+                  {pathnames.map((value, index) => {
+                    const last = index === pathnames.length - 1;
+                    const to = `${pathnames.slice(index, index + 1)}`;
+
+                    return last ? (
+                      <Typography color="textPrimary" key={to}>
+                        {to}
+                      </Typography>
+                    ) : (
+                      <Link
+                        to={(location) => ({
+                          ...location,
+                          pathname: location.pathname.split(to)[0] + to,
+                        })}
+                        key={to}
+                        className={classes.breadCrumbs}
+                      >
+                        {to === courseId ? course.name : to}
+                      </Link>
+                    );
+                  })}
+                </Breadcrumbs>
+              );
+            }}
+          </Route>
+        </Grid>
+      )}
       <div className={classes.headerContainer}>
         <Typography variant="h4">Create Assignment</Typography>
         <div className={classes.buttonContainer}>
