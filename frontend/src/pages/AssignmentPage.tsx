@@ -8,7 +8,7 @@ import Submission, {
 } from '../api/data/models/submission.model';
 import { Helmet } from 'react-helmet-async';
 import Typography from '@material-ui/core/Typography';
-import { Box, Button, Divider, Grid, Link as MatLink } from '@material-ui/core';
+import { Box, Button, Divider, Grid } from '@material-ui/core';
 import RequestStatus from '../components/RequestStatus';
 import moment from 'moment';
 import Course from '../api/data/models/course.model';
@@ -71,15 +71,6 @@ export default function AssignmentPage() {
           <Helmet>
             <title>uAssign - {assignment?.name || 'Course Loading...'}</title>
           </Helmet>
-          <Typography
-            variant="body1"
-            color="textSecondary"
-            className={classes.subHeader}
-          >
-            <MatLink component={Link} to={`/courses/${courseId}`}>
-              {course?.name}
-            </MatLink>
-          </Typography>
           <div className={classes.header}>
             <Typography variant="h4">{assignment.name}</Typography>
             {hasEditAccess && (
