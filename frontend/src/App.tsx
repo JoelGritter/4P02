@@ -52,6 +52,9 @@ const App = () => {
         main: '#757575',
       },
     },
+    typography: {
+      fontFamily: ['Lexend'].join(','),
+    },
   });
 
   return (

@@ -37,18 +37,15 @@ const useStyles = makeStyles((theme: Theme) => ({
   mainText: {
     color: '#000',
     fontSize: '40px',
-    fontFamily: 'Lexend',
     fontWeight: 700,
     textAlign: 'center',
   },
   subText: {
     fontSize: '24px',
-    fontFamily: 'Lexend',
     fontWeight: 500,
     textAlign: 'center',
   },
   loginButton: {
-    fontFamily: 'Lexend',
     fontWeight: 500,
     color: '#fff',
     marginTop: '15px',

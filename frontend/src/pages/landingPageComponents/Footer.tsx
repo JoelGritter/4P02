@@ -42,25 +42,21 @@ const useStyles = makeStyles((theme: Theme) => ({
   topLine: {
     color: theme.palette.primary.main,
     fontSize: '16px',
-    fontFamily: 'Lexend',
     fontWeight: 700,
   },
   heading: {
     lineHeight: '1.1',
     marginBottom: '10px',
     fontSize: '30px',
-    fontFamily: 'Lexend',
     fontWeight: 700,
   },
   subHeading: {
     maxWidth: '440px',
     fontSize: '14px',
-    fontFamily: 'Lexend',
     fontWeight: 500,
   },
   loginButton: {
     width: '200px',
-    fontFamily: 'Lexend',
     fontWeight: 500,
     color: '#fff',
     marginTop: '15px',

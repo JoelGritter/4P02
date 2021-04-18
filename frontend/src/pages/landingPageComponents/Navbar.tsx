@@ -26,7 +26,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxWidth: '1100px',
   },
   navbarLogo: {
-    fontFamily: 'Lexend',
     fontWeight: 700,
     color: '#fff',
     justifyContent: 'flex-start',
@@ -38,7 +37,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     textDecoration: 'none',
   },
   loginButton: {
-    fontFamily: 'Lexend',
     fontWeight: 500,
     color: theme.palette.primary.main,
     backgroundColor: '#fff',

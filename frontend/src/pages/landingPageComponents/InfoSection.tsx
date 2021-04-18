@@ -43,7 +43,6 @@ const useStyles = makeStyles((theme: Theme) => ({
   topLine: {
     color: theme.palette.primary.main,
     fontSize: '16px',
-    fontFamily: 'Lexend',
     fontWeight: 700,
     marginBottom: '5px',
   },
@@ -51,19 +50,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     lineHeight: '1.1',
     marginBottom: '10px',
     fontSize: '48px',
-    fontFamily: 'Lexend',
     fontWeight: 700,
   },
   subHeading: {
     color: '#999',
     maxWidth: '440px',
     fontSize: '18px',
-    fontFamily: 'Lexend',
     fontWeight: 500,
   },
   loginButton: {
     width: '200px',
-    fontFamily: 'Lexend',
     fontWeight: 500,
     color: '#fff',
     marginTop: '15px',
