@@ -13,7 +13,7 @@ const s3 = new S3({
 
 const bucket = 'uassign-api-dev-s3bucket-1ubat74rzbquo';
 
-export const signedPutUrl = lambda(
+export const submissionPutUrl = lambda(
   auth(async (event, context, { userDoc }) => {
     const { courseId, assignmentId, objectKey, contentType } = parseBody<any>(
       event
@@ -34,20 +34,29 @@ export const signedPutUrl = lambda(
   })
 );
 
-export const signedGetUrl = lambda(
+export const submissionGetUrl = lambda(
   auth(async (event, context, { userDoc }) => {
-    const { courseId, assignmentId, objectKey } = parseBody<any>(event);
+    const {
+      courseId,
+      assignmentId,
+      objectKey,
+      cognitoId: reqCognitoId,
+    } = parseBody<any>(event);
+
+    const cognitoId = reqCognitoId ?? userDoc.cognitoId;
 
     const course = await CourseModel.findById(courseId);
 
     if (
-      course.students.includes(userDoc.cognitoId) ||
+      (course.students.includes(userDoc.cognitoId) &&
+        cognitoId === userDoc.cognitoId) ||
       course.moderators.includes(userDoc.cognitoId) ||
-      course.currentProfessors.includes(userDoc.cognitoId)
+      course.currentProfessors.includes(userDoc.cognitoId) ||
+      userDoc.roles.includes('admin')
     ) {
       const signedUrl = s3.getSignedUrl('getObject', {
         Bucket: bucket,
-        Key: `submissions/${courseId}}/${assignmentId}/${userDoc.cognitoId}/${objectKey}`,
+        Key: `submissions/${courseId}}/${assignmentId}/${cognitoId}/${objectKey}`,
       });
       return success({ signedUrl });
     } else {

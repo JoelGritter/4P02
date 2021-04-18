@@ -5,6 +5,7 @@ import Submission from '../api/data/models/submission.model';
 import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import { testsApiPost } from '../api/util';
+import { useSnackbar } from 'notistack';
 
 interface TestCasesProps {
   assignment: Assignment;
@@ -37,6 +38,8 @@ const TestCases: React.FC<TestCasesProps> = ({
 }) => {
   const [value, setValue] = React.useState(0);
 
+  const { enqueueSnackbar } = useSnackbar();
+
   const handleChange = (event: React.ChangeEvent<{}>, newValue: number) => {
     setValue(newValue);
   };
@@ -54,12 +57,14 @@ const TestCases: React.FC<TestCasesProps> = ({
           const resCase = tCase._id && submission.testCaseResults[tCase._id];
 
           if (!resCase && tCase._id) {
-            const { success } = await testsApiPost('getTestResult', {
+            const { success, message } = await testsApiPost('getTestResult', {
               testCaseId: tCase._id,
               assignmentId: assignment._id,
             });
             if (success) {
               mutateSub && mutateSub();
+            } else {
+              enqueueSnackbar(message ?? 'Unknown error running test');
             }
           }
         }

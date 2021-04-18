@@ -287,17 +287,17 @@ functions:
           method: delete
           cors: true
   signedGetUrl:
-    handler: app/handlers/file.signedGetUrl
+    handler: app/handlers/file.submissionGetUrl
     events:
       - http:
-          path: fileGetUrl
+          path: fileGetUrl/submission
           method: post
           cors: true
   signedPutUrl:
-    handler: app/handlers/file.signedPutUrl
+    handler: app/handlers/file.submissionPutUrl
     events:
       - http:
-          path: filePutUrl
+          path: filePutUrl/submission
           method: post
           cors: true
   submissionGetAuth:
