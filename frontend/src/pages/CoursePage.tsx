@@ -12,6 +12,8 @@ import {
   IconButton,
   Tooltip,
   Typography,
+  Grid,
+  Breadcrumbs,
 } from '@material-ui/core';
 import AssignmentCard from '../components/AssignmentCard';
 import {
@@ -161,6 +163,20 @@ export default function CoursesPage() {
       <div className={classes.root}>
         {assignments && course && (
           <>
+            <Grid item xs={12} md={9}>
+              <Breadcrumbs aria-label="breadcrumb">
+                <Typography
+                  color="inherit"
+                  component={Link}
+                  to={'/'}
+                  style={{ textDecoration: 'none' }}
+                >
+                  Home
+                </Typography>
+                <Typography color="textPrimary">{course.name}</Typography>
+              </Breadcrumbs>
+            </Grid>
+
             <div className={classes.header}>
               <Typography variant="h4">{course.name}</Typography>
               <div className={classes.headerIcons}>

@@ -8,7 +8,7 @@ import Submission, {
 } from '../api/data/models/submission.model';
 import { Helmet } from 'react-helmet-async';
 import Typography from '@material-ui/core/Typography';
-import { Box, Button, Divider, Link as MatLink } from '@material-ui/core';
+import { Breadcrumbs, Grid, Box, Button, Divider } from '@material-ui/core';
 import RequestStatus from '../components/RequestStatus';
 import moment from 'moment';
 import Course from '../api/data/models/course.model';
@@ -63,18 +63,30 @@ export default function AssignmentPage() {
     <div className={classes.root}>
       {assignment && course && (
         <>
+          <Grid item xs={12} md={9}>
+            <Breadcrumbs aria-label="breadcrumb">
+              <Typography
+                color="inherit"
+                component={Link}
+                to={'/'}
+                style={{ textDecoration: 'none' }}
+              >
+                Home
+              </Typography>
+              <Typography
+                color="inherit"
+                component={Link}
+                to={`/courses/${courseId}`}
+                style={{ textDecoration: 'none' }}
+              >
+                {course?.name}
+              </Typography>
+              <Typography color="textPrimary">{assignment?.name}</Typography>
+            </Breadcrumbs>
+          </Grid>
           <Helmet>
             <title>uAssign - {assignment?.name || 'Course Loading...'}</title>
           </Helmet>
-          <Typography
-            variant="body1"
-            color="textSecondary"
-            className={classes.subHeader}
-          >
-            <MatLink component={Link} to={`/courses/${courseId}`}>
-              {course?.name}
-            </MatLink>
-          </Typography>
           <div className={classes.header}>
             <Typography variant="h4">{assignment.name}</Typography>
             {isProf && (

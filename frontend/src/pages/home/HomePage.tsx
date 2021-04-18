@@ -1,6 +1,4 @@
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import { Breadcrumbs, Typography, Grid } from '@material-ui/core';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import useMe from '../../api/data/use-me';
 import ProfCourses from './components/ProfCourses';
@@ -64,6 +62,11 @@ export default function HomePage() {
   return (
     <>
       <Grid container spacing={1}>
+        <Grid item xs={12} md={9}>
+          <Breadcrumbs aria-label="breadcrumb">
+            <Typography color="textPrimary">Home</Typography>
+          </Breadcrumbs>
+        </Grid>
         <Grid item xs={12} md={9} className={classes.coursesContainer}>
           {isProf && <ProfCourses />}
           <StudentCourses />
