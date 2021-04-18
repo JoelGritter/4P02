@@ -53,10 +53,6 @@ export const addCourse = lambda(
     const reqUser = userDoc as User;
     const { cognitoId } = reqUser;
 
-    // reject update if user already exists in another role
-    const errmsg = courseRoleIntersections(newCourse);
-    if (errmsg != null) return unauthorized(errmsg);
-
     // add current user to this new course if user is prof
     if (reqUser.roles.includes('prof')) {
       if (!newCourse.currentProfessors) {
@@ -67,6 +63,11 @@ export const addCourse = lambda(
         newCourse.currentProfessors.push(cognitoId);
       }
     }
+
+    // reject update if user already exists in another role
+    const errmsg = courseRoleIntersections(newCourse);
+    if (errmsg != null) return unauthorized(errmsg);
+
     const resCourse = await CourseModel.create(newCourse);
     return success(resCourse);
   })

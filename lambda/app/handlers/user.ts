@@ -1,5 +1,6 @@
 import { roleAuth } from './../util/wrappers';
 import UserModel, { User } from './../schemas/user.model';
+import CourseModel from './../schemas/course.model';
 import { badRequest, parseBody } from '../util/rest';
 import { success } from '../util/rest';
 import { lambda, auth } from '../util/wrappers';
@@ -200,6 +201,9 @@ export const addProf = lambda(
 export const removeProf = lambda(
   roleAuth(['admin'], async (event) => {
     const { cognitoId, email } = parseBody(event);
+    const courses = await CourseModel.find({
+      currentProfessors: cognitoId,
+    });
 
     const query = {} as any;
 
@@ -216,6 +220,13 @@ export const removeProf = lambda(
 
       if (roles.includes('prof')) {
         userToUpdate.roles = roles.filter((value) => value !== 'prof');
+        for (let course of courses) {
+          course.currentProfessors = course.currentProfessors.filter(
+            (user) => user !== cognitoId
+          );
+          await CourseModel.findByIdAndUpdate(course.id, course);
+        }
+
         userToUpdate.save();
       }
       return success();
