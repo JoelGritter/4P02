@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function ProfilePage() {
   const classes = useStyles();
   const history = useHistory();
+  const pathnames = history.location.pathname.split('/').filter((x) => x);
   const { me, mutate, loading, failed, success } = useMe();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -83,44 +84,36 @@ export default function ProfilePage() {
       />
       <Grid item xs={12} md={9}>
         <Route>
-          {({ location }) => {
-            const pathnames = history.location.pathname
-              .split('/')
-              .filter((x) => x);
+          <Breadcrumbs aria-label="breadcrumb">
+            <RouterLink
+              color="textSecondary"
+              to="/"
+              className={classes.breadCrumbs}
+            >
+              Home
+            </RouterLink>
+            {pathnames.map((value, index) => {
+              const last = index === pathnames.length - 1;
+              const to = `${pathnames.slice(index, index + 1)}`;
 
-            return (
-              <Breadcrumbs aria-label="breadcrumb">
+              return last ? (
+                <Typography color="textPrimary" key={to}>
+                  {to}
+                </Typography>
+              ) : (
                 <RouterLink
-                  color="textSecondary"
-                  to="/"
+                  to={(location) => ({
+                    ...location,
+                    pathname: location.pathname.split(to)[0] + to,
+                  })}
+                  key={to}
                   className={classes.breadCrumbs}
                 >
-                  Home
+                  {to}
                 </RouterLink>
-                {pathnames.map((value, index) => {
-                  const last = index === pathnames.length - 1;
-                  const to = `${pathnames.slice(index, index + 1)}`;
-
-                  return last ? (
-                    <Typography color="textPrimary" key={to}>
-                      {to}
-                    </Typography>
-                  ) : (
-                    <RouterLink
-                      to={(location) => ({
-                        ...location,
-                        pathname: location.pathname.split(to)[0] + to,
-                      })}
-                      key={to}
-                      className={classes.breadCrumbs}
-                    >
-                      {to}
-                    </RouterLink>
-                  );
-                })}
-              </Breadcrumbs>
-            );
-          }}
+              );
+            })}
+          </Breadcrumbs>
         </Route>
       </Grid>
       <div className={classes.headerContainer}>

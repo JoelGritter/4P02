@@ -41,6 +41,7 @@ export default function CreateAssignmentPage() {
   const [assignment, setAssignment] = useState<Assignment>(emptyAssignment);
   const { data: course } = useGet<Course>(`course/${courseId}`);
   const history = useHistory();
+  const pathnames = history.location.pathname.split('/').filter((x) => x);
 
   const addAssignment = async () => {
     assignment.courseID = courseId;
@@ -60,44 +61,36 @@ export default function CreateAssignmentPage() {
       {course && (
         <Grid item xs={12} md={9}>
           <Route>
-            {({ location }) => {
-              const pathnames = history.location.pathname
-                .split('/')
-                .filter((x) => x);
+            <Breadcrumbs aria-label="breadcrumb">
+              <Link
+                color="textSecondary"
+                to="/"
+                className={classes.breadCrumbs}
+              >
+                Home
+              </Link>
+              {pathnames.map((value, index) => {
+                const last = index === pathnames.length - 1;
+                const to = `${pathnames.slice(index, index + 1)}`;
 
-              return (
-                <Breadcrumbs aria-label="breadcrumb">
+                return last ? (
+                  <Typography color="textPrimary" key={to}>
+                    {to}
+                  </Typography>
+                ) : (
                   <Link
-                    color="textSecondary"
-                    to="/"
+                    to={(location) => ({
+                      ...location,
+                      pathname: location.pathname.split(to)[0] + to,
+                    })}
+                    key={to}
                     className={classes.breadCrumbs}
                   >
-                    Home
+                    {to === courseId ? course.name : to}
                   </Link>
-                  {pathnames.map((value, index) => {
-                    const last = index === pathnames.length - 1;
-                    const to = `${pathnames.slice(index, index + 1)}`;
-
-                    return last ? (
-                      <Typography color="textPrimary" key={to}>
-                        {to}
-                      </Typography>
-                    ) : (
-                      <Link
-                        to={(location) => ({
-                          ...location,
-                          pathname: location.pathname.split(to)[0] + to,
-                        })}
-                        key={to}
-                        className={classes.breadCrumbs}
-                      >
-                        {to === courseId ? course.name : to}
-                      </Link>
-                    );
-                  })}
-                </Breadcrumbs>
-              );
-            }}
+                );
+              })}
+            </Breadcrumbs>
           </Route>
         </Grid>
       )}

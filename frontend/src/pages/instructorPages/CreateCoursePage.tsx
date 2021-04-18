@@ -38,6 +38,7 @@ export default function CreateCoursePage() {
   const classes = useStyles();
   const [course, setCourse] = useState<Course>(emptyCourse);
   const history = useHistory();
+  const pathnames = history.location.pathname.split('/').filter((x) => x);
 
   const addCourse = async () => {
     const { success, message, data } = await post('/course', course);
@@ -55,44 +56,32 @@ export default function CreateCoursePage() {
     <div className={classes.root}>
       <Grid item xs={12} md={9}>
         <Route>
-          {({ location }) => {
-            const pathnames = history.location.pathname
-              .split('/')
-              .filter((x) => x);
+          <Breadcrumbs aria-label="breadcrumb">
+            <Link color="textSecondary" to="/" className={classes.breadCrumbs}>
+              Home
+            </Link>
+            {pathnames.map((value, index) => {
+              const last = index === pathnames.length - 1;
+              const to = `${pathnames.slice(index, index + 1)}`;
 
-            return (
-              <Breadcrumbs aria-label="breadcrumb">
+              return last ? (
+                <Typography color="textPrimary" key={to}>
+                  {to}
+                </Typography>
+              ) : (
                 <Link
-                  color="textSecondary"
-                  to="/"
+                  to={(location) => ({
+                    ...location,
+                    pathname: location.pathname.split(to)[0] + to,
+                  })}
+                  key={to}
                   className={classes.breadCrumbs}
                 >
-                  Home
+                  {to}
                 </Link>
-                {pathnames.map((value, index) => {
-                  const last = index === pathnames.length - 1;
-                  const to = `${pathnames.slice(index, index + 1)}`;
-
-                  return last ? (
-                    <Typography color="textPrimary" key={to}>
-                      {to}
-                    </Typography>
-                  ) : (
-                    <Link
-                      to={(location) => ({
-                        ...location,
-                        pathname: location.pathname.split(to)[0] + to,
-                      })}
-                      key={to}
-                      className={classes.breadCrumbs}
-                    >
-                      {to}
-                    </Link>
-                  );
-                })}
-              </Breadcrumbs>
-            );
-          }}
+              );
+            })}
+          </Breadcrumbs>
         </Route>
       </Grid>
       <div className={classes.headerContainer}>

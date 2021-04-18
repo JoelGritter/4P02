@@ -64,6 +64,7 @@ export default function HomePage() {
   const { me } = useMe();
 
   const history = useHistory();
+  const pathnames = history.location.pathname.split('/').filter((x) => x);
 
   const isProf = me?.roles?.includes('prof');
 
@@ -73,43 +74,31 @@ export default function HomePage() {
         <Grid item xs={12} md={9}>
           <div className={classes.root}>
             <Route>
-              {({ location }) => {
-                const pathnames = history.location.pathname
-                  .split('/')
-                  .filter((x) => x);
+              <Breadcrumbs aria-label="breadcrumb">
+                <Link color="inherit" to="/" className={classes.breadCrumbs}>
+                  Home
+                </Link>
+                {pathnames.map((value, index) => {
+                  const last = index === pathnames.length - 1;
+                  const to = `${pathnames.slice(index, index + 1)}`;
 
-                return (
-                  <Breadcrumbs aria-label="breadcrumb">
+                  return last ? (
+                    <Typography color="textPrimary" key={to}>
+                      {to}
+                    </Typography>
+                  ) : (
                     <Link
-                      color="inherit"
-                      to="/"
+                      to={(location) => ({
+                        ...location,
+                        pathname: location.pathname.split(to)[0] + to,
+                      })}
                       className={classes.breadCrumbs}
                     >
-                      Home
+                      {to}
                     </Link>
-                    {pathnames.map((value, index) => {
-                      const last = index === pathnames.length - 1;
-                      const to = `${pathnames.slice(index, index + 1)}`;
-
-                      return last ? (
-                        <Typography color="textPrimary" key={to}>
-                          {to}
-                        </Typography>
-                      ) : (
-                        <Link
-                          to={(location) => ({
-                            ...location,
-                            pathname: location.pathname.split(to)[0] + to,
-                          })}
-                          className={classes.breadCrumbs}
-                        >
-                          {to}
-                        </Link>
-                      );
-                    })}
-                  </Breadcrumbs>
-                );
-              }}
+                  );
+                })}
+              </Breadcrumbs>
             </Route>
           </div>
         </Grid>

@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme: Theme) => ({
 export default function AssignmentPage() {
   const classes = useStyles();
   const history = useHistory();
+  const pathnames = history.location.pathname.split('/').filter((x) => x);
   const { courseId, id }: { courseId: string; id: string } = useParams();
   const {
     data: assignment,
@@ -71,52 +72,44 @@ export default function AssignmentPage() {
         <>
           <Grid item xs={12} md={9}>
             <Route>
-              {({ location }) => {
-                const pathnames = history.location.pathname
-                  .split('/')
-                  .filter((x) => x);
+              <Breadcrumbs aria-label="breadcrumb">
+                <Link
+                  color="textSecondary"
+                  to="/"
+                  className={classes.breadCrumbs}
+                >
+                  Home
+                </Link>
+                {pathnames.map((value, index) => {
+                  const last = index === pathnames.length - 1;
+                  const to = `${pathnames.slice(index, index + 1)}`;
 
-                return (
-                  <Breadcrumbs aria-label="breadcrumb">
+                  return last ? (
+                    <Typography color="textPrimary" key={to}>
+                      {to === course._id
+                        ? course.name
+                        : to === assignment._id
+                        ? assignment.name
+                        : to}
+                    </Typography>
+                  ) : (
                     <Link
-                      color="textSecondary"
-                      to="/"
+                      to={(location) => ({
+                        ...location,
+                        pathname: location.pathname.split(to)[0] + to,
+                      })}
+                      key={to}
                       className={classes.breadCrumbs}
                     >
-                      Home
+                      {to === course._id
+                        ? course.name
+                        : to === assignment._id
+                        ? assignment.name
+                        : to}
                     </Link>
-                    {pathnames.map((value, index) => {
-                      const last = index === pathnames.length - 1;
-                      const to = `${pathnames.slice(index, index + 1)}`;
-
-                      return last ? (
-                        <Typography color="textPrimary" key={to}>
-                          {to === course._id
-                            ? course.name
-                            : to === assignment._id
-                            ? assignment.name
-                            : to}
-                        </Typography>
-                      ) : (
-                        <Link
-                          to={(location) => ({
-                            ...location,
-                            pathname: location.pathname.split(to)[0] + to,
-                          })}
-                          key={to}
-                          className={classes.breadCrumbs}
-                        >
-                          {to === course._id
-                            ? course.name
-                            : to === assignment._id
-                            ? assignment.name
-                            : to}
-                        </Link>
-                      );
-                    })}
-                  </Breadcrumbs>
-                );
-              }}
+                  );
+                })}
+              </Breadcrumbs>
             </Route>
           </Grid>
           <Helmet>
