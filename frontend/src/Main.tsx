@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React from 'react';
 import { Switch, Route, Redirect, useLocation, Link } from 'react-router-dom';
 import AssignmentPage from './pages/AssignmentPage';
 import CoursesPage from './pages/CoursePage';
@@ -20,36 +20,20 @@ import { Helmet } from 'react-helmet-async';
 import CreateAssignmentPage from './pages/instructorPages/CreateAssignmentPage';
 import useMe from './api/data/use-me';
 import useGet from './api/data/use-get';
-import Course, { emptyCourse } from './api/data/models/course.model';
-import Assignment, {
-  emptyAssignment,
-} from './api/data/models/assignment.model';
+import Course from './api/data/models/course.model';
+import Assignment from './api/data/models/assignment.model';
 
 export default function Main() {
   const { me, success } = useMe();
   const { pathname } = useLocation();
   const courseId = pathname.split('/')[2];
   const assignId = pathname.split('/')[4];
-  const { data: assignment } = useGet<Assignment>(`/assign/${assignId}`);
-  const { data: course } = useGet<Course>(`course/${courseId}`);
-
-  const [curCourse, setCurCourse] = useState<Course>(emptyCourse);
-
-  const [curAssign, setCurAssignment] = useState<Assignment>(emptyAssignment);
-
-  useEffect(() => {
-    setCurCourse((prev) => ({
-      ...prev,
-      ...course,
-    }));
-  }, [course]);
-
-  useEffect(() => {
-    setCurAssignment((prev) => ({
-      ...prev,
-      ...assignment,
-    }));
-  }, [assignment]);
+  const { data: assignment } = useGet<Assignment>(`/assign/${assignId}`, {
+    shouldRetryOnError: false,
+  });
+  const { data: course } = useGet<Course>(`course/${courseId}`, {
+    shouldRetryOnError: false,
+  });
 
   const incompleteProfile = success && !me.name;
 
@@ -72,10 +56,10 @@ export default function Main() {
 
                     return last ? (
                       <Typography color="textPrimary" key={to}>
-                        {value === curCourse._id
-                          ? curCourse.name
-                          : value === curAssign._id
-                          ? curAssign.name
+                        {value === course?._id
+                          ? course?.name
+                          : value === assignment?._id
+                          ? assignment?.name
                           : value}
                       </Typography>
                     ) : (
@@ -85,10 +69,10 @@ export default function Main() {
                         to={to}
                         key={to}
                       >
-                        {value === curCourse._id
-                          ? curCourse.name
-                          : value === curAssign._id
-                          ? curAssign.name
+                        {value === course?._id
+                          ? course?.name
+                          : value === assignment?._id
+                          ? assignment?.name
                           : value}
                       </MatLink>
                     );
