@@ -68,7 +68,7 @@ export async function testsApiPost(path: string, data: any) {
       ...json,
     };
   } catch (e) {
-    return { success: false };
+    return { success: false, message: 'Unexpected error' };
   }
 }
 

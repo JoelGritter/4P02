@@ -1,6 +1,5 @@
 import React from 'react';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
 import AssignmentPage from './pages/AssignmentPage';
 import CoursesPage from './pages/CoursePage';
 import HomePage from './pages/home/HomePage';
@@ -30,12 +29,6 @@ export default function Main() {
             {incompleteProfile && pathname !== '/profile' && (
               <Redirect to="/profile" />
             )}
-            <Route path="/login">
-              <Helmet>
-                <title>uAssign - Login</title>
-              </Helmet>
-              <LoginPage />
-            </Route>
             <Route path="/courses/create">
               <Helmet>
                 <title>uAssign - Create Course</title>

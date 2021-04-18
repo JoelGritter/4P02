@@ -8,7 +8,7 @@ import Submission, {
 } from '../api/data/models/submission.model';
 import { Helmet } from 'react-helmet-async';
 import Typography from '@material-ui/core/Typography';
-import { Breadcrumbs, Grid, Box, Button, Divider } from '@material-ui/core';
+import { Breadcrumbs, Grid, Box, Button, Divider, Link as MatLink } from '@material-ui/core';
 import RequestStatus from '../components/RequestStatus';
 import moment from 'moment';
 import Course from '../api/data/models/course.model';
@@ -40,10 +40,16 @@ const useStyles = makeStyles((theme: Theme) => ({
   createCourseButton: {
     height: 75,
   },
-  breadCrumbs: {
-    textDecoration: 'none',
-    color: 'rgba(0, 0, 0, 0.54)',
+  submissionCardContainer: {
+    marginTop: theme.spacing(1),
   },
+  submissionsHeader: {
+    marginTop: theme.spacing(2),
+  },
+  breadCrumbs: {
+  textDecoration: 'none',
+  color: 'rgba(0, 0, 0, 0.54)',
+  }
 }));
 
 export default function AssignmentPage() {
@@ -61,11 +67,10 @@ export default function AssignmentPage() {
     loading: loadingCourse,
     failed: failedCourse,
   } = useGet<Course>(`course/${courseId}`);
-  const { data: submissions } = useGet<Submission[]>(
-    `/assign/submissions/${id}/`
-  );
 
-  const { isProf } = useMe();
+  const { isProf, isAdmin, me } = useMe();
+  const hasEditAccess = isProf || isAdmin;
+  const isCourseStudent = course?.students?.includes(me?.cognitoId);
   return (
     <div className={classes.root}>
       {assignment && course && (
@@ -117,7 +122,7 @@ export default function AssignmentPage() {
           </Helmet>
           <div className={classes.header}>
             <Typography variant="h4">{assignment.name}</Typography>
-            {isProf && (
+            {hasEditAccess && (
               <Button
                 component={Link}
                 to={`/courses/${courseId}/assignments/${id}/edit`}
@@ -164,17 +169,8 @@ export default function AssignmentPage() {
               </>
             )}
           </div>
-          {!isProf && <StudentAssignmentPage />}
-          {isProf &&
-            submissions?.map((s: Submission) => {
-              return (
-                <SubmissionCard
-                  submission={s}
-                  courseID={courseId}
-                  key={s._id}
-                />
-              );
-            })}
+          {isCourseStudent && <StudentAssignmentPage />}
+          {hasEditAccess && <ProfAssignmentPage />}
         </>
       )}
       <RequestStatus
@@ -186,6 +182,40 @@ export default function AssignmentPage() {
   );
 }
 
+function ProfAssignmentPage() {
+  const { courseId, id }: { courseId: string; id: string } = useParams();
+  const { data: submissions } = useGet<Submission[]>(
+    `/assign/submissions/${id}/`
+  );
+
+  const classes = useStyles();
+
+  return (
+    <>
+      {submissions && (
+        <>
+          <Typography variant="h5" className={classes.submissionsHeader}>
+            Submissions
+          </Typography>
+          <Grid
+            container
+            spacing={2}
+            className={classes.submissionCardContainer}
+          >
+            {submissions?.map((s: Submission) => {
+              return (
+                <Grid item xs={12} key={s._id}>
+                  <SubmissionCard submission={s} courseID={courseId} />
+                </Grid>
+              );
+            })}
+          </Grid>
+        </>
+      )}
+    </>
+  );
+}
+
 function StudentAssignmentPage() {
   const { courseId, id }: { courseId: string; id: string } = useParams();
   const { data: assignment } = useGet<Assignment>(`/assign/${id}`);
@@ -194,7 +224,10 @@ function StudentAssignmentPage() {
   const [submission] = useState<Submission>(emptySubmission);
   const { data: course } = useGet<Course>(`course/${courseId}`);
   const { data: oldSub, mutate: mutateSub } = useGet<Submission>(
-    `assign/sub/${id}`
+    `assign/sub/${id}`,
+    {
+      shouldRetryOnError: false,
+    }
   );
 
   const handleFileChange = (e: any) => {
@@ -213,7 +246,7 @@ function StudentAssignmentPage() {
         data: { signedUrl },
         success: signedSuccess,
         message: signedMessage,
-      } = await post('filePutUrl', {
+      } = await post('filePutUrl/submission', {
         assignmentId: assignment._id,
         courseId,
         objectKey: file.name,
@@ -265,15 +298,23 @@ function StudentAssignmentPage() {
               File submitted -{' '}
               <Button
                 onClick={async () => {
-                  const {
-                    data: { signedUrl },
-                  } = await post('fileGetUrl', {
-                    assignmentId: assignment._id,
-                    courseId: course._id,
-                    objectKey: oldSub.codeZip,
-                  });
+                  const { data, success, message } = await post(
+                    'fileGetUrl/submission',
+                    {
+                      assignmentId: assignment._id,
+                      courseId: course._id,
+                      objectKey: oldSub.codeZip,
+                    }
+                  );
 
-                  window.open(signedUrl, '_blank');
+                  if (success) {
+                    const { signedUrl } = data;
+                    window.open(signedUrl, '_blank');
+                  } else {
+                    enqueueSnackbar(
+                      message ?? 'Unknown error downloading file'
+                    );
+                  }
                 }}
               >
                 {oldSub.codeZip}
@@ -288,26 +329,21 @@ function StudentAssignmentPage() {
         </>
       )}
 
-      {new Date(assignment.closeDate).getTime() > new Date().getTime() &&
-        oldSub && (
-          <>
-            <Box marginTop={1}>
-              <input
-                type="file"
-                name="chooseFile"
-                onChange={handleFileChange}
-              />
+      {new Date(assignment.closeDate).getTime() > new Date().getTime() && (
+        <>
+          <Box marginTop={1}>
+            <input type="file" name="chooseFile" onChange={handleFileChange} />
 
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={sendSubmission}
-              >
-                Submit
-              </Button>
-            </Box>
-          </>
-        )}
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={sendSubmission}
+            >
+              Submit
+            </Button>
+          </Box>
+        </>
+      )}
     </>
   );
 }
