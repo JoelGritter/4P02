@@ -8,6 +8,7 @@
     "local": "serverless offline --skipCacheInvalidation --port 4000",
     "start": "npm run local",
     "deploy": "serverless deploy",
+    "deploy-docker": "serverless deploy -c serverless.docker.yml",
     "test": "cross-env NODE_ENV=dev mocha -r ts-node/register tests/*.test.ts --exit",
     "coverage": "nyc --reporter lcov npm run test",
     "bld": "tsc --outDir dist"
@@ -41,7 +42,7 @@
     "lambda-tester": "^4.0.1",
     "mocha": "^7.1.2",
     "nyc": "^15.0.1",
-    "serverless": "^2.28.0",
+    "serverless": "^2.35.0",
     "serverless-apigateway-service-proxy": "^1.14.0",
     "serverless-offline": "^5.12.1",
     "serverless-plugin-typescript": "^1.1.9",
