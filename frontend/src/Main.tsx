@@ -1,6 +1,5 @@
 import React from 'react';
 import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
-import LoginPage from './pages/LoginPage';
 import AssignmentPage from './pages/AssignmentPage';
 import CoursesPage from './pages/CoursePage';
 import HomePage from './pages/home/HomePage';
