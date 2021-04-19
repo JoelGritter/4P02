@@ -37,6 +37,15 @@ export default function Main() {
 
   const incompleteProfile = success && !me.name;
 
+  const breadcrumbsNameMap: { [key: string]: string } = {
+    profile: 'My Profile',
+    admin: 'Admin',
+    users: 'Users',
+    courses: 'Courses',
+    assignments: 'Assignments',
+    tests: 'Tests',
+  };
+
   return (
     <>
       <Paper style={{ minHeight: '100vh' }}>
@@ -60,6 +69,8 @@ export default function Main() {
                           ? course?.name
                           : value === assignment?._id
                           ? assignment?.name
+                          : breadcrumbsNameMap[value] !== null
+                          ? breadcrumbsNameMap[value]
                           : value}
                       </Typography>
                     ) : (
@@ -73,6 +84,8 @@ export default function Main() {
                           ? course?.name
                           : value === assignment?._id
                           ? assignment?.name
+                          : breadcrumbsNameMap[value] !== null
+                          ? breadcrumbsNameMap[value]
                           : value}
                       </MatLink>
                     );
