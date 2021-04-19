@@ -20,7 +20,7 @@ export default function StudentCourses() {
 
   return (
     <>
-      {studentCourses?.length > 0 && (
+      {studentCourses && studentCourses.length > 0 && (
         <>
           <Box display="flex" justifyContent="space-between" paddingRight={1}>
             <Typography variant="h4">My Courses</Typography>

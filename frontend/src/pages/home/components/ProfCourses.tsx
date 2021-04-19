@@ -21,7 +21,7 @@ export default function ProfCourses() {
 
   return (
     <>
-      {profCourses && (
+      {profCourses && profCourses.length > 0 && (
         <>
           <Box display="flex" justifyContent="space-between" paddingRight={1}>
             <Typography variant="h4">Courses I'm Teaching</Typography>
