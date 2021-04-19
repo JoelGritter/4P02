@@ -1,11 +1,15 @@
 import { fetcher } from './../util';
-import useSWR from 'swr';
+import useSWR, { ConfigInterface } from 'swr';
 import { apiJoin } from '../util';
 import useMe from './use-me';
 import Course from './models/course.model';
 
-export default function useAssociatedCourses() {
-  const { data, mutate, error } = useSWR(apiJoin('course/associated'), fetcher);
+export default function useAssociatedCourses(options?: ConfigInterface) {
+  const { data, mutate, error } = useSWR(
+    apiJoin('course/associated'),
+    fetcher,
+    options
+  );
 
   const { me } = useMe();
 

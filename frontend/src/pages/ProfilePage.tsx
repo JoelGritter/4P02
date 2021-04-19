@@ -13,7 +13,7 @@ import RequestStatus from '../components/RequestStatus';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
-      margin: theme.spacing(1),
+      marginRight: theme.spacing(1),
     },
     headerContainer: {
       display: 'flex',
@@ -24,6 +24,11 @@ const useStyles = makeStyles((theme: Theme) =>
     fieldsContainer: {
       marginTop: theme.spacing(1),
       padding: theme.spacing(1),
+    },
+    buttonContainer: {
+      display: 'flex',
+      justifyContent: 'flex-end',
+      margin: theme.spacing(1),
     },
   })
 );
@@ -87,29 +92,6 @@ export default function ProfilePage() {
               </Button>
             </>
           )}
-
-          {edit && (
-            <>
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                onClick={userHandler}
-              >
-                Save
-              </Button>
-              <Button
-                color="primary"
-                variant="contained"
-                className={classes.button}
-                onClick={() => {
-                  setManualEdit(false);
-                }}
-              >
-                Cancel
-              </Button>
-            </>
-          )}
         </div>
       </div>
       {incomplete && (
@@ -167,6 +149,28 @@ export default function ProfilePage() {
           </>
         )}
       </Grid>
+      {edit && (
+        <div className={classes.buttonContainer}>
+          <Button
+            variant="contained"
+            color="primary"
+            className={classes.button}
+            onClick={userHandler}
+          >
+            Save
+          </Button>
+          <Button
+            color="primary"
+            variant="contained"
+            className={classes.button}
+            onClick={() => {
+              setManualEdit(false);
+            }}
+          >
+            Cancel
+          </Button>
+        </div>
+      )}
     </>
   );
 }
