@@ -1,7 +1,17 @@
 FROM public.ecr.aws/lambda/nodejs:12
 
-RUN yum update -y && yum install unzip -y
-RUN yum install python3 -y
+RUN ulimit -n 1024 && \
+yum update -y && \
+yum install -y unzip \
+dos2unix \
+gcc \
+gcc-c++ \
+java-1.8.0-openjdk \
+java-1.8.0-openjdk-devel \
+python3 && \
+yum clean all
+
+ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk/
 
 COPY ./ ./
 RUN npm install
