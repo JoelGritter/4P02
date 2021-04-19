@@ -2,6 +2,7 @@ import { Button } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import { ReactComponent as Logo } from '../../assets/logo-circle.svg';
 
 const useStyles = makeStyles((theme: Theme) => ({
   nav: {
@@ -49,6 +50,11 @@ const useStyles = makeStyles((theme: Theme) => ({
       transition: '0.5s',
     },
   },
+  logo: {
+    height: 55,
+    width: 55,
+    marginRight: theme.spacing(2),
+  },
 }));
 
 const Navbar = () => {
@@ -58,7 +64,9 @@ const Navbar = () => {
     <>
       <div className={classes.nav}>
         <div className={classes.navbarContainer}>
-          <div className={classes.navbarLogo}>UAssign</div>
+          <div className={classes.navbarLogo}>
+            <Logo className={classes.logo} /> UAssign
+          </div>
           <Button component={Link} to="/login" className={classes.loginButton}>
             Login
           </Button>

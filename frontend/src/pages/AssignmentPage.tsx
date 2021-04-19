@@ -8,7 +8,15 @@ import Submission, {
 } from '../api/data/models/submission.model';
 import { Helmet } from 'react-helmet-async';
 import Typography from '@material-ui/core/Typography';
-import { Box, Button, Divider, Grid } from '@material-ui/core';
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Divider,
+  Grid,
+} from '@material-ui/core';
 import RequestStatus from '../components/RequestStatus';
 import moment from 'moment';
 import Course from '../api/data/models/course.model';
@@ -43,6 +51,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(1),
   },
   submissionsHeader: {
+    marginTop: theme.spacing(2),
+  },
+  card: {
     marginTop: theme.spacing(2),
   },
 }));
@@ -91,22 +102,26 @@ export default function AssignmentPage() {
           </div>
           <Divider />
           <div className={classes.dueContainer}>
-            <Typography variant="body1" color="textSecondary">
-              Open Date
-            </Typography>
-            <Typography variant="body1">
-              {moment(assignment?.openDate).format('LL - h:mm a')}
-            </Typography>
-            <Box marginTop={1}>
-              <Typography variant="body1" color="textSecondary">
-                Due Date
-              </Typography>
-              <Typography variant="body1">
-                {moment(assignment?.lateDate ?? assignment?.closeDate).format(
-                  'LL - h:mm a'
-                )}
-              </Typography>
-            </Box>
+            <Grid container>
+              <Grid item xs={12} md={6}>
+                <Typography variant="body1" color="textSecondary">
+                  Open Date
+                </Typography>
+                <Typography variant="body1">
+                  {moment(assignment?.openDate).format('LL - h:mm a')}
+                </Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Typography variant="body1" color="textSecondary">
+                  Due Date
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  {moment(assignment?.lateDate ?? assignment?.closeDate).format(
+                    'LL - h:mm a'
+                  )}
+                </Typography>
+              </Grid>
+            </Grid>
             {assignment?.lateDate && (
               <>
                 <Box marginTop={1}>
@@ -236,18 +251,31 @@ function StudentAssignmentPage() {
     }
   };
 
+  const classes = useStyles();
+
   return (
     <>
       {oldSub && assignment && assignment._id && (
         <>
-          <Box marginTop={1}>
-            <Typography variant="body1">
-              Submission made on{' '}
-              {moment(oldSub?.submissionDate).format('LL - h:mm a')}
-            </Typography>
-            <Typography variant="body1" color="textSecondary">
-              File submitted -{' '}
+          <Card variant="outlined" className={classes.card}>
+            <CardContent>
+              <Typography variant="h5" gutterBottom>
+                Your Submission
+              </Typography>
+              <Typography variant="body1" color="textSecondary" gutterBottom>
+                Submitted on{' '}
+                {moment(oldSub?.submissionDate).format('LL - h:mm a')}
+              </Typography>
+              <TestCases
+                assignment={assignment}
+                submission={oldSub}
+                mutateSub={mutateSub}
+              />
+            </CardContent>
+            <CardActions>
               <Button
+                variant="outlined"
+                color="primary"
                 onClick={async () => {
                   const { data, success, message } = await post(
                     'fileGetUrl/submission',
@@ -268,28 +296,22 @@ function StudentAssignmentPage() {
                   }
                 }}
               >
-                {oldSub.codeZip}
+                Download Submission ({oldSub.codeZip})
               </Button>
-            </Typography>
-          </Box>
-          <TestCases
-            assignment={assignment}
-            submission={oldSub}
-            mutateSub={mutateSub}
-          />
+            </CardActions>
+          </Card>
         </>
       )}
 
       {new Date(assignment.closeDate).getTime() > new Date().getTime() && (
         <>
-          <Box marginTop={1}>
+          <Box marginTop={2}>
+            <Typography variant="h5" gutterBottom>
+              {oldSub ? 'Resubmit' : 'Submit'}
+            </Typography>
             <input type="file" name="chooseFile" onChange={handleFileChange} />
 
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={sendSubmission}
-            >
+            <Button variant="outlined" color="primary" onClick={sendSubmission}>
               Submit
             </Button>
           </Box>
