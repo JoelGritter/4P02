@@ -25,6 +25,7 @@ function runCode(
     // Run stuff
     cd(codePath);
     exec('touch compile_and_run.sh', () => {
+      exec('dos2unix compile_and_run.sh');
       exec(`chmod +x compile_and_run.sh`);
       echo(testCase.input).exec('env -i sh compile_and_run.sh', (c, s, e) => {
         const actualOutput = cat('out.txt').trim();
