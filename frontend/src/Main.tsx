@@ -1,5 +1,5 @@
 import React from 'react';
-import { Switch, Route, Redirect, useLocation } from 'react-router-dom';
+import { Switch, Route, Redirect, useLocation, Link } from 'react-router-dom';
 import AssignmentPage from './pages/AssignmentPage';
 import CoursesPage from './pages/CoursePage';
 import HomePage from './pages/home/HomePage';
@@ -7,17 +7,33 @@ import ProfilePage from './pages/ProfilePage';
 import TestsPage from './pages/TestsPage';
 import EditAssignmentPage from './pages/instructorPages/EditAssignmentPage';
 import CreateCoursePage from './pages/instructorPages/CreateCoursePage';
-import { Paper } from '@material-ui/core';
+import {
+  Paper,
+  Breadcrumbs,
+  Link as MatLink,
+  Typography,
+} from '@material-ui/core';
 import AdminHome from './pages/admin/AdminHome';
 import Nav from './components/Nav';
 import EditCoursePage from './pages/instructorPages/EditCoursePage';
 import { Helmet } from 'react-helmet-async';
 import CreateAssignmentPage from './pages/instructorPages/CreateAssignmentPage';
 import useMe from './api/data/use-me';
+import useGet from './api/data/use-get';
+import Course from './api/data/models/course.model';
+import Assignment from './api/data/models/assignment.model';
 
 export default function Main() {
   const { me, success } = useMe();
   const { pathname } = useLocation();
+  const courseId = pathname.split('/')[2];
+  const assignId = pathname.split('/')[4];
+  const { data: assignment } = useGet<Assignment>(`/assign/${assignId}`, {
+    shouldRetryOnError: false,
+  });
+  const { data: course } = useGet<Course>(`course/${courseId}`, {
+    shouldRetryOnError: false,
+  });
 
   const incompleteProfile = success && !me.name;
 
@@ -25,6 +41,46 @@ export default function Main() {
     <>
       <Paper style={{ minHeight: '100vh' }}>
         <Nav>
+          <Route>
+            {({ location }) => {
+              const pathnames = location.pathname.split('/').filter((x) => x);
+
+              return (
+                <Breadcrumbs aria-label="breadcrumb">
+                  <MatLink component={Link} color="inherit" to="/">
+                    Home
+                  </MatLink>
+                  {pathnames.map((value, index) => {
+                    const last = index === pathnames.length - 1;
+                    const to = `/${pathnames.slice(0, index + 1).join('/')}`;
+
+                    return last ? (
+                      <Typography color="textPrimary" key={to}>
+                        {value === course?._id
+                          ? course?.name
+                          : value === assignment?._id
+                          ? assignment?.name
+                          : value}
+                      </Typography>
+                    ) : (
+                      <MatLink
+                        component={Link}
+                        color="inherit"
+                        to={to}
+                        key={to}
+                      >
+                        {value === course?._id
+                          ? course?.name
+                          : value === assignment?._id
+                          ? assignment?.name
+                          : value}
+                      </MatLink>
+                    );
+                  })}
+                </Breadcrumbs>
+              );
+            }}
+          </Route>
           <Switch>
             {incompleteProfile && pathname !== '/profile' && (
               <Redirect to="/profile" />
