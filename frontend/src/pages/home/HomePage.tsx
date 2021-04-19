@@ -2,7 +2,6 @@ import React from 'react';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import useMe from '../../api/data/use-me';
 import ProfCourses from './components/ProfCourses';
 import StudentCourses from './components/StudentCourses';
 
@@ -57,15 +56,11 @@ const useStyles = makeStyles((theme: Theme) =>
 export default function HomePage() {
   const classes = useStyles();
 
-  const { me } = useMe();
-
-  const isProf = me?.roles?.includes('prof');
-
   return (
     <>
       <Grid container spacing={1}>
         <Grid item xs={12} md={9} className={classes.coursesContainer}>
-          {isProf && <ProfCourses />}
+          <ProfCourses />
           <StudentCourses />
         </Grid>
         <Grid
