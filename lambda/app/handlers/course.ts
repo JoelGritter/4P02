@@ -135,10 +135,12 @@ export const getCourse = lambda(
       });
     } else if (roles.includes('prof')) {
       resCourse = await CourseModel.findOne({
-        $and: [
+        $or: [
           { currentProfessors: cognitoId },
-          { _id: mongoose.Types.ObjectId(event.pathParameters.id) },
+          { students: cognitoId },
+          { moderators: cognitoId },
         ],
+        _id: mongoose.Types.ObjectId(event.pathParameters.id),
       });
     } else {
       resCourse = await CourseModel.findOne({
