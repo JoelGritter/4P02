@@ -12,6 +12,7 @@ import {
   Breadcrumbs,
   Link as MatLink,
   Typography,
+  makeStyles,
 } from '@material-ui/core';
 import AdminHome from './pages/admin/AdminHome';
 import Nav from './components/Nav';
@@ -23,7 +24,14 @@ import useGet from './api/data/use-get';
 import Course from './api/data/models/course.model';
 import Assignment from './api/data/models/assignment.model';
 
+const useStyles = makeStyles((theme) => ({
+  crumbs: {
+    marginBottom: theme.spacing(1),
+  },
+}));
+
 export default function Main() {
+  const classes = useStyles();
   const { me, success } = useMe();
   const { pathname } = useLocation();
   const courseId = pathname.split('/')[2];
@@ -55,7 +63,7 @@ export default function Main() {
               const pathnames = location.pathname.split('/').filter((x) => x);
 
               return (
-                <Breadcrumbs aria-label="breadcrumb">
+                <Breadcrumbs aria-label="breadcrumb" className={classes.crumbs}>
                   <MatLink component={Link} color="inherit" to="/">
                     Home
                   </MatLink>

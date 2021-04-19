@@ -8,7 +8,6 @@ export default interface Course {
 }
 
 export const emptyCourse: Course = {
-  _id: '',
   name: '',
   description: '',
   currentProfessors: [],
