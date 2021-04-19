@@ -177,6 +177,7 @@ export default function Nav(props: Props) {
             {profCourses?.map((course) => (
               <ListItem
                 button
+                key={course._id}
                 className={classes.nested}
                 component={Link}
                 selected={pathStartsWith(`/courses/${course._id}`)}
@@ -196,6 +197,7 @@ export default function Nav(props: Props) {
             {studentCourses?.map((course) => (
               <ListItem
                 button
+                key={course._id}
                 className={classes.nested}
                 component={Link}
                 selected={pathStartsWith(`/courses/${course._id}`)}
