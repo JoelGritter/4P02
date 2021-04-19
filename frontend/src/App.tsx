@@ -87,7 +87,25 @@ const App = () => {
                   )}
                 </>
               </Route>
-              <Route path="/">
+              <Route path="/" exact>
+                {loggedIn && jwtToken && <Main />}
+                {!loggedIn && <LandingPage />}
+              </Route>
+              <Route>
+                <AmplifyAuthenticator>
+                  <AmplifySignUp
+                    slot="sign-up"
+                    usernameAlias="email"
+                    formFields={[
+                      {
+                        type: 'email',
+                      },
+                      {
+                        type: 'password',
+                      },
+                    ]}
+                  />
+                </AmplifyAuthenticator>
                 {loggedIn && jwtToken && <Main />}
                 {!loggedIn && <LandingPage />}
               </Route>

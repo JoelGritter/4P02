@@ -1,4 +1,11 @@
-import { CircularProgress, Tab, Tabs, Typography } from '@material-ui/core';
+import {
+  Box,
+  CircularProgress,
+  makeStyles,
+  Tab,
+  Tabs,
+  Typography,
+} from '@material-ui/core';
 import React, { useEffect } from 'react';
 import Assignment from '../api/data/models/assignment.model';
 import Submission from '../api/data/models/submission.model';
@@ -6,6 +13,22 @@ import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import { testsApiPost } from '../api/util';
 import { useSnackbar } from 'notistack';
+
+const useStyles = makeStyles((theme) => ({
+  preCls: {
+    background: '#eeeeee',
+    padding: theme.spacing(2),
+  },
+  tabs: {
+    marginBottom: theme.spacing(2),
+  },
+  checkMark: {
+    color: '#2EB100',
+  },
+  wrongMark: {
+    color: '#ff0000',
+  },
+}));
 
 interface TestCasesProps {
   assignment: Assignment;
@@ -20,12 +43,13 @@ function TestCaseIndicator({
   loading: boolean;
   correct: boolean;
 }) {
+  const classes = useStyles();
   return (
     <>
       <span>
         {loading && <CircularProgress />}
-        {!loading && correct && <CheckIcon />}
-        {!loading && !correct && <CloseIcon />}
+        {!loading && correct && <CheckIcon className={classes.checkMark} />}
+        {!loading && !correct && <CloseIcon className={classes.wrongMark} />}
       </span>
     </>
   );
@@ -73,50 +97,66 @@ const TestCases: React.FC<TestCasesProps> = ({
     // eslint-disable-next-line
   }, [JSON.stringify(assignment), JSON.stringify(submission.submissionDate)]);
 
+  const classes = useStyles();
+
   return (
     <>
-      <Typography>Test Cases</Typography>
-      {assignment && submission && (
-        <>
-          <Tabs value={value} onChange={handleChange}>
-            {assignment.testCases.map((tCase) => {
-              const caseRes = tCase._id
-                ? submission.testCaseResults[tCase._id]
-                : null;
-              return (
-                <Tab
-                  key={tCase._id}
-                  label={
-                    <TestCaseIndicator
-                      loading={!caseRes}
-                      correct={!!caseRes?.correct}
-                      key={tCase._id}
-                    />
-                  }
-                />
-              );
-            })}
-          </Tabs>
-          {currResCase && (
-            <>
-              {currResCase.hidden && (
-                <Typography variant="body1">Hidden Case</Typography>
-              )}
+      <Box marginTop={2}>
+        <Typography variant="h6" gutterBottom>
+          Test Cases
+        </Typography>
+        {assignment && submission && (
+          <>
+            <Tabs
+              value={value}
+              onChange={handleChange}
+              indicatorColor="secondary"
+              textColor="secondary"
+              className={classes.tabs}
+            >
+              {assignment.testCases.map((tCase) => {
+                const caseRes = tCase._id
+                  ? submission.testCaseResults[tCase._id]
+                  : null;
+                return (
+                  <Tab
+                    key={tCase._id}
+                    label={
+                      <TestCaseIndicator
+                        loading={!caseRes}
+                        correct={!!caseRes?.correct}
+                        key={tCase._id}
+                      />
+                    }
+                  />
+                );
+              })}
+            </Tabs>
+            {currResCase && (
+              <>
+                {currResCase.hidden && (
+                  <Typography variant="body1">Hidden Case</Typography>
+                )}
 
-              {!currResCase.hidden && (
-                <>
-                  <Typography variant="body1">Input</Typography>
-                  <pre>{currResCase.input}</pre>
-                  <Typography variant="body1">Expected Output</Typography>
-                  <pre>{currResCase.expectedOutput}</pre>
-                  <Typography variant="body1">Your Output</Typography>
-                  <pre>{currResCase.actualOutput}</pre>
-                </>
-              )}
-            </>
-          )}
-        </>
-      )}
+                {!currResCase.hidden && (
+                  <>
+                    <Typography variant="body1">Input</Typography>
+                    <pre className={classes.preCls}>{currResCase.input}</pre>
+                    <Typography variant="body1">Expected Output</Typography>
+                    <pre className={classes.preCls}>
+                      {currResCase.expectedOutput}
+                    </pre>
+                    <Typography variant="body1">Your Output</Typography>
+                    <pre className={classes.preCls}>
+                      {currResCase.actualOutput}
+                    </pre>
+                  </>
+                )}
+              </>
+            )}
+          </>
+        )}
+      </Box>
     </>
   );
 };

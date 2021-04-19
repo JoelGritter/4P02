@@ -28,6 +28,7 @@ import { logout } from '../api/auth';
 import useMe from '../api/data/use-me';
 import { Collapse } from '@material-ui/core';
 import { cache } from 'swr';
+import { ReactComponent as Logo } from '../assets/logo.svg';
 
 const drawerWidth = 240;
 
@@ -56,6 +57,12 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     // necessary for content to be below app bar
     toolbar: theme.mixins.toolbar,
+    drawerToolbar: {
+      ...theme.mixins.toolbar,
+      display: 'flex',
+      alignItems: 'center',
+      paddingLeft: theme.spacing(2),
+    },
     drawerPaper: {
       width: drawerWidth,
     },
@@ -73,6 +80,11 @@ const useStyles = makeStyles((theme: Theme) =>
     calendarContainer: {},
     nested: {
       paddingLeft: theme.spacing(4),
+    },
+    logo: {
+      height: 35,
+      width: 35,
+      marginRight: theme.spacing(1),
     },
   })
 );
@@ -106,7 +118,9 @@ export default function Nav(props: Props) {
 
   const drawer = (
     <div>
-      <div className={classes.toolbar} />
+      <div className={classes.drawerToolbar}>
+        <Logo className={classes.logo} />
+      </div>
       <Divider />
       <List>
         <ListItem
@@ -217,7 +231,7 @@ export default function Nav(props: Props) {
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap>
-            uAssign
+            UAssign
           </Typography>
         </Toolbar>
       </AppBar>
