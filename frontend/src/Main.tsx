@@ -23,6 +23,7 @@ import useMe from './api/data/use-me';
 import useGet from './api/data/use-get';
 import Course from './api/data/models/course.model';
 import Assignment from './api/data/models/assignment.model';
+import { swrNoFetchOptions } from './api/util';
 
 const useStyles = makeStyles((theme) => ({
   crumbs: {
@@ -36,12 +37,14 @@ export default function Main() {
   const { pathname } = useLocation();
   const courseId = pathname.split('/')[2];
   const assignId = pathname.split('/')[4];
-  const { data: assignment } = useGet<Assignment>(`/assign/${assignId}`, {
-    shouldRetryOnError: false,
-  });
-  const { data: course } = useGet<Course>(`course/${courseId}`, {
-    shouldRetryOnError: false,
-  });
+  const { data: assignment } = useGet<Assignment>(
+    `/assign/${assignId}`,
+    swrNoFetchOptions
+  );
+  const { data: course } = useGet<Course>(
+    `course/${courseId}`,
+    swrNoFetchOptions
+  );
 
   const incompleteProfile = success && !me.name;
 

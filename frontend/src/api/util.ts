@@ -163,3 +163,12 @@ export async function del(path: string, data?: any) {
     return { success: false };
   }
 }
+
+export const swrNoFetchOptions = {
+  revalidateOnFocus: false,
+  revalidateOnMount: false,
+  revalidateOnReconnect: false,
+  refreshWhenOffline: false,
+  refreshWhenHidden: false,
+  refreshInterval: 0,
+};

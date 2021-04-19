@@ -26,9 +26,11 @@ import {
 } from '@material-ui/core/styles';
 import { logout } from '../api/auth';
 import useMe from '../api/data/use-me';
-import { Collapse } from '@material-ui/core';
+import { Collapse, ListSubheader } from '@material-ui/core';
 import { cache } from 'swr';
 import { ReactComponent as Logo } from '../assets/logo.svg';
+import useAssociatedCourses from '../api/data/use-associated-courses';
+import BookIcon from '@material-ui/icons/Book';
 
 const drawerWidth = 240;
 
@@ -100,9 +102,12 @@ export default function Nav(props: Props) {
   const theme = useTheme();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const [adminOpen, setAdminOpen] = React.useState(false);
+  const [coursesOpen, setCoursesOpen] = React.useState(false);
 
   const { me } = useMe();
   const isAdmin = me?.roles?.includes('admin');
+
+  const { studentCourses, profCourses } = useAssociatedCourses();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -110,8 +115,19 @@ export default function Nav(props: Props) {
 
   const { pathname } = useLocation();
 
-  const pathStartsWith = (str: string) =>
-    pathname.substr(0, str.length) === str;
+  const pathStartsWith = React.useCallback(
+    (str: string) => pathname.substr(0, str.length) === str,
+    [pathname]
+  );
+
+  React.useEffect(() => {
+    if (pathStartsWith('/admin')) {
+      setAdminOpen(true);
+    }
+    if (pathStartsWith('/courses')) {
+      setCoursesOpen(true);
+    }
+  }, [pathStartsWith]);
 
   const pathIs = (str: string) =>
     pathname === str || pathname === str + '/' || pathname + '/' === str;
@@ -140,6 +156,61 @@ export default function Nav(props: Props) {
         </ListItem>
         <ListItem
           button
+          key="courses"
+          onClick={() => {
+            setCoursesOpen((prev) => !prev);
+          }}
+        >
+          <ListItemIcon>
+            <BookIcon />
+          </ListItemIcon>
+          <ListItemText primary={'Courses'} />
+          {coursesOpen ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={coursesOpen} timeout="auto">
+          <List component="div" disablePadding>
+            {profCourses && profCourses.length > 0 && (
+              <ListSubheader className={classes.nested}>
+                Courses I'm Teaching
+              </ListSubheader>
+            )}
+            {profCourses?.map((course) => (
+              <ListItem
+                button
+                className={classes.nested}
+                component={Link}
+                selected={pathStartsWith(`/courses/${course._id}`)}
+                to={`/courses/${course._id}`}
+                onClick={() => {
+                  setMobileOpen(false);
+                }}
+              >
+                <ListItemText primary={course.name} />
+              </ListItem>
+            ))}
+            {studentCourses && studentCourses.length > 0 && (
+              <ListSubheader className={classes.nested}>
+                My Courses
+              </ListSubheader>
+            )}
+            {studentCourses?.map((course) => (
+              <ListItem
+                button
+                className={classes.nested}
+                component={Link}
+                selected={pathStartsWith(`/courses/${course._id}`)}
+                to={`/courses/${course._id}`}
+                onClick={() => {
+                  setMobileOpen(false);
+                }}
+              >
+                <ListItemText primary={course.name} />
+              </ListItem>
+            ))}
+          </List>
+        </Collapse>
+        <ListItem
+          button
           key="profile"
           component={Link}
           to="/profile"
@@ -153,6 +224,7 @@ export default function Nav(props: Props) {
           </ListItemIcon>
           <ListItemText primary={'Profile'} />
         </ListItem>
+
         {isAdmin && (
           <ListItem
             button
