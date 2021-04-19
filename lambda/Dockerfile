@@ -4,11 +4,11 @@ RUN ulimit -n 1024 && \
 yum update -y && \
 yum install -y unzip \
 dos2unix \
-gcc \
-gcc-c++ \
+clang \
+cmake \
 java-1.8.0-openjdk \
 java-1.8.0-openjdk-devel \
-python3 && \
+python3 \
 yum clean all
 
 ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk/
