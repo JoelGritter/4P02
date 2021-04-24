@@ -43,7 +43,6 @@ const SubmissionCard: React.FC<SubmissionCardProps> = ({
   const handleFormChange = (event: any) => {
     const value = event.target.value;
     const name = event.target.name;
-    console.log(newSub);
 
     setSubmission((prev: any) => ({
       ...prev,
