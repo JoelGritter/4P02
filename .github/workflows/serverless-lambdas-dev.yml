@@ -21,11 +21,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
         run: |
+          cd lambda
           npm install -g serverless
           npm install
       - name: Run unit tests 🔧
         run: |
-          cd lambda
           npm run test
       - name: Deploy 🚀
         run: |
