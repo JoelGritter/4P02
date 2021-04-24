@@ -26,9 +26,11 @@ jobs:
           npm install
       - name: Run unit tests 🔧
         run: |
+          cd lambda
           npm run test
       - name: Deploy 🚀
         run: |
+          cd lambda
           touch .env 
           echo "DB=${{ secrets.DB_DEV }}" >> .env
           echo "USER_POOL_ID=${{ secrets.USER_POOL_ID }}" >> .env
