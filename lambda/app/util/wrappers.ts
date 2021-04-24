@@ -4,8 +4,9 @@ import { LambdaCallback, CustomOptions } from './../types/lambdaCallback';
 import { badRequest, internalServerError, unauthorized } from './rest';
 import UserModel, { User } from '../schemas/user.model';
 import { authorizer } from '../util/auth';
+import { Handler } from 'aws-lambda';
 
-export const lambda: (c: LambdaCallback) => LambdaCallback = (
+export const lambda: (c: LambdaCallback) => Handler<any, any> = (
   callback: LambdaCallback
 ) => {
   const options: CustomOptions = { userDoc: null };

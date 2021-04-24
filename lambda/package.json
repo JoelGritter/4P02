@@ -41,6 +41,8 @@
     "istanbul": "^0.4.5",
     "lambda-tester": "^4.0.1",
     "mocha": "^7.1.2",
+    "mock-require": "^3.0.3",
+    "nock": "^13.0.11",
     "nyc": "^15.0.1",
     "serverless": "^2.35.0",
     "serverless-apigateway-service-proxy": "^1.14.0",
@@ -54,7 +56,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Q-Angelo/aws-node-typescript-rest-api.git"
+    "url": "https://github.com/JoelGritter/4P02"
   },
   "keywords": [
     "Nodejs",

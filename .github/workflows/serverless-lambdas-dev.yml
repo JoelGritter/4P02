@@ -8,7 +8,7 @@ on:
       - 'lambda/**'
 jobs:
   deploy:
-    name: deploy
+    name: Test 🔧 and Deploy 🚀
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -19,9 +19,12 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: configure .env
+      - name: Run unit tests 🔧
         run: |
           cd lambda
+          npm run test
+      - name: Deploy 🚀
+        run: |
           touch .env 
           echo "DB=${{ secrets.DB_DEV }}" >> .env
           echo "USER_POOL_ID=${{ secrets.USER_POOL_ID }}" >> .env
