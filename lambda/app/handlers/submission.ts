@@ -107,7 +107,7 @@ export const grade = lambda(
     const assignment = await AssignmentModel.findById(aID);
     if (await validateElevatedPrivileges(assignment, reqUser)) {
       // submission grade mandatory - feedback optional
-      if (!graded.grade)
+      if (graded.grade == null)
         return badRequest('Cannot grade: submission grade required');
       if (!graded.owner)
         return badRequest('Cannot grade: submission owner cannot be anonymous');
