@@ -1,13 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Card, CardActions, Grid } from '@material-ui/core/';
+import { Button, Card, CardActions, Grid, TextField } from '@material-ui/core/';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Submission from '../api/data/models/submission.model';
 import moment from 'moment';
 import useGet from '../api/data/use-get';
 import User from '../api/data/models/user.model';
-import { post } from '../api/util';
+import { post, update } from '../api/util';
 import { useSnackbar } from 'notistack';
 
 const useStyles = makeStyles((theme) => ({
@@ -37,6 +37,18 @@ const SubmissionCard: React.FC<SubmissionCardProps> = ({
   const classes = useStyles();
 
   const { enqueueSnackbar } = useSnackbar();
+  const [showFeedback, setFeedback] = React.useState(false);
+  const [newSub, setSubmission] = React.useState(submission);
+
+  const handleFormChange = (event: any) => {
+    const value = event.target.value;
+    const name = event.target.name;
+
+    setSubmission((prev: any) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
 
   const { data: submissionUser } = useGet<User>(
     `/user/public/${submission?.owner}`
@@ -88,7 +100,74 @@ const SubmissionCard: React.FC<SubmissionCardProps> = ({
         >
           Download {submission.codeZip}
         </Button>
+        <Button
+          variant="outlined"
+          color="primary"
+          onClick={async () => {
+            setFeedback(true);
+          }}
+        >
+          Give Feedback
+        </Button>
       </CardActions>
+      {showFeedback && (
+        <CardActions>
+          <Grid container spacing={2}>
+            <Grid item xs={12} md={12}>
+              <TextField
+                fullWidth
+                multiline
+                rows={4}
+                value={newSub.feedback}
+                variant="outlined"
+                name="feedback"
+                label="Feedback"
+                onChange={handleFormChange}
+              />
+            </Grid>
+            <Grid item xs={12} md={12}>
+              <TextField
+                fullWidth
+                type="number"
+                variant="outlined"
+                name="grade"
+                label="Grade"
+                value={newSub.grade}
+                onChange={handleFormChange}
+              />
+            </Grid>
+            <Button
+              variant="outlined"
+              color="primary"
+              onClick={async () => {
+                const { success, message } = await update(
+                  `/assign/sub/${submission.assignID}`,
+                  newSub
+                );
+
+                if (success) {
+                  enqueueSnackbar(message ?? 'Feedback submitted!');
+                } else {
+                  enqueueSnackbar(
+                    message ?? 'Unknown error submitting feedback!'
+                  );
+                }
+              }}
+            >
+              Submit
+            </Button>
+            <Button
+              variant="outlined"
+              color="secondary"
+              onClick={async () => {
+                setFeedback(false);
+              }}
+            >
+              Cancel
+            </Button>
+          </Grid>
+        </CardActions>
+      )}
     </Card>
   );
 };
