@@ -19,9 +19,13 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Run unit tests 🔧
+      - name: Install Dependencies
         run: |
           cd lambda
+          npm install -g serverless
+          npm install
+      - name: Run unit tests 🔧
+        run: |
           npm run test
       - name: Deploy 🚀
         run: |
@@ -29,8 +33,6 @@ jobs:
           echo "DB=${{ secrets.DB_DEV }}" >> .env
           echo "USER_POOL_ID=${{ secrets.USER_POOL_ID }}" >> .env
           echo "USER_POOL_CLIENT_ID=${{ secrets.USER_POOL_CLIENT_ID }}" >> .env
-          npm install -g serverless
-          npm install
           serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           serverless deploy
           serverless deploy -c serverless.docker.yml

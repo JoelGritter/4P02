@@ -1,6 +1,15 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
-import { Button, Card, CardActions, Grid, TextField } from '@material-ui/core/';
+import {
+  Box,
+  Button,
+  Card,
+  CardActions,
+  Collapse,
+  Divider,
+  Grid,
+  TextField,
+} from '@material-ui/core/';
 import CardContent from '@material-ui/core/CardContent';
 import Typography from '@material-ui/core/Typography';
 import Submission from '../api/data/models/submission.model';
@@ -23,6 +32,16 @@ const useStyles = makeStyles((theme) => ({
       justifyContent: 'flex-end',
     },
   },
+  feedbackContent: {},
+  feedbackActions: {
+    '& > button': {
+      marginRight: theme.spacing(1),
+    },
+    marginTop: theme.spacing(2),
+  },
+  feedbackDivider: {
+    marginTop: theme.spacing(2),
+  },
 }));
 
 interface SubmissionCardProps {
@@ -39,6 +58,7 @@ const SubmissionCard: React.FC<SubmissionCardProps> = ({
   const { enqueueSnackbar } = useSnackbar();
   const [showFeedback, setFeedback] = React.useState(false);
   const [newSub, setSubmission] = React.useState(submission);
+  const [edit, setEdit] = React.useState(false);
 
   const handleFormChange = (event: any) => {
     const value = event.target.value;
@@ -100,74 +120,111 @@ const SubmissionCard: React.FC<SubmissionCardProps> = ({
         >
           Download {submission.codeZip}
         </Button>
-        <Button
-          variant="outlined"
-          color="primary"
-          onClick={async () => {
-            setFeedback(true);
-          }}
-        >
-          Give Feedback
-        </Button>
+        {!showFeedback && (
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={async () => {
+              setFeedback(true);
+            }}
+          >
+            Feedback
+          </Button>
+        )}
+        {showFeedback && (
+          <Button
+            variant="outlined"
+            color="primary"
+            onClick={async () => {
+              setFeedback(false);
+            }}
+          >
+            Hide Feedback
+          </Button>
+        )}
       </CardActions>
-      {showFeedback && (
-        <CardActions>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={12}>
-              <TextField
-                fullWidth
-                multiline
-                rows={4}
-                value={newSub.feedback}
-                variant="outlined"
-                name="feedback"
-                label="Feedback"
-                onChange={handleFormChange}
-              />
+      <Collapse in={showFeedback}>
+        <>
+          <Divider className={classes.feedbackDivider} />
+          <CardContent className={classes.feedbackContent}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={12}>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={4}
+                  value={newSub.feedback}
+                  variant="outlined"
+                  name="feedback"
+                  label="Feedback"
+                  onChange={handleFormChange}
+                  disabled={!edit}
+                />
+              </Grid>
+              <Grid item xs={12} md={12}>
+                <TextField
+                  fullWidth
+                  type="number"
+                  variant="outlined"
+                  name="grade"
+                  label="Grade"
+                  value={newSub.grade}
+                  onChange={handleFormChange}
+                  disabled={!edit}
+                />
+              </Grid>
             </Grid>
-            <Grid item xs={12} md={12}>
-              <TextField
-                fullWidth
-                type="number"
-                variant="outlined"
-                name="grade"
-                label="Grade"
-                value={newSub.grade}
-                onChange={handleFormChange}
-              />
-            </Grid>
-            <Button
-              variant="outlined"
-              color="primary"
-              onClick={async () => {
-                const { success, message } = await update(
-                  `/assign/sub/${submission.assignID}`,
-                  newSub
-                );
+            <Box className={classes.feedbackActions}>
+              {edit && (
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={async () => {
+                    const { success, message } = await update(
+                      `/assign/sub/${submission.assignID}`,
+                      newSub
+                    );
 
-                if (success) {
-                  enqueueSnackbar(message ?? 'Feedback submitted!');
-                } else {
-                  enqueueSnackbar(
-                    message ?? 'Unknown error submitting feedback!'
-                  );
-                }
-              }}
-            >
-              Submit
-            </Button>
-            <Button
-              variant="outlined"
-              color="secondary"
-              onClick={async () => {
-                setFeedback(false);
-              }}
-            >
-              Cancel
-            </Button>
-          </Grid>
-        </CardActions>
-      )}
+                    if (success) {
+                      enqueueSnackbar(message ?? 'Feedback submitted!');
+                    } else {
+                      enqueueSnackbar(
+                        message ?? 'Unknown error submitting feedback!'
+                      );
+                    }
+
+                    setEdit(false);
+                  }}
+                >
+                  Save
+                </Button>
+              )}
+              {!edit && (
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={() => {
+                    setEdit(true);
+                  }}
+                >
+                  Edit
+                </Button>
+              )}
+              {edit && (
+                <Button
+                  variant="outlined"
+                  color="secondary"
+                  onClick={() => {
+                    setEdit(false);
+                  }}
+                >
+                  Cancel
+                </Button>
+              )}
+            </Box>
+          </CardContent>
+        </>
+      </Collapse>
     </Card>
   );
 };
