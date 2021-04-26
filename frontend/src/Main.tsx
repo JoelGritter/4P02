@@ -67,9 +67,6 @@ export default function Main() {
 
               return (
                 <Breadcrumbs aria-label="breadcrumb" className={classes.crumbs}>
-                  <MatLink component={Link} color="inherit" to="/">
-                    Home
-                  </MatLink>
                   {pathnames.map((value, index) => {
                     const last = index === pathnames.length - 1;
                     const to = `/${pathnames.slice(0, index + 1).join('/')}`;

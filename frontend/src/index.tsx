@@ -6,18 +6,21 @@ import reportWebVitals from './reportWebVitals';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { BrowserRouter as Router } from 'react-router-dom';
 import ScrollToTop from './components/ScrollToTop';
+import { RecoilRoot } from 'recoil';
 
 ReactDOM.render(
   <React.StrictMode>
-    <HelmetProvider>
-      <Helmet>
-        <title>uAssign</title>
-      </Helmet>
-      <Router>
-        <ScrollToTop />
-        <App />
-      </Router>
-    </HelmetProvider>
+    <RecoilRoot>
+      <HelmetProvider>
+        <Helmet>
+          <title>uAssign</title>
+        </Helmet>
+        <Router>
+          <ScrollToTop />
+          <App />
+        </Router>
+      </HelmetProvider>
+    </RecoilRoot>
   </React.StrictMode>,
   document.getElementById('root')
 );

@@ -17,7 +17,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     headerContainer: {
       display: 'flex',
-      margin: theme.spacing(1),
       alignItems: 'center',
       justifyContent: 'space-between',
     },
@@ -28,7 +27,6 @@ const useStyles = makeStyles((theme: Theme) =>
     buttonContainer: {
       display: 'flex',
       justifyContent: 'flex-end',
-      margin: theme.spacing(1),
     },
   })
 );
