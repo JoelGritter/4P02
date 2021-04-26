@@ -87,7 +87,7 @@ const Navbar = () => {
               to="/courses"
               className={classes.loginButton}
             >
-              your courses
+              Courses
             </Button>
           )}
         </div>
