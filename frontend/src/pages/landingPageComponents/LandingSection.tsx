@@ -11,7 +11,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     padding: '0 30px',
-    height: '100vh',
+    height: 'calc(100vh - 80px)',
     position: 'relative',
     zIndex: 1,
   },

@@ -11,7 +11,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import HomeIcon from '@material-ui/icons/Home';
 import PersonIcon from '@material-ui/icons/Person';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
@@ -129,33 +128,22 @@ export default function Nav(props: Props) {
     }
   }, [pathStartsWith]);
 
-  const pathIs = (str: string) =>
-    pathname === str || pathname === str + '/' || pathname + '/' === str;
+  // const pathIs = (str: string) =>
+  //   pathname === str || pathname === str + '/' || pathname + '/' === str;
 
   const drawer = (
     <div>
       <div className={classes.drawerToolbar}>
-        <Logo className={classes.logo} />
+        <Link to="/">
+          <Logo className={classes.logo} />
+        </Link>
       </div>
       <Divider />
       <List>
         <ListItem
           button
-          key="home"
           component={Link}
-          to="/"
-          selected={pathIs('/')}
-          onClick={() => {
-            setMobileOpen(false);
-          }}
-        >
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText primary={'Home'} />
-        </ListItem>
-        <ListItem
-          button
+          to="/courses"
           key="courses"
           onClick={() => {
             setCoursesOpen((prev) => !prev);

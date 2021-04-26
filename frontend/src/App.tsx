@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { ThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import { CssBaseline } from '@material-ui/core';
-import { AuthState, onAuthUIStateChange } from '@aws-amplify/ui-components';
+import { onAuthUIStateChange } from '@aws-amplify/ui-components';
 import Amplify from 'aws-amplify';
+import Auth from '@aws-amplify/auth';
 import { AmplifyAuthenticator, AmplifySignUp } from '@aws-amplify/ui-react';
 import { SnackbarProvider } from 'notistack';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
@@ -10,6 +11,10 @@ import MomentUtils from '@date-io/moment';
 import Main from './Main';
 import { Redirect, Route, Switch } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
+import { useRecoilState, useRecoilValue } from 'recoil';
+import authAtom from './sharedState/atoms/auth.atom';
+import jwtTokenAtom from './sharedState/atoms/jwtToken.atom';
+import loginState from './sharedState/selectors/loginState.selector';
 
 const awsConfig = {
   aws_project_region: process.env.REACT_APP_AWS_PROJECT_REGION,
@@ -21,10 +26,40 @@ const awsConfig = {
 
 Amplify.configure(awsConfig);
 
+const Authenticator = () => {
+  return (
+    <>
+      <AmplifyAuthenticator>
+        <AmplifySignUp
+          slot="sign-up"
+          usernameAlias="email"
+          formFields={[
+            {
+              type: 'email',
+            },
+            {
+              type: 'password',
+            },
+          ]}
+        />
+      </AmplifyAuthenticator>
+    </>
+  );
+};
+
 const App = () => {
   const [darkMode] = useState(false);
-  const [authState, setAuthState] = React.useState<any>();
-  const [jwtToken, setJwtToken] = useState<string | null>(null);
+  const [, setAuthState] = useRecoilState(authAtom);
+  const [jwtToken, setJwtToken] = useRecoilState(jwtTokenAtom);
+
+  const [alreadyLoggedInUser, setAlreadyLoggedInUser] = useState<any>(null);
+
+  React.useEffect(() => {
+    (async () => {
+      const user = await Auth.currentUserInfo();
+      setAlreadyLoggedInUser(user);
+    })();
+  }, []);
 
   React.useEffect(() => {
     onAuthUIStateChange((nextAuthState, authData: any) => {
@@ -38,9 +73,9 @@ const App = () => {
         setJwtToken(null);
       }
     });
-  }, []);
+  }, [setAuthState, setJwtToken]);
 
-  const loggedIn = authState === AuthState.SignedIn;
+  const loggedIn = useRecoilValue(loginState);
 
   const theme = createMuiTheme({
     palette: {
@@ -63,49 +98,19 @@ const App = () => {
         <MuiPickersUtilsProvider utils={MomentUtils}>
           <SnackbarProvider>
             <CssBaseline />
+            {alreadyLoggedInUser && <Authenticator />}
             <Switch>
               <Route path="/login">
                 <>
-                  {loggedIn && jwtToken && <Redirect to="/" />}
-                  {!loggedIn && (
-                    <>
-                      <AmplifyAuthenticator>
-                        <AmplifySignUp
-                          slot="sign-up"
-                          usernameAlias="email"
-                          formFields={[
-                            {
-                              type: 'email',
-                            },
-                            {
-                              type: 'password',
-                            },
-                          ]}
-                        />
-                      </AmplifyAuthenticator>
-                    </>
-                  )}
+                  {loggedIn && jwtToken && <Redirect to="/courses" />}
+                  {!loggedIn && <Authenticator />}
                 </>
               </Route>
               <Route path="/" exact>
-                {loggedIn && jwtToken && <Main />}
-                {!loggedIn && <LandingPage />}
+                <LandingPage />
               </Route>
               <Route>
-                <AmplifyAuthenticator>
-                  <AmplifySignUp
-                    slot="sign-up"
-                    usernameAlias="email"
-                    formFields={[
-                      {
-                        type: 'email',
-                      },
-                      {
-                        type: 'password',
-                      },
-                    ]}
-                  />
-                </AmplifyAuthenticator>
+                <Authenticator />
                 {loggedIn && jwtToken && <Main />}
                 {!loggedIn && <LandingPage />}
               </Route>

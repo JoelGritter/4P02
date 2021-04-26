@@ -3,6 +3,8 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import { ReactComponent as Logo } from '../../assets/logo-circle.svg';
+import { useRecoilValue } from 'recoil';
+import loginState from '../../sharedState/selectors/loginState.selector';
 
 const useStyles = makeStyles((theme: Theme) => ({
   nav: {
@@ -34,7 +36,6 @@ const useStyles = makeStyles((theme: Theme) => ({
     fontSize: '1.5rem',
     display: 'flex',
     alignItems: 'center',
-    marginLeft: '24px',
     textDecoration: 'none',
   },
   loginButton: {
@@ -42,7 +43,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     color: theme.palette.primary.main,
     backgroundColor: '#fff',
     height: '50%',
-    width: 100,
+    // width: 100,
+    paddingRight: theme.spacing(3),
+    paddingLeft: theme.spacing(3),
     borderRadius: 50,
     margin: 'auto 0',
     '&:hover': {
@@ -60,6 +63,8 @@ const useStyles = makeStyles((theme: Theme) => ({
 const Navbar = () => {
   const classes = useStyles();
 
+  const loggedIn = useRecoilValue(loginState);
+
   return (
     <>
       <div className={classes.nav}>
@@ -67,9 +72,24 @@ const Navbar = () => {
           <div className={classes.navbarLogo}>
             <Logo className={classes.logo} /> UAssign
           </div>
-          <Button component={Link} to="/login" className={classes.loginButton}>
-            Login
-          </Button>
+          {!loggedIn && (
+            <Button
+              component={Link}
+              to="/login"
+              className={classes.loginButton}
+            >
+              Login
+            </Button>
+          )}
+          {loggedIn && (
+            <Button
+              component={Link}
+              to="/courses"
+              className={classes.loginButton}
+            >
+              Courses
+            </Button>
+          )}
         </div>
       </div>
     </>
