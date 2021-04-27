@@ -20,7 +20,7 @@ export const emptyAssignment: Assignment = {
   name: '',
   description: '',
   openDate: new Date(),
-  closeDate: new Date(),
+  closeDate: new Date(Date.now() + 604800000),
   lateDate: new Date(),
   maxGrade: 0,
   weight: 0,
