@@ -17,6 +17,7 @@ import {
   FormControlLabel,
   Typography,
 } from '@material-ui/core';
+import { DATE_TIME_FORMAT } from '../util/dateUtils';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {
@@ -97,7 +98,7 @@ function TestCaseForm({ testCase, setTestCase, removeTestCase }: any) {
   );
 }
 
-export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
+const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
   assignment,
   setAssignment,
 }) => {
@@ -154,12 +155,16 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
     });
   };
 
+  const makeId = (text: string) =>
+    'assignment' + (assignment?._id ?? '') + '_' + text;
+
   return (
     <div className={classes.root}>
       <Grid container spacing={2}>
         <Grid item xs={12}>
           <TextField
             fullWidth
+            id={makeId('name')}
             variant="outlined"
             name="name"
             label="Name"
@@ -170,6 +175,7 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
         <Grid item xs={12}>
           <TextField
             fullWidth
+            id={makeId('description')}
             variant="outlined"
             name="description"
             label="Description"
@@ -181,9 +187,10 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
           <KeyboardDateTimePicker
             fullWidth
             margin="normal"
+            id={makeId('openDate')}
             inputVariant="outlined"
             label="Open Date"
-            format="MMMM Do, YYYY - hh:mm a"
+            format={DATE_TIME_FORMAT}
             value={assignment.openDate}
             onChange={handleDateChange('openDate')}
             KeyboardButtonProps={{
@@ -191,15 +198,14 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
             }}
           />
         </Grid>
-
         <Grid item xs={12} md={6}>
           <KeyboardDateTimePicker
             fullWidth
+            id={makeId('closeDate')}
             margin="normal"
             inputVariant="outlined"
-            id="date-picker-dialog"
             label="Close Date"
-            format="MMMM Do, YYYY - hh:mm a"
+            format={DATE_TIME_FORMAT}
             value={assignment.closeDate}
             onChange={handleDateChange('closeDate')}
             helperText="Assignment will not be available for submission after this date"
@@ -215,22 +221,23 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
             fullWidth
             margin="normal"
             inputVariant="outlined"
-            id="date-picker-dialog"
             label="Late Date"
             optionLabel="Allow lates"
-            format="MMMM Do, YYYY - hh:mm a"
+            format={DATE_TIME_FORMAT}
             value={assignment.lateDate}
             helperText="Submissions after this date are considered late"
             setValue={handleDateChange('lateDate')}
             KeyboardButtonProps={{
               'aria-label': 'change date',
             }}
+            id={makeId('lateDate')}
           ></OptionalField>
         </Grid>
         <Grid item xs={12} md={6}>
           <TextField
             fullWidth
             type="number"
+            id={makeId('maxGrade')}
             variant="outlined"
             name="maxGrade"
             label="Max Grade"
@@ -244,6 +251,7 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
             type="number"
             variant="outlined"
             name="weight"
+            id={makeId('weight')}
             label="Weight"
             helperText="Ratio, e.g. 0.12"
             value={assignment.weight}
@@ -257,7 +265,7 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
           {assignment?.testCases?.map((tCase, index) => (
             <TestCaseForm
               testCase={tCase}
-              key={tCase.id}
+              key={tCase.id || tCase._id}
               setTestCase={modifyTestCase(index)}
               removeTestCase={removeTestCase(index)}
             />
@@ -270,3 +278,5 @@ export const AssignmentForm: React.FC<CreateAssignmentFormProps> = ({
     </div>
   );
 };
+
+export default AssignmentForm;

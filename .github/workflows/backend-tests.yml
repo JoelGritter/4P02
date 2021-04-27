@@ -1,0 +1,16 @@
+name: Run Unit Tests for Lambda
+on:
+  pull_request:
+    branches:
+      - dev
+    paths:
+      - 'lambda/**'
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          cd lambda
+          npm i
+          npm run test
