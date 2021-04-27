@@ -32,9 +32,9 @@ export default function HelpPage() {
             Submission Instructions
           </Typography>
           <p>
-            For submission you will have to provide a zip file containing your
-            code, along with a compile_and_run.sh script containing instructions
-            how your program can be compiled.
+            For assignment submissions you will have to provide a zip file
+            containing your code, along with a compile_and_run.sh script
+            containing instructions how your program can be compiled.
             <br />
             We have provided examples of compile_and_run.sh scripts for the
             languages supported on this platform.
