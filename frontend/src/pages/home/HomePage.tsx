@@ -5,7 +5,7 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import ProfCourses from './components/ProfCourses';
 import StudentCourses from './components/StudentCourses';
 import useAssociatedCourses from '../../api/data/use-associated-courses';
-import { ReactComponent as Empty } from '../../assets/undraw_empty_xct9.svg';
+import emptyImage from '../../assets/undraw_empty_xct9.svg';
 
 const drawerWidth = 240;
 
@@ -53,10 +53,15 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2),
     },
     emptyImg: {
+      maxWidth: '600px',
       width: '100%',
+      maxHeight: '600px',
+      paddingBottom: theme.spacing(4),
+      paddingTop: theme.spacing(4),
+      paddingRight: theme.spacing(4),
+      paddingLeft: theme.spacing(4),
     },
     emptyContainer: {
-      padding: theme.spacing(2),
       textAlign: 'center',
     },
   })
@@ -87,7 +92,7 @@ export default function HomePage() {
           <StudentCourses />
           {nothing && (
             <div className={classes.emptyContainer}>
-              <Empty className={classes.emptyImg} />
+              <img src={emptyImage} alt="" className={classes.emptyImg} />
               <Typography color="primary" variant="h4">
                 No courses to show
               </Typography>
