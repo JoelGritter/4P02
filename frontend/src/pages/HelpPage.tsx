@@ -29,14 +29,15 @@ export default function HelpPage() {
             color="textPrimary"
             className={classes.headers}
           >
-            Compile Instructions
+            Submission Instructions
           </Typography>
           <p>
-            In order to compile your programs in the following languages you
-            will require a file with your submission called compile_and_run.sh
+            For submission you will have to provide a zip file containing your
+            code, along with a compile_and_run.sh script containing instructions
+            how your program can be compiled.
             <br />
-            We have provided examples for each language of the languages
-            supported below.
+            We have provided examples of compile_and_run.sh scripts for the
+            languages supported on this platform.
           </p>
         </Grid>
         <Grid item xs={12}>
