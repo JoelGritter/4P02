@@ -154,8 +154,8 @@ export default function CoursesPage() {
   };
 
   const editAccess =
-    course?.currentProfessors?.includes(me.cognitoId) ||
-    course?.moderators?.includes(me.cognitoId) ||
+    course?.currentProfessors?.includes(me?.cognitoId) ||
+    course?.moderators?.includes(me?.cognitoId) ||
     isAdmin;
 
   return (
