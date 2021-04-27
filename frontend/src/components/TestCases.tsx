@@ -6,7 +6,7 @@ import {
   Tabs,
   Typography,
 } from '@material-ui/core';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Assignment from '../api/data/models/assignment.model';
 import Submission from '../api/data/models/submission.model';
 import CheckIcon from '@material-ui/icons/Check';
@@ -44,12 +44,17 @@ function TestCaseIndicator({
   correct: boolean;
 }) {
   const classes = useStyles();
+  const [curLoading, setLoading] = useState(loading);
+
+  setTimeout(() => {
+    setLoading(false);
+  }, 10000);
   return (
     <>
       <span>
-        {loading && <CircularProgress />}
-        {!loading && correct && <CheckIcon className={classes.checkMark} />}
-        {!loading && !correct && <CloseIcon className={classes.wrongMark} />}
+        {curLoading && <CircularProgress />}
+        {!curLoading && correct && <CheckIcon className={classes.checkMark} />}
+        {!curLoading && !correct && <CloseIcon className={classes.wrongMark} />}
       </span>
     </>
   );
