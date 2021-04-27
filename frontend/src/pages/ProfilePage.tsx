@@ -117,6 +117,20 @@ export default function ProfilePage() {
                 {me?.name}
               </Typography>
             </Grid>
+            {!me.roles?.includes('prof') && (
+              <>
+                <Grid item xs={12}>
+                  <Button
+                    color="primary"
+                    variant="contained"
+                    className={classes.button}
+                    href="mailto:support@uassign.app"
+                  >
+                    Request Professor Access
+                  </Button>
+                </Grid>
+              </>
+            )}
           </>
         )}
         {edit && (
