@@ -46,9 +46,15 @@ function TestCaseIndicator({
   const classes = useStyles();
   const [curLoading, setLoading] = useState(loading);
 
-  setTimeout(() => {
-    setLoading(false);
-  }, 10000);
+  useEffect(() => {
+    let timer = setTimeout(() => {
+      setLoading(false);
+    }, 10000);
+
+    return () => {
+      clearTimeout(timer);
+    };
+  });
   return (
     <>
       <span>
