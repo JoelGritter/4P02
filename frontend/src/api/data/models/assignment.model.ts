@@ -60,10 +60,22 @@ export const sampleAssignment: Assignment = {
   questions: [],
   testCases: [
     {
-      _id: 'fakeTestCaseId',
-      input: 'Fake Input',
-      output: 'Fake Output',
+      _id: 'fakeTestCaseId0',
+      input: 'Fake Input 0',
+      output: 'Fake Output 0',
       hidden: false,
+    },
+    {
+      _id: 'fakeTestCaseId1',
+      input: 'Fake Input 1',
+      output: 'Fake Output 2',
+      hidden: false,
+    },
+    {
+      _id: 'fakeTestCaseId2',
+      input: 'Fake Input 1',
+      output: 'Fake Output 2',
+      hidden: true,
     },
   ],
 };

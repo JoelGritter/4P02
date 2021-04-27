@@ -1,22 +1,11 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { RecoilRoot } from 'recoil';
 import Assignment, {
   sampleAssignment,
 } from '../api/data/models/assignment.model';
 import AssignmentForm from './AssignmentForm';
-import { BrowserRouter } from 'react-router-dom';
-import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import MomentUtils from '@date-io/moment';
 import { formatDateTime } from '../util/dateUtils';
-
-const TestWrapper = ({ children }: any) => (
-  <MuiPickersUtilsProvider utils={MomentUtils}>
-    <BrowserRouter>
-      <RecoilRoot>{children}</RecoilRoot>
-    </BrowserRouter>
-  </MuiPickersUtilsProvider>
-);
+import { TestWrapper } from '../util/unitTestUtils';
 
 test('Displays correct values', () => {
   const mockCallback = jest.fn((assignment: Assignment) => {
@@ -74,4 +63,33 @@ test('Change triggers function', () => {
   fireEvent.change(desc, { target: { value: 'Nice' } });
 
   expect(mockCallback.mock.calls.length).toBe(1);
+});
+
+test('Cases Display', () => {
+  const mockCallback = jest.fn(() => {});
+
+  render(
+    <TestWrapper>
+      <AssignmentForm
+        assignment={sampleAssignment}
+        setAssignment={mockCallback}
+      />
+    </TestWrapper>
+  );
+
+  const inputs = screen.getAllByLabelText('Input') as HTMLInputElement[];
+  const outputs = screen.getAllByLabelText(
+    'Expected output'
+  ) as HTMLInputElement[];
+  const hiddenCheckboxes = screen.getAllByLabelText(
+    'Hidden'
+  ) as HTMLInputElement[];
+
+  for (let i = 0; i < sampleAssignment.testCases.length; i++) {
+    expect(inputs[i].value).toBe(sampleAssignment.testCases[i].input);
+    expect(outputs[i].value).toBe(sampleAssignment.testCases[i].output);
+    expect(hiddenCheckboxes[i].checked).toBe(
+      sampleAssignment.testCases[i].hidden
+    );
+  }
 });

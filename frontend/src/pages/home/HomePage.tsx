@@ -81,8 +81,8 @@ export default function HomePage() {
     !failed &&
     studentCourses &&
     profCourses &&
-    !studentCourses[1] &&
-    !profCourses[1];
+    !studentCourses[0] &&
+    !profCourses[0];
 
   return (
     <>

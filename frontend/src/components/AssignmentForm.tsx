@@ -50,6 +50,10 @@ function TestCaseForm({ testCase, setTestCase, removeTestCase }: any) {
       [name]: value,
     });
   };
+
+  const makeId = (id: string) =>
+    (testCase._id ?? testCase.id) + '-test-case-' + id;
+
   return (
     <>
       <Card variant="outlined" className={classes.card}>
@@ -63,6 +67,7 @@ function TestCaseForm({ testCase, setTestCase, removeTestCase }: any) {
                 value={testCase?.input ?? ''}
                 onChange={handleFormChange}
                 name="input"
+                id={makeId('input')}
                 label="Input"
               />
             </Grid>
@@ -74,6 +79,7 @@ function TestCaseForm({ testCase, setTestCase, removeTestCase }: any) {
                 value={testCase?.output ?? ''}
                 onChange={handleFormChange}
                 name="output"
+                id={makeId('output')}
                 label="Expected output"
               />
             </Grid>
@@ -81,6 +87,7 @@ function TestCaseForm({ testCase, setTestCase, removeTestCase }: any) {
               <FormControlLabel
                 control={
                   <Checkbox
+                    id={makeId('input')}
                     checked={testCase?.hidden}
                     onChange={() => {
                       setTestCase({ ...testCase, hidden: !testCase.hidden });
