@@ -16,6 +16,8 @@ import {
   CardContent,
   Divider,
   Grid,
+  Collapse,
+  TextField,
 } from '@material-ui/core';
 import RequestStatus from '../components/RequestStatus';
 import moment from 'moment';
@@ -54,6 +56,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(2),
   },
   card: {
+    marginTop: theme.spacing(2),
+  },
+  feedbackContent: {},
+  feedbackActions: {
+    '& > button': {
+      marginRight: theme.spacing(1),
+    },
+    marginTop: theme.spacing(2),
+  },
+  feedbackDivider: {
     marginTop: theme.spacing(2),
   },
 }));
@@ -187,6 +199,7 @@ function StudentAssignmentPage() {
   const { data: assignment } = useGet<Assignment>(`/assign/${id}`);
   const { enqueueSnackbar } = useSnackbar();
   const [file, setFile] = useState(new File([], 'null'));
+  const [showFeedback, setFeedback] = React.useState(false);
   const [submission] = useState<Submission>(emptySubmission);
   const { data: course } = useGet<Course>(`course/${courseId}`);
   const { data: oldSub, mutate: mutateSub } = useGet<Submission>(
@@ -298,7 +311,61 @@ function StudentAssignmentPage() {
               >
                 Download Submission ({oldSub.codeZip})
               </Button>
+              {!showFeedback && (
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={async () => {
+                    setFeedback(true);
+                  }}
+                >
+                  View Feedback
+                </Button>
+              )}
+              {showFeedback && (
+                <Button
+                  variant="outlined"
+                  color="primary"
+                  onClick={async () => {
+                    setFeedback(false);
+                  }}
+                >
+                  Hide Feedback
+                </Button>
+              )}
             </CardActions>
+            <Collapse in={showFeedback}>
+              <>
+                <Divider className={classes.feedbackDivider} />
+                <CardContent className={classes.feedbackContent}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} md={12}>
+                      <TextField
+                        fullWidth
+                        multiline
+                        rows={4}
+                        value={oldSub.feedback}
+                        variant="outlined"
+                        name="feedback"
+                        label="Feedback"
+                        disabled={true}
+                      />
+                    </Grid>
+                    <Grid item xs={12} md={12}>
+                      <TextField
+                        fullWidth
+                        type="number"
+                        variant="outlined"
+                        name="grade"
+                        label="Grade"
+                        value={oldSub.grade}
+                        disabled={true}
+                      />
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </>
+            </Collapse>
           </Card>
         </>
       )}
