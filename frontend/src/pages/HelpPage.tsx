@@ -1,5 +1,5 @@
 import React from 'react';
-import { createStyles, Box } from '@material-ui/core';
+import { createStyles } from '@material-ui/core';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme } from '@material-ui/core/styles';
