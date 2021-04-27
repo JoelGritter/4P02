@@ -7,10 +7,12 @@ on:
       - 'lambda/**'
 jobs:
   test:
+    name: Run Unit Tests for Lambda
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: |
+      - name: Run Tests
+        run: |
           cd lambda
           npm i
           npm run test
