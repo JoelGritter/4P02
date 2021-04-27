@@ -8,7 +8,7 @@ export default interface Assignment {
   createdBy?: string; // cognitoId of assignment creator
   openDate: Date; // date upon which this assignment appears to students (and submissions are accepted)
   closeDate: Date; // date after which no more submissions are allowed
-  lateDate: Date; // date after which a submission is deemed late - must be in between open and close date [OPTIONAL - no late = no lates accepted]
+  lateDate?: Date | null; // date after which a submission is deemed late - must be in between open and close date [OPTIONAL - no late = no lates accepted]
   maxGrade: number; // grade corresponding to 100% on this assignment
   weight: number; // percentage weight of final mark for this assignment
   attachments: string[]; // File ID's for attached files
@@ -45,3 +45,37 @@ export function emptyTestCaseWithNewId(): TestCase {
     id: nanoid(),
   };
 }
+
+export const sampleAssignment: Assignment = {
+  _id: 'fakeAssignmentId',
+  name: 'Fake Assignment Name',
+  description: 'Fake Assignment Description',
+  courseID: 'fakeCourseId',
+  createdBy: 'fakeProfCognitoId',
+  openDate: new Date('January 1 2021'),
+  closeDate: new Date('January 1, 2050'),
+  maxGrade: 5,
+  weight: 0.2,
+  attachments: [],
+  questions: [],
+  testCases: [
+    {
+      _id: 'fakeTestCaseId0',
+      input: 'Fake Input 0',
+      output: 'Fake Output 0',
+      hidden: false,
+    },
+    {
+      _id: 'fakeTestCaseId1',
+      input: 'Fake Input 1',
+      output: 'Fake Output 2',
+      hidden: false,
+    },
+    {
+      _id: 'fakeTestCaseId2',
+      input: 'Fake Input 1',
+      output: 'Fake Output 2',
+      hidden: true,
+    },
+  ],
+};

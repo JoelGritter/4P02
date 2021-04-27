@@ -3,7 +3,7 @@ import { makeStyles, Theme } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Typography from '@material-ui/core/Typography';
 import { useSnackbar } from 'notistack';
-import { AssignmentForm } from '../../components/AssignmentForm';
+import AssignmentForm from '../../components/AssignmentForm';
 import { post } from '../../api/util';
 import Assignment, {
   emptyAssignment,
