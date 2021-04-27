@@ -6,6 +6,7 @@ import ProfCourses from './components/ProfCourses';
 import StudentCourses from './components/StudentCourses';
 import useAssociatedCourses from '../../api/data/use-associated-courses';
 import emptyImage from '../../assets/undraw_empty_xct9.svg';
+import useMe from '../../api/data/use-me';
 
 const drawerWidth = 240;
 
@@ -53,9 +54,9 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: theme.spacing(2),
     },
     emptyImg: {
-      maxWidth: '600px',
+      maxWidth: '400px',
       width: '100%',
-      maxHeight: '600px',
+      maxHeight: '400px',
       paddingBottom: theme.spacing(4),
       paddingTop: theme.spacing(4),
       paddingRight: theme.spacing(4),
@@ -76,7 +77,10 @@ export default function HomePage() {
     failed,
   } = useAssociatedCourses();
 
+  const { isProf } = useMe();
+
   const nothing =
+    !isProf &&
     !loading &&
     !failed &&
     studentCourses &&
@@ -88,12 +92,12 @@ export default function HomePage() {
     <>
       <Grid container spacing={1}>
         <Grid item xs={12} md={9} className={classes.coursesContainer}>
-          <ProfCourses />
+          {isProf && <ProfCourses />}
           <StudentCourses />
           {nothing && (
             <div className={classes.emptyContainer}>
               <img src={emptyImage} alt="" className={classes.emptyImg} />
-              <Typography color="primary" variant="h4">
+              <Typography color="primary" variant="h5">
                 No courses to show
               </Typography>
             </div>
