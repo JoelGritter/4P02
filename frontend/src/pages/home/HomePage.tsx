@@ -4,6 +4,8 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import ProfCourses from './components/ProfCourses';
 import StudentCourses from './components/StudentCourses';
+import useAssociatedCourses from '../../api/data/use-associated-courses';
+import { ReactComponent as Empty } from '../../assets/undraw_empty_xct9.svg';
 
 const drawerWidth = 240;
 
@@ -50,11 +52,32 @@ const useStyles = makeStyles((theme: Theme) =>
       marginTop: theme.spacing(2),
       marginBottom: theme.spacing(2),
     },
+    emptyImg: {
+      width: '100%',
+    },
+    emptyContainer: {
+      padding: theme.spacing(2),
+      textAlign: 'center',
+    },
   })
 );
 
 export default function HomePage() {
   const classes = useStyles();
+  const {
+    profCourses,
+    studentCourses,
+    loading,
+    failed,
+  } = useAssociatedCourses();
+
+  const nothing =
+    !loading &&
+    !failed &&
+    studentCourses &&
+    profCourses &&
+    !studentCourses[1] &&
+    !profCourses[1];
 
   return (
     <>
@@ -62,6 +85,14 @@ export default function HomePage() {
         <Grid item xs={12} md={9} className={classes.coursesContainer}>
           <ProfCourses />
           <StudentCourses />
+          {nothing && (
+            <div className={classes.emptyContainer}>
+              <Empty className={classes.emptyImg} />
+              <Typography color="primary" variant="h4">
+                No courses to show
+              </Typography>
+            </div>
+          )}
         </Grid>
         <Grid
           container
