@@ -9,6 +9,7 @@ import Course from '../api/data/models/course.model';
 
 const useStyles = makeStyles((theme) => ({
   root: {
+    width: '100%',
     display: 'flex',
     height: '100%',
     borderRadius: 10,
@@ -29,7 +30,10 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   const classes = useStyles();
 
   return (
-    <Link to={`/courses/${course._id}`} style={{ textDecoration: 'none' }}>
+    <Link
+      to={`/courses/${course._id}`}
+      style={{ textDecoration: 'none', width: '100%' }}
+    >
       <Card className={classes.root}>
         <CardActionArea>
           <CardContent
