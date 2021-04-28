@@ -1,6 +1,7 @@
 import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
+import Typography from '@material-ui/core/Typography';
 import ProfCourses from './components/ProfCourses';
 import StudentCourses from './components/StudentCourses';
 import useAssociatedCourses from '../../api/data/use-associated-courses';
