@@ -87,7 +87,7 @@ const CallToAction = () => {
                   to="/login"
                   className={classes.loginButton}
                 >
-                  Login or create an account
+                  Get Started
                 </Button>
               </div>
             </Grid>
