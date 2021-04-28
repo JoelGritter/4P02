@@ -57,9 +57,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   createCourseButton: {
     background: theme.palette.background.paper,
   },
-  editCourseButton: {
+  deleteCourseButton: {
     background: theme.palette.background.paper,
-    marginRight: theme.spacing(1),
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -185,7 +185,7 @@ export default function CoursesPage() {
                 {editAccess && (
                   <Tooltip title="Edit Course">
                     <IconButton
-                      className={classes.editCourseButton}
+                      className={classes.createCourseButton}
                       component={Link}
                       to={`/courses/${id}/edit`}
                       color="primary"
@@ -198,7 +198,7 @@ export default function CoursesPage() {
                   <>
                     <Tooltip title="Delete Course">
                       <IconButton
-                        className={classes.createCourseButton}
+                        className={classes.deleteCourseButton}
                         component={IconButton}
                         color="primary"
                         onClick={() => {

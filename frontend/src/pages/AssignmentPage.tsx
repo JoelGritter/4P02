@@ -19,6 +19,8 @@ import {
   Collapse,
   TextField,
   Link as MatLink,
+  IconButton,
+  Tooltip,
 } from '@material-ui/core';
 import RequestStatus from '../components/RequestStatus';
 import moment from 'moment';
@@ -28,6 +30,7 @@ import { putFile, put, post } from '../api/util';
 import useMe from '../api/data/use-me';
 import TestCases from '../components/TestCases';
 import SubmissionCard from '../components/SubmissionCard';
+import EditIcon from '@material-ui/icons/Edit';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -70,6 +73,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   feedbackDivider: {
     marginTop: theme.spacing(2),
   },
+  icon: {
+    backgroundColor: theme.palette.background.paper,
+  },
 }));
 
 export default function AssignmentPage() {
@@ -105,14 +111,18 @@ export default function AssignmentPage() {
               {assignment.name}
             </Typography>
             {hasEditAccess && (
-              <Button
-                component={Link}
-                to={`/courses/${courseId}/assignments/${id}/edit`}
-                variant="contained"
-                color="primary"
-              >
-                Edit Assignment
-              </Button>
+              <div>
+                <Tooltip title="Edit Assignment">
+                  <IconButton
+                    component={Link}
+                    className={classes.icon}
+                    to={`/courses/${courseId}/assignments/${id}/edit`}
+                    color="primary"
+                  >
+                    <EditIcon />
+                  </IconButton>
+                </Tooltip>
+              </div>
             )}
           </div>
           <div className={classes.description}>
