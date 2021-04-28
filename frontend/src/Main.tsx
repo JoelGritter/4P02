@@ -108,73 +108,73 @@ export default function Main() {
             )}
             <Route path="/courses/create">
               <Helmet>
-                <title>uAssign - Create Course</title>
+                <title>UAssign - Create Course</title>
               </Helmet>
               <CreateCoursePage />
             </Route>
             <Route path="/courses/:id/edit">
               <Helmet>
-                <title>uAssign - Edit Course</title>
+                <title>UAssign - Edit Course</title>
               </Helmet>
               <EditCoursePage />
             </Route>
             <Route path="/courses/:courseId/assignments/create">
               <Helmet>
-                <title>uAssign - Create Assignments</title>
+                <title>UAssign - Create Assignments</title>
               </Helmet>
               <CreateAssignmentPage />
             </Route>
             <Route path="/courses/:courseId/assignments/:id/edit">
               <Helmet>
-                <title>uAssign - Edit Assignments</title>
+                <title>UAssign - Edit Assignments</title>
               </Helmet>
               <EditAssignmentPage />
             </Route>
             <Route path="/courses/:courseId/assignments/:id">
               <Helmet>
-                <title>uAssign - Assignment</title>
+                <title>UAssign - Assignment</title>
               </Helmet>
               <AssignmentPage />
             </Route>
             <Route path="/courses/:id">
               <Helmet>
-                <title>uAssign - Course Page</title>
+                <title>UAssign - Course Page</title>
               </Helmet>
               <CoursesPage />
             </Route>
             <Route path="/profile">
               <Helmet>
-                <title>uAssign - My Profile</title>
+                <title>UAssign - My Profile</title>
               </Helmet>
               <ProfilePage />
             </Route>
             <Route path="/help">
               <Helmet>
-                <title>uAssign - Help Page</title>
+                <title>UAssign - Help Page</title>
               </Helmet>
               <HelpPage />
             </Route>
             <Route path="/tests">
               <Helmet>
-                <title>uAssign - Tests</title>
+                <title>UAssign - Tests</title>
               </Helmet>
               <TestsPage />
             </Route>
             <Route path="/admin">
               <Helmet>
-                <title>uAssign - Admin</title>
+                <title>UAssign - Admin</title>
               </Helmet>
               <AdminHome />
             </Route>
             <Route path="/home">
               <Helmet>
-                <title>uAssign - Home</title>
+                <title>UAssign - Home</title>
               </Helmet>
               <HomePage />
             </Route>
             <Route path="/">
               <Helmet>
-                <title>uAssign - Home</title>
+                <title>UAssign - Home</title>
               </Helmet>
               <HomePage />
             </Route>
