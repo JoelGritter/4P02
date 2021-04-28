@@ -117,7 +117,7 @@ const Footer = () => {
               xs={12}
               md={6}
               className={classes.textWrapper}
-              style={{ alignItems: 'centerS' }}
+              style={{ alignItems: 'center' }}
             >
               <div className={classes.heading}>Developers</div>
               <div className={classes.subHeading}>Joel Gritter</div>
