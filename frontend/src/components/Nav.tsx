@@ -28,7 +28,7 @@ import { logout } from '../api/auth';
 import useMe from '../api/data/use-me';
 import { Collapse, ListSubheader } from '@material-ui/core';
 import { cache } from 'swr';
-import { ReactComponent as Logo } from '../assets/logo.svg';
+import logo from '../assets/logo.svg';
 import useAssociatedCourses from '../api/data/use-associated-courses';
 import BookIcon from '@material-ui/icons/Book';
 
@@ -65,7 +65,7 @@ const useStyles = makeStyles((theme: Theme) =>
       ...theme.mixins.toolbar,
       display: 'flex',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
       paddingLeft: theme.spacing(2),
     },
     drawerPaper: {
@@ -88,11 +88,10 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     logo: {
       height: 35,
-      width: 35,
-      marginRight: theme.spacing(1),
     },
     logoName: {
       fontWeight: 700,
+      marginLeft: theme.spacing(2),
     },
   })
 );
@@ -142,8 +141,16 @@ export default function Nav(props: Props) {
     <div>
       <div className={classes.drawerToolbar}>
         <Link to="/">
-          <Logo className={classes.logo} />
+          <img src={logo} alt="" className={classes.logo} />
         </Link>
+        <Typography
+          variant="h6"
+          color="primary"
+          noWrap
+          className={classes.logoName}
+        >
+          UAssign
+        </Typography>
       </div>
       <Divider />
       <List>
@@ -303,27 +310,31 @@ export default function Nav(props: Props) {
 
   return (
     <div className={classes.root}>
-      <AppBar position="fixed" className={classes.appBar}>
-        <Toolbar>
-          <IconButton
-            color="primary"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            className={classes.menuButton}
-          >
-            <MenuIcon />
-          </IconButton>
-          <Typography
-            variant="h6"
-            color="primary"
-            noWrap
-            className={classes.logoName}
-          >
-            UAssign
-          </Typography>
-        </Toolbar>
-      </AppBar>
+      <Hidden smUp>
+        <AppBar position="fixed" className={classes.appBar}>
+          <Toolbar>
+            <IconButton
+              color="primary"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              className={classes.menuButton}
+            >
+              <MenuIcon />
+            </IconButton>
+            <img src={logo} alt="" className={classes.logo} />
+
+            <Typography
+              variant="h6"
+              color="primary"
+              noWrap
+              className={classes.logoName}
+            >
+              UAssign
+            </Typography>
+          </Toolbar>
+        </AppBar>
+      </Hidden>
       <nav className={classes.drawer} aria-label="mailbox folders">
         {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
         <Hidden smUp implementation="css">
@@ -356,7 +367,9 @@ export default function Nav(props: Props) {
         </Hidden>
       </nav>
       <main className={classes.content}>
-        <div className={classes.toolbar} />
+        <Hidden smUp>
+          <div className={classes.toolbar} />
+        </Hidden>
         {children}
       </main>
     </div>
