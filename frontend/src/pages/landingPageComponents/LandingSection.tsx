@@ -6,7 +6,6 @@ import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
-    // background: 'linear-gradient(180deg, #fcc 30%, #fff )',
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
@@ -53,13 +52,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: 50,
     padding: '8px 20px',
     '&:hover': {
-      backgroundColor: '#fcc',
+      backgroundColor: '#6699ff',
       transition: '0.5s',
     },
   },
   arrowDown: {
     position: 'absolute',
-    bottom: 80,
+    bottom: 40,
   },
   icon: { width: 80, height: 80, color: theme.palette.primary.main },
 }));

@@ -6,7 +6,7 @@ import testImage from './pageAssets/undraw_Code_typing_re_p8b9.png';
 const useStyles = makeStyles((theme: Theme) => ({
   infoContainer: {
     color: '#000',
-    backgroundColor: '#fdd',
+    backgroundColor: '#ccddff',
   },
   infoWrapper: {
     display: 'grid',

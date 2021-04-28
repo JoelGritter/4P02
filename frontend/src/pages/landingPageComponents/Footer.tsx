@@ -93,12 +93,12 @@ const Footer = () => {
             </Grid>
             <Grid item xs={12} md={6} className={classes.textWrapper}>
               <div className={classes.heading}>Developers</div>
-              <div className={classes.subHeading}>Full Name</div>
-              <div className={classes.subHeading}>Full Name</div>
-              <div className={classes.subHeading}>Full Name</div>
-              <div className={classes.subHeading}>Full Name</div>
-              <div className={classes.subHeading}>Full Name</div>
-              <div className={classes.subHeading}>Full Name</div>
+              <div className={classes.subHeading}>Joel Gritter</div>
+              <div className={classes.subHeading}>Kindeep Singh Kargil</div>
+              <div className={classes.subHeading}>Tennyson Demchuk</div>
+              <div className={classes.subHeading}>Aditya Rajyaguru</div>
+              <div className={classes.subHeading}>Daniel Sokic</div>
+              <div className={classes.subHeading}>Mutaz Fattal</div>
             </Grid>
           </Grid>
         </div>
