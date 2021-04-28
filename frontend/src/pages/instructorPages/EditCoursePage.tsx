@@ -62,7 +62,13 @@ export default function EditCoursePage() {
       {course && (
         <>
           <div className={classes.headerContainer}>
-            <Typography variant="h4">Edit Course</Typography>
+            <Typography
+              variant="h4"
+              color="primary"
+              style={{ fontWeight: 700 }}
+            >
+              Edit Course
+            </Typography>
           </div>
           <div className={classes.fieldsContainer}>
             <CourseForm course={resCourse} setCourse={setEditCourse} />

@@ -73,8 +73,16 @@ export default function ProfilePage() {
         failedMessage="Failed to load profile!"
       />
       <div className={classes.headerContainer}>
-        {incomplete && <Typography variant="h4">Complete Profile</Typography>}
-        {!incomplete && <Typography variant="h4">Profile</Typography>}
+        {incomplete && (
+          <Typography variant="h4" color="primary" style={{ fontWeight: 700 }}>
+            Complete Profile
+          </Typography>
+        )}
+        {!incomplete && (
+          <Typography variant="h4" color="primary" style={{ fontWeight: 700 }}>
+            Profile
+          </Typography>
+        )}
         <div>
           {!edit && (
             <>

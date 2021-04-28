@@ -51,7 +51,9 @@ export default function CreateAssignmentPage() {
   return (
     <div className={classes.root}>
       <div className={classes.headerContainer}>
-        <Typography variant="h4">Create Assignment</Typography>
+        <Typography variant="h4" color="primary" style={{ fontWeight: 700 }}>
+          Create Assignment
+        </Typography>
         <div className={classes.buttonContainer}>
           <Button
             variant="outlined"

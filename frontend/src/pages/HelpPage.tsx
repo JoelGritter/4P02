@@ -8,6 +8,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     headers: {
       marginBottom: theme.spacing(1),
+      fontWeight: 700,
     },
     fieldsContainer: {
       marginTop: theme.spacing(1),
@@ -21,7 +22,9 @@ export default function HelpPage() {
 
   return (
     <>
-      <Typography variant="h4">Help Page</Typography>
+      <Typography variant="h4" color="primary" style={{ fontWeight: 700 }}>
+        Help
+      </Typography>
       <Grid container spacing={2} className={classes.fieldsContainer}>
         <Grid item xs={12}>
           <Typography

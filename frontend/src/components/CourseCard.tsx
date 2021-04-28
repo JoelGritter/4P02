@@ -31,8 +31,8 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
-      <Link to={`/courses/${course._id}`} style={{ textDecoration: 'none' }}>
+    <Link to={`/courses/${course._id}`} style={{ textDecoration: 'none' }}>
+      <Card className={classes.root}>
         <CardActionArea>
           <CardContent
             style={{
@@ -59,8 +59,8 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
             </Typography>
           </CardContent>
         </CardActionArea>
-      </Link>
-    </Card>
+      </Card>
+    </Link>
   );
 };
 
