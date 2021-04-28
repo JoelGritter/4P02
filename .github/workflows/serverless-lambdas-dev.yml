@@ -1,9 +1,9 @@
 name: Deploy AWS Lambda
 
 on:
-  push:
+  pull_request:
     branches:
-      - fix-docker-workflow
+      - dev
     paths:
       - 'lambda/**'
   workflow_dispatch:
