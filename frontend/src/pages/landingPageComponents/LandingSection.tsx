@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import onlineTest from './pageAssets/undraw_Code_thinking_re_gka2.svg';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -61,6 +62,15 @@ const useStyles = makeStyles((theme: Theme) => ({
     bottom: 40,
   },
   icon: { width: 80, height: 80, color: theme.palette.primary.main },
+  onlineTest: {
+    position: 'absolute',
+    padding: theme.spacing(3),
+    maxWidth: '100%',
+    maxHeight: '300px',
+    bottom: 0,
+    left: 0,
+    filter: 'opacity(0.3)',
+  },
 }));
 
 const LandingSection = () => {
@@ -69,6 +79,7 @@ const LandingSection = () => {
   return (
     <>
       <div className={classes.container}>
+        <img src={onlineTest} alt="" className={classes.onlineTest}></img>
         <div className={classes.backgorund}></div>
         <div className={classes.content}>
           <div className={classes.mainText}>UAssign</div>
