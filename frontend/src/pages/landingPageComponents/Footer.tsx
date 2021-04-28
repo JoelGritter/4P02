@@ -48,6 +48,13 @@ const useStyles = makeStyles((theme: Theme) => ({
     lineHeight: '1.1',
     marginBottom: '10px',
     fontSize: '30px',
+    fontWeight: 500,
+  },
+  headingMain: {
+    color: theme.palette.primary.main,
+    lineHeight: '1.1',
+    marginBottom: '10px',
+    fontSize: '30px',
     fontWeight: 700,
   },
   subHeading: {
@@ -78,6 +85,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     width: '100%',
     marign: '0 0 10px 0',
   },
+  nameUni: {
+    maxWidth: '440px',
+    fontSize: '18px',
+    fontWeight: 700,
+  },
+  name: {
+    maxWidth: '440px',
+    fontSize: '14px',
+    fontWeight: 700,
+  },
 }));
 
 const Footer = () => {
@@ -89,9 +106,19 @@ const Footer = () => {
         <div className={classes.infoWrapper}>
           <Grid container component="main" className={classes.infoRow}>
             <Grid item xs={12} md={6} className={classes.textWrapper}>
-              <div className={classes.heading}>Footer</div>
+              <div className={classes.headingMain}>Senior Project</div>
+              <div className={classes.nameUni}>
+                UAssign - A complete E-Learning platform that takes care of
+                marking with a automated code submission system
+              </div>
             </Grid>
-            <Grid item xs={12} md={6} className={classes.textWrapper}>
+            <Grid
+              item
+              xs={12}
+              md={6}
+              className={classes.textWrapper}
+              style={{ alignItems: 'centerS' }}
+            >
               <div className={classes.heading}>Developers</div>
               <div className={classes.subHeading}>Joel Gritter</div>
               <div className={classes.subHeading}>Kindeep Singh Kargil</div>
