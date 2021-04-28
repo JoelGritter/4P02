@@ -2,21 +2,24 @@ import React from 'react';
 
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import testImage from './pageAssets/undraw_check_boxes_m3d0.png';
+import testImage from './pageAssets/undraw_check_boxes_m3d0.svg';
 
 const useStyles = makeStyles((theme: Theme) => ({
   infoContainer: {
     color: '#000',
   },
   infoWrapper: {
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
     display: 'grid',
     zIndex: 1,
-    height: '630px',
+    minHeight: '630px',
     width: '100%',
     maxWidth: '1100px',
     marginLeft: 'auto',
     marginRight: 'auto',
-    padding: '0 24px',
     justifyContent: ' center',
   },
   infoRow: {
@@ -46,6 +49,7 @@ const useStyles = makeStyles((theme: Theme) => ({
       display: 'none',
     },
     display: 'flex',
+    padding: theme.spacing(2),
   },
   topLine: {
     color: theme.palette.primary.main,
@@ -55,12 +59,12 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   heading: {
     lineHeight: '1.1',
-    marginBottom: '10px',
+    marginBottom: theme.spacing(2),
     fontSize: '48px',
     fontWeight: 700,
   },
   subHeading: {
-    color: '#999',
+    color: theme.palette.text.secondary,
     maxWidth: '440px',
     fontSize: '18px',
     fontWeight: 500,
@@ -85,8 +89,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
   },
   img: {
-    width: '100%',
+    width: '80%',
     marign: '0 0 10px 0',
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(4),
+    borderRadius: 30,
   },
 }));
 
@@ -100,12 +107,7 @@ const InfoSection3 = () => {
           <Grid container component="main" className={classes.infoRow}>
             <Grid item xs={12} md={6} className={classes.imgWrapper}>
               <div className={classes.imgWrap}>
-                <img
-                  src={testImage}
-                  width={'80%'}
-                  alt=""
-                  style={{ borderRadius: 30 }}
-                />
+                <img src={testImage} alt="" className={classes.img} />
               </div>
             </Grid>
             <Grid item xs={12} md={6} className={classes.textWrapper}>
@@ -114,8 +116,8 @@ const InfoSection3 = () => {
                 Automated testing for assignment submissions
               </div>
               <div className={classes.subHeading}>
-                Unique automated tests set for each assignment taking care of
-                the hassle of checking student submission
+                Save time by defining test cases that are automatically run for
+                every submission
               </div>
             </Grid>
             <Grid item xs={12} md={6} className={classes.imgBelow}>
@@ -124,7 +126,7 @@ const InfoSection3 = () => {
                   src={testImage}
                   width={'80%'}
                   alt=""
-                  style={{ borderRadius: 30 }}
+                  className={classes.img}
                 />
               </div>
             </Grid>

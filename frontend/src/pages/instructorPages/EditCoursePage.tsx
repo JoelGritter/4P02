@@ -10,6 +10,7 @@ import { useHistory, useParams } from 'react-router';
 import useGet from '../../api/data/use-get';
 import { Link } from 'react-router-dom';
 import RequestStatus from '../../components/RequestStatus';
+import useAssociatedCourses from '../../api/data/use-associated-courses';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -41,6 +42,8 @@ export default function EditCoursePage() {
   const { data: course, failed, loading, mutate } = useGet<Course>(
     `/course/${id}`
   );
+  const { mutate: mutateAssociated } = useAssociatedCourses();
+
   const [editCourse, setEditCourse] = useState<Course>({});
 
   const resCourse = { ...course, ...editCourse };
@@ -54,6 +57,7 @@ export default function EditCoursePage() {
       enqueueSnackbar(message ?? `Updated course "${resCourse.name}"`);
       history.push(`/courses/${data._id}`);
       mutate(data);
+      mutateAssociated();
     }
   };
 

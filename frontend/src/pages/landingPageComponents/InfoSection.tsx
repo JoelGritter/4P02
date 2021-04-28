@@ -1,24 +1,26 @@
-import { Button } from '@material-ui/core';
 import React from 'react';
-import { Link } from 'react-router-dom';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import testImage from './pageAssets/undraw_split_testing_l1uw.png';
+import testImage from './pageAssets/undraw_split_testing_l1uw.svg';
 
 const useStyles = makeStyles((theme: Theme) => ({
   infoContainer: {
-    color: '#000',
-    backgroundColor: '#ccddff',
+    color: theme.palette.getContrastText('#111'),
+    // backgroundColor: theme.palette.secondary.main,
+    backgroundColor: '#111',
   },
   infoWrapper: {
     display: 'grid',
     zIndex: 1,
-    height: '630px',
+    minHeight: '630px',
     width: '100%',
     maxWidth: '1100px',
     marginLeft: 'auto',
     marginRight: 'auto',
-    padding: '0 24px',
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
     justifyContent: ' center',
   },
   infoRow: {
@@ -39,21 +41,22 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: theme.spacing(2),
   },
   topLine: {
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
     fontSize: '16px',
     fontWeight: 700,
     marginBottom: '5px',
   },
   heading: {
     lineHeight: '1.1',
-    marginBottom: '10px',
+    marginBottom: theme.spacing(2),
     fontSize: '48px',
     fontWeight: 700,
   },
   subHeading: {
-    color: '#999',
+    color: theme.palette.getContrastText('#111'),
     maxWidth: '440px',
     fontSize: '18px',
     fontWeight: 500,
@@ -78,8 +81,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
   },
   img: {
-    width: '100%',
+    width: '80%',
     marign: '0 0 10px 0',
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(4),
+    borderRadius: 30,
   },
 }));
 
@@ -94,19 +100,12 @@ const InfoSection = () => {
             <Grid item xs={12} md={6} className={classes.textWrapper}>
               <div className={classes.topLine}>Mission</div>
               <div className={classes.heading}>
-                Taking the next step in innovation
+                Simplifying Programming Assignments
               </div>
               <div className={classes.subHeading}>
-                A platform that enables institutions with the ability of
-                automated testing
+                We're a complete platform for programming assignments,
+                streamlining submissions and marking with automated testing
               </div>
-              <Button
-                component={Link}
-                to="/login"
-                className={classes.loginButton}
-              >
-                Create an account
-              </Button>
             </Grid>
             <Grid item xs={12} md={6} className={classes.imgWrapper}>
               <div className={classes.imgWrap}>
@@ -114,7 +113,7 @@ const InfoSection = () => {
                   src={testImage}
                   width={'80%'}
                   alt=""
-                  style={{ borderRadius: 30 }}
+                  className={classes.img}
                 />
               </div>
             </Grid>

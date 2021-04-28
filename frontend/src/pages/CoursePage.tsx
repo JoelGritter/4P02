@@ -55,7 +55,11 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   assignmentContainer: {},
   createCourseButton: {
-    backgroundColor: '#fff',
+    background: theme.palette.background.paper,
+  },
+  deleteCourseButton: {
+    background: theme.palette.background.paper,
+    marginLeft: theme.spacing(1),
   },
 }));
 
@@ -194,7 +198,7 @@ export default function CoursesPage() {
                   <>
                     <Tooltip title="Delete Course">
                       <IconButton
-                        className={classes.createCourseButton}
+                        className={classes.deleteCourseButton}
                         component={IconButton}
                         color="primary"
                         onClick={() => {
@@ -227,14 +231,16 @@ export default function CoursesPage() {
                 </Typography>
                 {editAccess && (
                   <Tooltip title="Add Assignment">
-                    <IconButton
-                      className={classes.createCourseButton}
-                      component={Link}
-                      to={`/courses/${id}/assignments/create`}
-                      color="primary"
-                    >
-                      <AddIcon />
-                    </IconButton>
+                    <div>
+                      <IconButton
+                        className={classes.createCourseButton}
+                        component={Link}
+                        to={`/courses/${id}/assignments/create`}
+                        color="primary"
+                      >
+                        <AddIcon />
+                      </IconButton>
+                    </div>
                   </Tooltip>
                 )}
               </Box>

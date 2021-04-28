@@ -1,8 +1,11 @@
-import { Button } from '@material-ui/core';
+import { Box, Button, Typography } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import onlineTest from './pageAssets/undraw_Code_thinking_re_gka2.svg';
+import education from './pageAssets/undraw_Accept_request_re_d81h.svg';
+import logo from './../../assets/logo.svg';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
@@ -34,15 +37,16 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
   },
   mainText: {
-    color: '#000',
-    fontSize: '40px',
+    color: theme.palette.text.primary,
     fontWeight: 700,
     textAlign: 'center',
+    marginLeft: theme.spacing(2),
   },
   subText: {
     fontSize: '24px',
     fontWeight: 500,
     textAlign: 'center',
+    marginBottom: theme.spacing(2),
   },
   loginButton: {
     fontWeight: 500,
@@ -61,6 +65,27 @@ const useStyles = makeStyles((theme: Theme) => ({
     bottom: 40,
   },
   icon: { width: 80, height: 80, color: theme.palette.primary.main },
+  onlineTest: {
+    position: 'absolute',
+    padding: theme.spacing(3),
+    maxWidth: '100%',
+    maxHeight: '300px',
+    bottom: 0,
+    left: 0,
+    filter: 'opacity(0.25)',
+  },
+  education: {
+    position: 'absolute',
+    padding: theme.spacing(3),
+    maxWidth: '100%',
+    maxHeight: '300px',
+    top: 0,
+    right: 0,
+    filter: 'opacity(0.25)',
+  },
+  logo: {
+    height: '70px',
+  },
 }));
 
 const LandingSection = () => {
@@ -69,11 +94,23 @@ const LandingSection = () => {
   return (
     <>
       <div className={classes.container}>
+        <img src={onlineTest} alt="" className={classes.onlineTest}></img>
+        <img src={education} alt="" className={classes.education}></img>
         <div className={classes.backgorund}></div>
         <div className={classes.content}>
-          <div className={classes.mainText}>UAssign</div>
+          <Box
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
+            marginBottom={2}
+          >
+            <img src={logo} alt="" className={classes.logo}></img>
+            <Typography variant="h2" className={classes.mainText}>
+              UAssign
+            </Typography>
+          </Box>
           <div className={classes.subText}>
-            Helping institutions take the next step in automation
+            A modern platform for programming assignments
           </div>
           <Button component={Link} to="/login" className={classes.loginButton}>
             Join UAssign!

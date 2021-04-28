@@ -13,7 +13,7 @@ import RequestStatus from '../components/RequestStatus';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
-      marginRight: theme.spacing(1),
+      marginLeft: theme.spacing(1),
     },
     headerContainer: {
       display: 'flex',
@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     fieldsContainer: {
       marginTop: theme.spacing(1),
-      padding: theme.spacing(1),
+      paddingBottom: theme.spacing(2),
     },
     buttonContainer: {
       display: 'flex',

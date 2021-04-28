@@ -1,22 +1,26 @@
 import React from 'react';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import testImage from './pageAssets/undraw_Code_typing_re_p8b9.png';
+import testImage from './pageAssets/undraw_Code_typing_re_p8b9.svg';
 
 const useStyles = makeStyles((theme: Theme) => ({
   infoContainer: {
-    color: '#000',
-    backgroundColor: '#ccddff',
+    color: theme.palette.getContrastText('#111'),
+    // backgroundColor: theme.palette.secondary.main,
+    backgroundColor: '#111',
   },
   infoWrapper: {
     display: 'grid',
     zIndex: 1,
-    height: '630px',
+    minHeight: '630px',
     width: '100%',
     maxWidth: '1100px',
     marginLeft: 'auto',
     marginRight: 'auto',
-    padding: '0 24px',
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
+    paddingTop: theme.spacing(3),
+    paddingBottom: theme.spacing(3),
     justifyContent: ' center',
   },
   infoRow: {
@@ -37,21 +41,22 @@ const useStyles = makeStyles((theme: Theme) => ({
     flexDirection: 'column',
     justifyContent: 'center',
     alignItems: 'center',
+    padding: theme.spacing(2),
   },
   topLine: {
-    color: theme.palette.primary.main,
+    color: theme.palette.secondary.main,
     fontSize: '16px',
     fontWeight: 700,
     marginBottom: '5px',
   },
   heading: {
     lineHeight: '1.1',
-    marginBottom: '10px',
     fontSize: '48px',
     fontWeight: 700,
+    marginBottom: theme.spacing(2),
   },
   subHeading: {
-    color: '#999',
+    color: theme.palette.getContrastText('#111'),
     maxWidth: '440px',
     fontSize: '18px',
     fontWeight: 500,
@@ -76,8 +81,11 @@ const useStyles = makeStyles((theme: Theme) => ({
     alignItems: 'center',
   },
   img: {
-    width: '100%',
+    width: '80%',
     marign: '0 0 10px 0',
+    backgroundColor: theme.palette.background.paper,
+    padding: theme.spacing(4),
+    borderRadius: 30,
   },
 }));
 
@@ -95,18 +103,13 @@ const InfoSection2 = () => {
                 Accepting a variety of different languages
               </div>
               <div className={classes.subHeading}>
-                Enables code submissions in many languages such as Python, C++,
-                Java, etc...
+                We support custom and flexible compile scripts for running
+                Python, C/C++ and Java code, with support for more on the way!
               </div>
             </Grid>
             <Grid item xs={12} md={6} className={classes.imgWrapper}>
               <div className={classes.imgWrap}>
-                <img
-                  src={testImage}
-                  width={'80%'}
-                  alt=""
-                  style={{ borderRadius: 30 }}
-                />
+                <img src={testImage} alt="" className={classes.img} />
               </div>
             </Grid>
           </Grid>
