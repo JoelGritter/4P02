@@ -20,5 +20,6 @@ RUN ls
 RUN rm -rf app 
 RUN mv dist app
 RUN ls
+RUN cd app && ls
 
 CMD ["app/handler.getAllNotes"]
