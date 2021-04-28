@@ -10,12 +10,20 @@ import moment from 'moment';
 
 const useStyles = makeStyles({
   root: {
-    margin: 5,
+    margin: '15px 5px',
+    borderRadius: 10,
+    borderLeft: `4px solid #0055ff`,
+    transition: '0.2s',
+    '&:hover': {
+      borderLeft: `8px solid #80aaff`,
+      transition: '0.2s',
+    },
   },
   contentContainer: {
     display: 'flex',
     justifyContent: 'space-between',
     flexDirection: 'row',
+    alignItems: 'center',
   },
 });
 
@@ -27,7 +35,7 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({ assignment }) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root}>
+    <Card className={classes.root} elevation={5}>
       <Link
         to={`/courses/${assignment.courseID}/assignments/${assignment._id}`}
         style={{ textDecoration: 'none' }}
@@ -35,10 +43,10 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({ assignment }) => {
         <CardActionArea>
           <CardContent className={classes.contentContainer}>
             <Typography
-              gutterBottom
               variant="h5"
-              color="primary"
+              color="initial"
               component="h5"
+              style={{ color: 'black' }}
             >
               {assignment.name}
             </Typography>

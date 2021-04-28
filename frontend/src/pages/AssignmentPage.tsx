@@ -51,10 +51,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     marginTop: theme.spacing(1),
   },
   submissionsHeader: {
+    fontWeight: 700,
     marginTop: theme.spacing(2),
   },
   card: {
     marginTop: theme.spacing(2),
+  },
+  name: {
+    // fontWeight: 700,
   },
 }));
 
@@ -83,7 +87,13 @@ export default function AssignmentPage() {
             <title>uAssign - {assignment?.name || 'Course Loading...'}</title>
           </Helmet>
           <div className={classes.header}>
-            <Typography variant="h4">{assignment.name}</Typography>
+            <Typography
+              variant="h4"
+              style={{ fontWeight: 700 }}
+              color="primary"
+            >
+              {assignment.name}
+            </Typography>
             {hasEditAccess && (
               <Button
                 component={Link}

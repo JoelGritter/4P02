@@ -8,7 +8,6 @@ import TestsPage from './pages/TestsPage';
 import EditAssignmentPage from './pages/instructorPages/EditAssignmentPage';
 import CreateCoursePage from './pages/instructorPages/CreateCoursePage';
 import {
-  Paper,
   Breadcrumbs,
   Link as MatLink,
   Typography,
@@ -59,7 +58,7 @@ export default function Main() {
 
   return (
     <>
-      <Paper style={{ minHeight: '100vh' }}>
+      <div style={{ minHeight: '100vh' }}>
         <Nav>
           <Route>
             {({ location }) => {
@@ -174,7 +173,7 @@ export default function Main() {
             </Route>
           </Switch>
         </Nav>
-      </Paper>
+      </div>
     </>
   );
 }

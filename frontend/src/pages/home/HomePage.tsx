@@ -1,5 +1,4 @@
 import React from 'react';
-import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import ProfCourses from './components/ProfCourses';
@@ -59,27 +58,9 @@ export default function HomePage() {
   return (
     <>
       <Grid container spacing={1}>
-        <Grid item xs={12} md={9} className={classes.coursesContainer}>
+        <Grid item xs={12} className={classes.coursesContainer}>
           <ProfCourses />
           <StudentCourses />
-        </Grid>
-        <Grid
-          container
-          item
-          md={3}
-          spacing={1}
-          className={classes.calendarContainer}
-        >
-          <Grid item xs={12}>
-            <Typography
-              gutterBottom
-              variant="h5"
-              color="primary"
-              component="h5"
-            >
-              Deadlines
-            </Typography>
-          </Grid>
         </Grid>
       </Grid>
     </>
