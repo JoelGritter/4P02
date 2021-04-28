@@ -11,7 +11,7 @@ import RequestStatus from '../../components/RequestStatus';
 import Assignment, {
   emptyAssignment,
 } from '../../api/data/models/assignment.model';
-import { AssignmentForm } from '../../components/AssignmentForm';
+import AssignmentForm from '../../components/AssignmentForm';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},

@@ -4,6 +4,7 @@ import AssignmentPage from './pages/AssignmentPage';
 import CoursesPage from './pages/CoursePage';
 import HomePage from './pages/home/HomePage';
 import ProfilePage from './pages/ProfilePage';
+import HelpPage from './pages/HelpPage';
 import TestsPage from './pages/TestsPage';
 import EditAssignmentPage from './pages/instructorPages/EditAssignmentPage';
 import CreateCoursePage from './pages/instructorPages/CreateCoursePage';
@@ -146,6 +147,12 @@ export default function Main() {
                 <title>uAssign - My Profile</title>
               </Helmet>
               <ProfilePage />
+            </Route>
+            <Route path="/help">
+              <Helmet>
+                <title>uAssign - Help Page</title>
+              </Helmet>
+              <HelpPage />
             </Route>
             <Route path="/tests">
               <Helmet>

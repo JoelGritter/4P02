@@ -25,7 +25,7 @@ jobs:
           cd lambda
           npm install -g serverless
           npm install
-      - name: Run unit tests 🔧
+      - name: Run tests 🛠️
         run: |
           cd lambda
           npm run test

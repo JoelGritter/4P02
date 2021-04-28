@@ -12,6 +12,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import PersonIcon from '@material-ui/icons/Person';
+import HelpIcon from '@material-ui/icons/Help';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import SupervisorAccountIcon from '@material-ui/icons/SupervisorAccount';
 import ExpandLess from '@material-ui/icons/ExpandLess';
@@ -264,6 +265,21 @@ export default function Nav(props: Props) {
             </ListItem>
           </List>
         </Collapse>
+        <ListItem
+          button
+          key="help"
+          component={Link}
+          to="/help"
+          selected={pathStartsWith('/help')}
+          onClick={() => {
+            setMobileOpen(false);
+          }}
+        >
+          <ListItemIcon>
+            <HelpIcon />
+          </ListItemIcon>
+          <ListItemText primary={'Help'} />
+        </ListItem>
         <ListItem
           button
           key="logout"

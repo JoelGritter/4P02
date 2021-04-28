@@ -126,7 +126,7 @@ export default function CoursesPage() {
     failed: failedAssignments,
   } = useGet<Assignment | any>(`/assign/course/${id}`);
 
-  const { isProf, isAdmin } = useMe();
+  const { isAdmin, me } = useMe();
   const classes = useStyles();
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
@@ -156,6 +156,11 @@ export default function CoursesPage() {
     }
   };
 
+  const editAccess =
+    course?.currentProfessors?.includes(me?.cognitoId) ||
+    course?.moderators?.includes(me?.cognitoId) ||
+    isAdmin;
+
   return (
     <>
       <Helmet>
@@ -173,7 +178,7 @@ export default function CoursesPage() {
                 {course.name}
               </Typography>
               <div className={classes.headerIcons}>
-                {isProf && (
+                {editAccess && (
                   <Tooltip title="Edit Course">
                     <IconButton
                       className={classes.createCourseButton}
@@ -220,7 +225,7 @@ export default function CoursesPage() {
                 <Typography variant="h5" className={classes.assignHeader}>
                   Assignments
                 </Typography>
-                {isProf && (
+                {editAccess && (
                   <Tooltip title="Add Assignment">
                     <IconButton
                       className={classes.createCourseButton}
