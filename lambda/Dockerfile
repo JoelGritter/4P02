@@ -19,9 +19,10 @@ RUN npm install && \
 npm run bld && \
 echo "start thing" && \
 ls && \
-ehco "end thing" && \
+echo "end thing" && \
 cd dist && \
 ls && \
+echo "end thing 2" && \
 cd .. && \
 rm -rf app && \
 mv dist app && \
