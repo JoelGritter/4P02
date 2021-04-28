@@ -8,14 +8,14 @@ import Typography from '@material-ui/core/Typography';
 import Assignment from '../api/data/models/assignment.model';
 import moment from 'moment';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     margin: '15px 5px',
     borderRadius: 10,
-    borderLeft: `4px solid #0055ff`,
+    borderLeft: `4px solid ${theme.palette.primary.main}`,
     transition: '0.2s',
     '&:hover': {
-      borderLeft: `8px solid #80aaff`,
+      borderLeft: `8px solid ${theme.palette.secondary.main}`,
       transition: '0.2s',
     },
   },
@@ -25,7 +25,7 @@ const useStyles = makeStyles({
     flexDirection: 'row',
     alignItems: 'center',
   },
-});
+}));
 
 interface AssignmentCardProps {
   assignment: Assignment;

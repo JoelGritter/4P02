@@ -7,18 +7,18 @@
 <g mask="url(#mask0)">
 <path d="M176 0C96.4905 79.4234 54.6417 110.022 0 62.5L35.5 144.5L84 150.5L164.5 84.5L176 0Z" fill="url(#paint0_linear)"/>
 <rect x="24.8312" y="151.242" width="228.492" height="181.149" transform="rotate(-45.0701 24.8312 151.242)" fill="url(#paint1_linear)"/>
-<path d="M230.415 262.667L-31.9416 34.6899L-36.4809 278.512L230.415 262.667Z" fill="#D00606"/>
+<path d="M230.415 262.667L-31.9416 34.6899L-36.4809 278.512L230.415 262.667Z" fill="#FE7F00"/>
 </g>
 </g>
 <defs>
-<linearGradient id="paint0_linear" x1="66" y1="38.5" x2="68.5" y2="122" gradientUnits="userSpaceOnUse">
-<stop stop-color="#444444"/>
-<stop offset="0.0001" stop-color="#333333"/>
-<stop offset="1" stop-color="#555555"/>
+<linearGradient id="paint0_linear" x1="57" y1="23" x2="68.5" y2="122" gradientUnits="userSpaceOnUse">
+<stop/>
+<stop offset="0.0001" stop-color="#FE8105"/>
+<stop offset="1"/>
 </linearGradient>
-<linearGradient id="paint1_linear" x1="121.534" y1="248.114" x2="56.7147" y2="259.362" gradientUnits="userSpaceOnUse">
-<stop stop-color="#B60909"/>
-<stop offset="1" stop-color="#980202"/>
+<linearGradient id="paint1_linear" x1="121.155" y1="260.202" x2="10.4414" y2="263.79" gradientUnits="userSpaceOnUse">
+<stop stop-color="#DD6F00"/>
+<stop offset="1" stop-color="#6F3801"/>
 </linearGradient>
 <clipPath id="clip0">
 <rect width="176" height="178" fill="white"/>

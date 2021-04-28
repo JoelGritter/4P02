@@ -12,7 +12,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     fieldsContainer: {
       marginTop: theme.spacing(1),
-      padding: theme.spacing(1),
     },
   })
 );

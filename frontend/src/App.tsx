@@ -84,10 +84,10 @@ const App = () => {
         main: '#0055ff',
       },
       secondary: {
-        main: '#757575',
+        main: '#fe7f00',
       },
       background: {
-        default: `#00000015`,
+        default: `#f5f5f5`,
       },
     },
     typography: {

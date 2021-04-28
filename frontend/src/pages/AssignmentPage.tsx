@@ -18,6 +18,7 @@ import {
   Grid,
   Collapse,
   TextField,
+  Link as MatLink,
 } from '@material-ui/core';
 import RequestStatus from '../components/RequestStatus';
 import moment from 'moment';
@@ -382,6 +383,13 @@ function StudentAssignmentPage() {
           <Box marginTop={2}>
             <Typography variant="h5" gutterBottom>
               {oldSub ? 'Resubmit' : 'Submit'}
+            </Typography>
+            <Typography gutterBottom color="textSecondary">
+              See{' '}
+              <MatLink to="/help" component={Link}>
+                submission instructions
+              </MatLink>{' '}
+              for help
             </Typography>
             <input type="file" name="chooseFile" onChange={handleFileChange} />
 

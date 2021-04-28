@@ -6,18 +6,18 @@
 </mask>
 <g mask="url(#mask0)">
 <path d="M218 59C138.49 138.423 96.6417 169.022 42 121.5L77.5 203.5L126 209.5L206.5 143.5L218 59Z" fill="url(#paint0_linear)"/>
-<rect x="66.8312" y="210.242" width="228.492" height="181.149" transform="rotate(-45.0701 66.8312 210.242)" fill="url(#paint1_linear)"/>
-<path d="M272.415 321.667L10.0584 93.6899L5.51909 337.512L272.415 321.667Z" fill="#D00606"/>
+<rect x="66.8313" y="210.242" width="228.492" height="181.149" transform="rotate(-45.0701 66.8313 210.242)" fill="url(#paint1_linear)"/>
+<path d="M272.415 321.667L10.0584 93.6899L5.51907 337.512L272.415 321.667Z" fill="#FE7F00"/>
 </g>
 <defs>
-<linearGradient id="paint0_linear" x1="108" y1="97.5" x2="110.5" y2="181" gradientUnits="userSpaceOnUse">
-<stop stop-color="#444444"/>
-<stop offset="0.0001" stop-color="#333333"/>
-<stop offset="1" stop-color="#555555"/>
+<linearGradient id="paint0_linear" x1="99" y1="82" x2="110.5" y2="181" gradientUnits="userSpaceOnUse">
+<stop/>
+<stop offset="0.0001" stop-color="#FE8105"/>
+<stop offset="1"/>
 </linearGradient>
-<linearGradient id="paint1_linear" x1="163.534" y1="307.114" x2="98.7147" y2="318.362" gradientUnits="userSpaceOnUse">
-<stop stop-color="#B60909"/>
-<stop offset="1" stop-color="#980202"/>
+<linearGradient id="paint1_linear" x1="163.155" y1="319.202" x2="52.4414" y2="322.79" gradientUnits="userSpaceOnUse">
+<stop stop-color="#DD6F00"/>
+<stop offset="1" stop-color="#6F3801"/>
 </linearGradient>
 </defs>
 </svg>

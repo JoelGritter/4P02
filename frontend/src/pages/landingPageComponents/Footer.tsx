@@ -46,20 +46,21 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   heading: {
     lineHeight: '1.1',
-    marginBottom: '10px',
     fontSize: '30px',
     fontWeight: 500,
+    marginBottom: theme.spacing(2),
   },
   headingMain: {
-    color: theme.palette.primary.main,
+    color: theme.palette.primary.light,
     lineHeight: '1.1',
-    marginBottom: '10px',
     fontSize: '30px',
     fontWeight: 700,
+    marginBottom: theme.spacing(2),
   },
   subHeading: {
     maxWidth: '440px',
     fontSize: '14px',
+    marginBottom: theme.spacing(1),
     fontWeight: 500,
   },
   loginButton: {
@@ -104,28 +105,29 @@ const Footer = () => {
     <>
       <div className={classes.infoContainer}>
         <div className={classes.infoWrapper}>
-          <Grid container component="main" className={classes.infoRow}>
+          <Grid
+            container
+            component="main"
+            className={classes.infoRow}
+            spacing={2}
+          >
+            <Grid item xs={12} md={6} className={classes.textWrapper}>
+              <div>
+                <div className={classes.heading}>Developers</div>
+                <div className={classes.subHeading}>Joel Gritter</div>
+                <div className={classes.subHeading}>Kindeep Singh Kargil</div>
+                <div className={classes.subHeading}>Tennyson Demchuk</div>
+                <div className={classes.subHeading}>Aditya Rajyaguru</div>
+                <div className={classes.subHeading}>Daniel Sokic</div>
+                <div className={classes.subHeading}>Mutaz Fattal</div>
+              </div>
+            </Grid>
             <Grid item xs={12} md={6} className={classes.textWrapper}>
               <div className={classes.headingMain}>Senior Project</div>
               <div className={classes.nameUni}>
                 UAssign - A complete E-Learning platform that takes care of
                 marking with a automated code submission system
               </div>
-            </Grid>
-            <Grid
-              item
-              xs={12}
-              md={6}
-              className={classes.textWrapper}
-              style={{ alignItems: 'center' }}
-            >
-              <div className={classes.heading}>Developers</div>
-              <div className={classes.subHeading}>Joel Gritter</div>
-              <div className={classes.subHeading}>Kindeep Singh Kargil</div>
-              <div className={classes.subHeading}>Tennyson Demchuk</div>
-              <div className={classes.subHeading}>Aditya Rajyaguru</div>
-              <div className={classes.subHeading}>Daniel Sokic</div>
-              <div className={classes.subHeading}>Mutaz Fattal</div>
             </Grid>
           </Grid>
         </div>
