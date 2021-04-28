@@ -35,11 +35,11 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({ assignment }) => {
   const classes = useStyles();
 
   return (
-    <Card className={classes.root} elevation={5}>
-      <Link
-        to={`/courses/${assignment.courseID}/assignments/${assignment._id}`}
-        style={{ textDecoration: 'none' }}
-      >
+    <Link
+      to={`/courses/${assignment.courseID}/assignments/${assignment._id}`}
+      style={{ textDecoration: 'none' }}
+    >
+      <Card className={classes.root} elevation={5}>
         <CardActionArea>
           <CardContent className={classes.contentContainer}>
             <Typography
@@ -55,8 +55,8 @@ const AssignmentCard: React.FC<AssignmentCardProps> = ({ assignment }) => {
             </Typography>
           </CardContent>
         </CardActionArea>
-      </Link>
-    </Card>
+      </Card>
+    </Link>
   );
 };
 

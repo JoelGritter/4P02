@@ -76,7 +76,13 @@ export default function EditCoursePage() {
       {assignment && (
         <>
           <div className={classes.headerContainer}>
-            <Typography variant="h4">Edit Assignment</Typography>
+            <Typography
+              variant="h4"
+              color="primary"
+              style={{ fontWeight: 700 }}
+            >
+              Edit Assignment
+            </Typography>
           </div>
           <div className={classes.fieldsContainer}>
             <AssignmentForm

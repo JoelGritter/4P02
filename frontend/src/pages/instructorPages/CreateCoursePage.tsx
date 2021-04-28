@@ -50,7 +50,9 @@ export default function CreateCoursePage() {
   return (
     <div className={classes.root}>
       <div className={classes.headerContainer}>
-        <Typography variant="h4">Create Course</Typography>
+        <Typography variant="h4" color="primary" style={{ fontWeight: 700 }}>
+          Create Course
+        </Typography>
       </div>
       <div className={classes.fieldsContainer}>
         <CourseForm course={course} setCourse={setCourse} />
