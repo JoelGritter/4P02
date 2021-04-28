@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   heading: {
     lineHeight: '1.1',
-    marginBottom: '10px',
+    marginBottom: theme.spacing(2),
     fontSize: '48px',
     fontWeight: 700,
   },
@@ -116,8 +116,8 @@ const InfoSection3 = () => {
                 Automated testing for assignment submissions
               </div>
               <div className={classes.subHeading}>
-                Unique automated tests set for each assignment taking care of
-                the hassle of checking student submission
+                Save time by defining test cases that are automatically run for
+                every submission
               </div>
             </Grid>
             <Grid item xs={12} md={6} className={classes.imgBelow}>

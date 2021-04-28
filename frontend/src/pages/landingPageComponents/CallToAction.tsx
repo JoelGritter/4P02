@@ -1,42 +1,29 @@
-import { Button } from '@material-ui/core';
+import { Box, Button, Grid, Typography } from '@material-ui/core';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { makeStyles, Theme } from '@material-ui/core/styles';
+import logo from '../../assets/logo.svg';
 
 const useStyles = makeStyles((theme: Theme) => ({
   container: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    padding: '0 30px',
-    height: '450px',
-    position: 'relative',
+    paddingTop: theme.spacing(4),
+    paddingBottom: theme.spacing(4),
+    paddingRight: theme.spacing(2),
+    paddingLeft: theme.spacing(2),
     zIndex: 1,
-  },
-  backgorund: {
-    position: 'absolute',
-    top: 0,
-    right: 0,
-    bottom: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    overflow: 'hidden',
+    minHeight: '500px',
   },
   content: {
-    zIndex: 3,
-    maxWidth: '1100px',
-    position: 'absolute',
-    padding: '8px 24px',
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
+    width: '100%',
   },
   mainText: {
     color: '#000',
-    fontSize: '35px',
     fontWeight: 700,
     textAlign: 'center',
+    marginLeft: theme.spacing(2),
   },
   subText: {
     fontSize: '24px',
@@ -55,6 +42,19 @@ const useStyles = makeStyles((theme: Theme) => ({
       backgroundColor: '#6699ff',
       transition: '0.5s',
     },
+    textAlign: 'center',
+  },
+  gridItem: {
+    display: 'flex',
+    alignItems: 'center',
+    flexDirection: 'column',
+  },
+  gridItemInner: {
+    maxWidth: '600px',
+    textAlign: 'center',
+  },
+  logo: {
+    height: '50px',
   },
 }));
 
@@ -64,13 +64,49 @@ const CallToAction = () => {
   return (
     <>
       <div className={classes.container}>
-        <div className={classes.backgorund}></div>
         <div className={classes.content}>
-          <div className={classes.mainText}>UAssign</div>
-          <div className={classes.subText}>Get Started With Us!</div>
-          <Button component={Link} to="/login" className={classes.loginButton}>
-            Join Now
-          </Button>
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            marginBottom={7}
+          >
+            <img src={logo} alt="" className={classes.logo} />
+            <Typography className={classes.mainText} variant="h3">
+              UAssign
+            </Typography>
+          </Box>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={6} className={classes.gridItem}>
+              <div className={classes.gridItem}>
+                <div className={classes.subText}>
+                  Already in a UAssign enabled course?
+                </div>
+                <Button
+                  component={Link}
+                  to="/login"
+                  className={classes.loginButton}
+                >
+                  Login or create an account
+                </Button>
+              </div>
+            </Grid>
+            <Grid item xs={12} md={6} className={classes.gridItem}>
+              <div className={classes.gridItemInner}>
+                <div className={classes.subText}>
+                  Are you an instructor/institution looking to use UAssign for
+                  your courses?
+                </div>
+                <Button
+                  component="a"
+                  href="mailto:sales@uassign.app"
+                  className={classes.loginButton}
+                >
+                  Contact sales@uassign.app
+                </Button>
+              </div>
+            </Grid>
+          </Grid>
         </div>
       </div>
     </>

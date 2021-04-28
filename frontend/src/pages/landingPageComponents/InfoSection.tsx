@@ -51,7 +51,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   heading: {
     lineHeight: '1.1',
-    marginBottom: '10px',
+    marginBottom: theme.spacing(2),
     fontSize: '48px',
     fontWeight: 700,
   },
@@ -100,11 +100,11 @@ const InfoSection = () => {
             <Grid item xs={12} md={6} className={classes.textWrapper}>
               <div className={classes.topLine}>Mission</div>
               <div className={classes.heading}>
-                Taking the next step in innovation
+                Simplifying Programming Assignments
               </div>
               <div className={classes.subHeading}>
-                A platform that enables institutions with the ability of
-                automated testing
+                We're a complete platform for programming assignments,
+                streamlining submissions and marking with automated testing
               </div>
             </Grid>
             <Grid item xs={12} md={6} className={classes.imgWrapper}>

@@ -51,9 +51,9 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   heading: {
     lineHeight: '1.1',
-    marginBottom: '10px',
     fontSize: '48px',
     fontWeight: 700,
+    marginBottom: theme.spacing(2),
   },
   subHeading: {
     color: theme.palette.getContrastText('#111'),
@@ -103,8 +103,8 @@ const InfoSection2 = () => {
                 Accepting a variety of different languages
               </div>
               <div className={classes.subHeading}>
-                Enables code submissions in many languages such as Python, C++,
-                Java, etc...
+                We support custom and flexible compile scripts for running
+                Python, C/C++ and Java code, with support for more on the way!
               </div>
             </Grid>
             <Grid item xs={12} md={6} className={classes.imgWrapper}>
