@@ -16,7 +16,9 @@ ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk/
 COPY ./ ./
 RUN npm install && \
 npm run bld && \
+echo "start thing" && \
 ls && \
+ehco "end thing" && \
 cd dist && \
 ls && \
 cd .. && \
