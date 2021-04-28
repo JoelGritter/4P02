@@ -3,6 +3,7 @@ FROM public.ecr.aws/lambda/nodejs:12
 RUN ulimit -n 1024 && \
 yum update -y && \
 yum install -y unzip \
+echo \
 dos2unix \
 clang \
 cmake \
