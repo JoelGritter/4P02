@@ -168,7 +168,7 @@ export default function CoursesPage() {
   return (
     <>
       <Helmet>
-        <title>uAssign - {course?.name || 'Course Loading...'}</title>
+        <title>UAssign - {course?.name || 'Course Loading...'}</title>
       </Helmet>
       <div className={classes.root}>
         {assignments && course && (

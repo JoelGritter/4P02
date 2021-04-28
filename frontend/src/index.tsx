@@ -13,7 +13,7 @@ ReactDOM.render(
     <RecoilRoot>
       <HelmetProvider>
         <Helmet>
-          <title>uAssign</title>
+          <title>UAssign</title>
         </Helmet>
         <Router>
           <ScrollToTop />

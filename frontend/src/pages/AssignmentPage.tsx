@@ -100,7 +100,7 @@ export default function AssignmentPage() {
       {assignment && course && (
         <>
           <Helmet>
-            <title>uAssign - {assignment?.name || 'Course Loading...'}</title>
+            <title>UAssign - {assignment?.name || 'Assignment Loading...'}</title>
           </Helmet>
           <div className={classes.header}>
             <Typography
