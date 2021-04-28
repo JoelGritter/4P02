@@ -41,6 +41,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     float: 'right',
   },
   assignHeader: {
+    fontWeight: 700,
     marginTop: theme.spacing(2),
     marginBottom: theme.spacing(1),
   },
@@ -53,7 +54,9 @@ const useStyles = makeStyles((theme: Theme) => ({
     maxHeight: 435,
   },
   assignmentContainer: {},
-  createCourseButton: {},
+  createCourseButton: {
+    backgroundColor: '#fff',
+  },
 }));
 
 export interface ConfirmationDialogRawProps {
@@ -167,7 +170,13 @@ export default function CoursesPage() {
         {assignments && course && (
           <>
             <div className={classes.header}>
-              <Typography variant="h4">{course.name}</Typography>
+              <Typography
+                variant="h4"
+                color="primary"
+                style={{ fontWeight: 700 }}
+              >
+                {course.name}
+              </Typography>
               <div className={classes.headerIcons}>
                 {editAccess && (
                   <Tooltip title="Edit Course">

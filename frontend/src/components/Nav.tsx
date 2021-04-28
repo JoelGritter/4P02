@@ -38,6 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       display: 'flex',
+      // backgroundColor: 'yellow',
     },
     drawer: {
       [theme.breakpoints.up('sm')]: {
@@ -46,6 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
       },
     },
     appBar: {
+      backgroundColor: '#fff',
       [theme.breakpoints.up('sm')]: {
         width: `calc(100% - ${drawerWidth}px)`,
         marginLeft: drawerWidth,
@@ -63,6 +65,7 @@ const useStyles = makeStyles((theme: Theme) =>
       ...theme.mixins.toolbar,
       display: 'flex',
       alignItems: 'center',
+      justifyContent: 'center',
       paddingLeft: theme.spacing(2),
     },
     drawerPaper: {
@@ -87,6 +90,9 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 35,
       width: 35,
       marginRight: theme.spacing(1),
+    },
+    logoName: {
+      fontWeight: 700,
     },
   })
 );
@@ -308,7 +314,12 @@ export default function Nav(props: Props) {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap>
+          <Typography
+            variant="h6"
+            color="primary"
+            noWrap
+            className={classes.logoName}
+          >
             UAssign
           </Typography>
         </Toolbar>

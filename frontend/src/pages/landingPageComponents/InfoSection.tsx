@@ -8,7 +8,7 @@ import testImage from './pageAssets/undraw_split_testing_l1uw.png';
 const useStyles = makeStyles((theme: Theme) => ({
   infoContainer: {
     color: '#000',
-    backgroundColor: '#fdd',
+    backgroundColor: '#ccddff',
   },
   infoWrapper: {
     display: 'grid',
@@ -67,7 +67,7 @@ const useStyles = makeStyles((theme: Theme) => ({
     borderRadius: 50,
     padding: '8px 20px',
     '&:hover': {
-      backgroundColor: '#fcc',
+      backgroundColor: '#6699ff',
       transition: '0.5s',
     },
   },

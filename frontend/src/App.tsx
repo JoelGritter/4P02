@@ -81,10 +81,13 @@ const App = () => {
     palette: {
       type: darkMode ? 'dark' : 'light',
       primary: {
-        main: '#d50000',
+        main: '#0055ff',
       },
       secondary: {
         main: '#757575',
+      },
+      background: {
+        default: `#00000015`,
       },
     },
     typography: {
