@@ -16,8 +16,9 @@ ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk/
 COPY ./ ./
 RUN npm install
 RUN npm run bld
+RUN ls
 RUN rm -rf app 
 RUN mv dist app
-RUN ls app
+RUN ls
 
 CMD ["app/handler.getAllNotes"]
