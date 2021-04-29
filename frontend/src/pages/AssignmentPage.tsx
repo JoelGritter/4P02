@@ -184,9 +184,10 @@ export default function AssignmentPage() {
 
 function ProfAssignmentPage() {
   const { courseId, id }: { courseId: string; id: string } = useParams();
-  const { data: submissions } = useGet<Submission[]>(
+  const { data: submissions, mutate: mutateSubmissions } = useGet<Submission[]>(
     `/assign/submissions/${id}/`
   );
+  const { data: assignment } = useGet<Assignment>(`/assign/${id}`);
 
   const classes = useStyles();
 
@@ -205,7 +206,12 @@ function ProfAssignmentPage() {
             {submissions?.map((s: Submission) => {
               return (
                 <Grid item xs={12} key={s._id}>
-                  <SubmissionCard submission={s} courseID={courseId} />
+                  <SubmissionCard
+                    submission={s}
+                    courseID={courseId}
+                    assignment={assignment}
+                    mutateSubmission={mutateSubmissions}
+                  />
                 </Grid>
               );
             })}

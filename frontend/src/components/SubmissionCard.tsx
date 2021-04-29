@@ -18,14 +18,12 @@ import useGet from '../api/data/use-get';
 import User from '../api/data/models/user.model';
 import { post, update } from '../api/util';
 import { useSnackbar } from 'notistack';
+import Assignment from '../api/data/models/assignment.model';
+import TestCases from './TestCases';
 
 const useStyles = makeStyles((theme) => ({
   root: {},
-  contentContainer: {
-    display: 'flex',
-    justifyContent: 'space-between',
-    flexDirection: 'row',
-  },
+  contentContainer: {},
   cardDate: {
     display: 'flex',
     [theme.breakpoints.up('md')]: {
@@ -45,12 +43,16 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 interface SubmissionCardProps {
+  assignment: Assignment;
   submission: Submission;
+  mutateSubmission?: any;
   courseID: String;
 }
 
 const SubmissionCard: React.FC<SubmissionCardProps> = ({
+  assignment,
   submission,
+  mutateSubmission,
   courseID,
 }) => {
   const classes = useStyles();
@@ -94,6 +96,11 @@ const SubmissionCard: React.FC<SubmissionCardProps> = ({
             </Typography>
           </Grid>
         </Grid>
+        <TestCases
+          assignment={assignment}
+          submission={submission}
+          mutateSub={mutateSubmission}
+        />
       </CardContent>
       <CardActions>
         <Button

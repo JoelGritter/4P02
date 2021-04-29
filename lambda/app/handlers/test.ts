@@ -61,15 +61,15 @@ function runCode(
 
 export const getTestResult = lambda(
   auth(async (event, context, { userDoc }) => {
-    const { assignmentId, testCaseId } = parseBody<any>(event);
-
+    const { assignmentId, testCaseId, owner: reqOwner } = parseBody<any>(event);
+    const owner = reqOwner ?? userDoc.cognitoId;
     const submission = await SubmissionModel.findOne({
-      owner: userDoc.cognitoId,
+      owner,
       assignID: assignmentId,
     });
 
     if (!submission) {
-      return badRequest('Submission does not exists');
+      return badRequest('Submission does not exist');
     }
 
     const assignment = await AssignmentModel.findById(assignmentId);
@@ -133,7 +133,7 @@ export const getTestResult = lambda(
     // Get and unzip file
     const zipObj = await s3.getObject({
       Bucket: 'uassign-api-dev-s3bucket-1ubat74rzbquo',
-      Key: `submissions/${course._id}}/${assignment._id}/${userDoc.cognitoId}/${submission.codeZip}`,
+      Key: `submissions/${course._id}}/${assignment._id}/${owner}/${submission.codeZip}`,
     });
 
     const body = zipObj.Body;

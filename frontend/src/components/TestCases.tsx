@@ -98,6 +98,7 @@ const TestCases: React.FC<TestCasesProps> = ({
             const { success, message } = await testsApiPost('getTestResult', {
               testCaseId: tCase._id,
               assignmentId: assignment._id,
+              owner: submission.owner,
             });
             if (success) {
               mutateSub && mutateSub();
@@ -112,6 +113,17 @@ const TestCases: React.FC<TestCasesProps> = ({
   }, [testCasesDep, submissionDateDep]);
 
   const classes = useStyles();
+
+  const resCases = [];
+
+  if (assignment) {
+    for (let tCase of assignment.testCases) {
+      resCases.push({
+        id: tCase._id,
+        res: tCase._id ? submission.testCaseResults[tCase._id] : null,
+      });
+    }
+  }
 
   return (
     <>
@@ -128,23 +140,17 @@ const TestCases: React.FC<TestCasesProps> = ({
               textColor="secondary"
               className={classes.tabs}
             >
-              {assignment.testCases.map((tCase) => {
-                const caseRes = tCase._id
-                  ? submission.testCaseResults[tCase._id]
-                  : null;
-                return (
-                  <Tab
-                    key={tCase._id}
-                    label={
-                      <TestCaseIndicator
-                        loading={!caseRes}
-                        correct={!!caseRes?.correct}
-                        key={tCase._id}
-                      />
-                    }
-                  />
-                );
-              })}
+              {resCases.map((caseRes) => (
+                <Tab
+                  key={caseRes.id}
+                  label={
+                    <TestCaseIndicator
+                      loading={!caseRes.res}
+                      correct={!!caseRes.res?.correct}
+                    />
+                  }
+                />
+              ))}
             </Tabs>
             {currResCase && (
               <>

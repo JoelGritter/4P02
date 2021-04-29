@@ -10,7 +10,7 @@
     "deploy": "serverless deploy",
     "deploy-docker": "serverless deploy -c serverless.docker.yml",
     "test": "cross-env NODE_ENV=dev mocha -r ts-node/register tests/*.test.ts --exit",
-    "coverage": "nyc --reporter lcov npm run test",
+    "coverage": "nyc --reporter lcov npm run test && opener ./coverage/lcov-report/index.html",
     "bld": "tsc --outDir dist"
   },
   "dependencies": {
@@ -45,6 +45,7 @@
     "mock-require": "^3.0.3",
     "nock": "^13.0.11",
     "nyc": "^15.0.1",
+    "opener": "^1.5.2",
     "serverless": "^2.35.0",
     "serverless-apigateway-service-proxy": "^1.14.0",
     "serverless-offline": "^5.12.1",
