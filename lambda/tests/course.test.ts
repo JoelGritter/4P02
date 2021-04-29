@@ -21,6 +21,7 @@ describe('Admin course tests', () => {
       },
       fakeCourse
     );
+    s.restore();
   });
 
   it('Course Get', async () => {
@@ -35,6 +36,7 @@ describe('Admin course tests', () => {
       fakeCourse,
       { id: fakeCourse.id }
     );
+    f.restore();
   });
 
   //Switch account to Prof?
@@ -42,35 +44,38 @@ describe('Admin course tests', () => {
     const { getAllAssociated } = require('../app/handlers/course');
 
     const f = mock(CourseModel);
-    f.expects('find').exactly(3).resolves(fakeCourse);
+    f.expects('find').exactly(3).resolves([fakeCourse]);
     await expectSuccess(
       getAllAssociated,
       (data) => {
-        expect(data).deep.equal(fakeCourse);
+        expect(data[0]).deep.equal(fakeCourse);
       },
       fakeCourse
     );
+    f.restore();
   });
 
   it('Get All Courses', async () => {
     const { getAll } = require('../app/handlers/course');
 
+    const f = mock(CourseModel);
+    f.expects('find').exactly(1).resolves([fakeCourse]);
     await expectSuccess(
       getAll,
       (data) => {
-        expect(data).deep.equal(fakeCourse);
+        expect(data[0]).deep.equal(fakeCourse);
       },
       fakeCourse
     );
+    f.restore();
   });
 
   it('Course Update', async () => {
     const { updateCourse } = require('../app/handlers/course');
 
     const f = mock(CourseModel);
-    const s = mock(CourseModel);
     f.expects('findById').exactly(1).resolves(fakeCourse);
-    s.expects('findByIdAndUpdate').exactly(1).resolves(fakeCourse);
+    f.expects('findByIdAndUpdate').exactly(1).resolves(fakeCourse);
     await expectSuccess(
       updateCourse,
       (data) => {
@@ -79,6 +84,7 @@ describe('Admin course tests', () => {
       fakeCourse,
       { id: fakeCourse.id }
     );
+    f.restore();
   });
 
   it('Course Deletion', async () => {
@@ -94,6 +100,7 @@ describe('Admin course tests', () => {
       fakeCourse,
       { id: fakeCourse.id }
     );
+    s.restore();
   });
 
   after(() => {
