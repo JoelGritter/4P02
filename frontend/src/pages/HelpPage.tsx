@@ -1,7 +1,11 @@
 import React from 'react';
-import { createStyles } from '@material-ui/core';
-import Typography from '@material-ui/core/Typography';
-import Grid from '@material-ui/core/Grid';
+import {
+  Button,
+  createStyles,
+  Divider,
+  Grid,
+  Typography,
+} from '@material-ui/core';
 import { makeStyles, Theme } from '@material-ui/core/styles';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -12,6 +16,20 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     fieldsContainer: {
       marginTop: theme.spacing(1),
+    },
+    supportButton: {
+      fontWeight: 700,
+      fontSize: '14px',
+      color: '#fff',
+      marginTop: '15px',
+      backgroundColor: theme.palette.primary.main,
+      borderRadius: 50,
+      padding: '8px 30px',
+      '&:hover': {
+        backgroundColor: '#6699ff',
+        transition: '0.5s',
+      },
+      textAlign: 'center',
     },
   })
 );
@@ -27,7 +45,7 @@ export default function HelpPage() {
       <Grid container spacing={2} className={classes.fieldsContainer}>
         <Grid item xs={12}>
           <Typography
-            variant="body1"
+            variant="h5"
             color="textPrimary"
             className={classes.headers}
           >
@@ -84,6 +102,29 @@ export default function HelpPage() {
           </code>
         </Grid>
       </Grid>
+      <br />
+      <Divider />
+      <br />
+      <div>
+        <Typography
+          variant="h5"
+          color="textPrimary"
+          className={classes.headers}
+        >
+          Professor Access
+        </Typography>
+        <p>
+          Don't have access to professor permissions, but should? Contact us and
+          we'll make things right!
+        </p>
+        <Button
+          component="a"
+          href="mailto:support@uassign.app"
+          className={classes.supportButton}
+        >
+          Contact support@uassign.app
+        </Button>
+      </div>
     </>
   );
 }
