@@ -5,9 +5,8 @@ import { LambdaCallback } from '../../app/types/lambdaCallback';
 import * as wrappers from '../../app/util/wrappers';
 import { stub, mock } from 'sinon';
 import * as mongoExports from './../../app/util/mongo';
-
 // Emulates a mongodb document
-export function fakeDocument(obj): any {
+export function fakeDocument(obj: any): any {
   return {
     ...obj,
     toObject: () => ({ ...obj }),
@@ -16,6 +15,8 @@ export function fakeDocument(obj): any {
 
 // Call as first import, mocks the auth wrapper to return 'user' as the current logged in user
 export function mockAuth(user = fakeUser) {
+  // console.log('Mock auth called', { user });
+  // console.trace();
   const mockAuthWrapper: (c: LambdaCallback) => LambdaCallback = (callback) => {
     return async (event, context, options) => {
       return await callback(event, context, {
@@ -51,8 +52,9 @@ export const expectSuccess = async (
   if (body !== undefined) {
     event.body = JSON.stringify(body);
   }
-  await meTest.event(event).expectResult((result: any) => {
+  await meTest.event(event).expectResolve((result: any) => {
     const body = JSON.parse(result.body);
+    // console.log({ result });
     callback(body.data);
   });
 };

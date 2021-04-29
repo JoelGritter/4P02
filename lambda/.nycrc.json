@@ -1,0 +1,12 @@
+{
+  "all": true,
+  "report-dir": "./coverage",
+  "extension": [".ts"],
+  "exclude": [
+    "app/schemas/**.ts",
+    "app/types/**.ts",
+    "app/handler.ts",
+    "coverage",
+    "tests"
+  ]
+}
