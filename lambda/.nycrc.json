@@ -2,5 +2,11 @@
   "all": true,
   "report-dir": "./coverage",
   "extension": [".ts"],
-  "exclude": ["app/model/dto/**.ts", "app/model/vo/**.ts", "coverage", "tests"]
+  "exclude": [
+    "app/schemas/**.ts",
+    "app/types/**.ts",
+    "app/handler.ts",
+    "coverage",
+    "tests"
+  ]
 }
