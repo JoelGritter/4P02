@@ -12,6 +12,7 @@ import Assignment, {
   emptyAssignment,
 } from '../../api/data/models/assignment.model';
 import AssignmentForm from '../../components/AssignmentForm';
+import useMe from '../../api/data/use-me';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -57,6 +58,9 @@ export default function EditCoursePage() {
   const resAssignment = editAssignment;
   const history = useHistory();
 
+  const { isProf, isAdmin } = useMe();
+  const hasEditAccess = isProf || isAdmin;
+
   const updateAssignment = async () => {
     const { success, message, data } = await put(
       `/assign/${id}`,
@@ -73,7 +77,7 @@ export default function EditCoursePage() {
 
   return (
     <div className={classes.root}>
-      {assignment && (
+      {assignment && hasEditAccess && (
         <>
           <div className={classes.headerContainer}>
             <Typography

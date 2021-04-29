@@ -10,6 +10,7 @@ import Assignment, {
 } from '../../api/data/models/assignment.model';
 import { useParams } from 'react-router-dom';
 import { useHistory } from 'react-router';
+import useMe from '../../api/data/use-me';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -35,6 +36,9 @@ export default function CreateAssignmentPage() {
   const [assignment, setAssignment] = useState<Assignment>(emptyAssignment);
   const history = useHistory();
 
+  const { isProf, isAdmin } = useMe();
+  const hasEditAccess = isProf || isAdmin;
+
   const addAssignment = async () => {
     assignment.courseID = courseId;
     const { success, message, data } = await post('/assign', assignment);
@@ -50,37 +54,48 @@ export default function CreateAssignmentPage() {
 
   return (
     <div className={classes.root}>
-      <div className={classes.headerContainer}>
-        <Typography variant="h4" color="primary" style={{ fontWeight: 700 }}>
-          Create Assignment
-        </Typography>
-        <div className={classes.buttonContainer}>
-          <Button
-            variant="outlined"
-            color="secondary"
-            className={classes.button}
-            onClick={() => {
-              setAssignment({
-                ...emptyAssignment,
-                courseID: courseId,
-              });
-            }}
-          >
-            Clear
-          </Button>
-          <Button
-            variant="contained"
-            color="primary"
-            className={classes.button}
-            onClick={addAssignment}
-          >
-            Create
-          </Button>
-        </div>
-      </div>
-      <div className={classes.fieldsContainer}>
-        <AssignmentForm assignment={assignment} setAssignment={setAssignment} />
-      </div>
+      {hasEditAccess && (
+        <>
+          <div className={classes.headerContainer}>
+            <Typography
+              variant="h4"
+              color="primary"
+              style={{ fontWeight: 700 }}
+            >
+              Create Assignment
+            </Typography>
+            <div className={classes.buttonContainer}>
+              <Button
+                variant="outlined"
+                color="secondary"
+                className={classes.button}
+                onClick={() => {
+                  setAssignment({
+                    ...emptyAssignment,
+                    courseID: courseId,
+                  });
+                }}
+              >
+                Clear
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                onClick={addAssignment}
+              >
+                Create
+              </Button>
+            </div>
+          </div>
+          <div className={classes.fieldsContainer}>
+            <AssignmentForm
+              assignment={assignment}
+              setAssignment={setAssignment}
+            />
+          </div>
+        </>
+      )}
     </div>
   );
 }

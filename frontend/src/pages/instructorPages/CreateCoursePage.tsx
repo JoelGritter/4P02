@@ -7,6 +7,7 @@ import { CourseForm } from '../../components/CourseForm';
 import { post } from '../../api/util';
 import Course, { emptyCourse } from '../../api/data/models/course.model';
 import { useHistory } from 'react-router';
+import useMe from '../../api/data/use-me';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -35,6 +36,9 @@ export default function CreateCoursePage() {
   const [course, setCourse] = useState<Course>(emptyCourse);
   const history = useHistory();
 
+  const { isProf, isAdmin } = useMe();
+  const hasEditAccess = isProf || isAdmin;
+
   const addCourse = async () => {
     const { success, message, data } = await post('/course', course);
     if (!success) {
@@ -49,34 +53,42 @@ export default function CreateCoursePage() {
 
   return (
     <div className={classes.root}>
-      <div className={classes.headerContainer}>
-        <Typography variant="h4" color="primary" style={{ fontWeight: 700 }}>
-          Create Course
-        </Typography>
-      </div>
-      <div className={classes.fieldsContainer}>
-        <CourseForm course={course} setCourse={setCourse} />
-      </div>
-      <div className={classes.buttonContainer}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          className={classes.button}
-          onClick={() => {
-            setCourse(emptyCourse);
-          }}
-        >
-          Clear
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          className={classes.button}
-          onClick={addCourse}
-        >
-          Create
-        </Button>
-      </div>
+      {hasEditAccess && (
+        <>
+          <div className={classes.headerContainer}>
+            <Typography
+              variant="h4"
+              color="primary"
+              style={{ fontWeight: 700 }}
+            >
+              Create Course
+            </Typography>
+          </div>
+          <div className={classes.fieldsContainer}>
+            <CourseForm course={course} setCourse={setCourse} />
+          </div>
+          <div className={classes.buttonContainer}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              className={classes.button}
+              onClick={() => {
+                setCourse(emptyCourse);
+              }}
+            >
+              Clear
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              className={classes.button}
+              onClick={addCourse}
+            >
+              Create
+            </Button>
+          </div>
+        </>
+      )}
     </div>
   );
 }
