@@ -14,10 +14,9 @@ yum clean all
 ENV JAVA_HOME /usr/lib/jvm/java-1.8.0-openjdk/
 
 COPY ./ ./
-RUN npm install
-RUN npm run bld
-RUN rm -rf app 
-RUN mv dist app
-RUN ls app
+RUN npm install && \
+npm run bld && \
+rm -rf app && \
+mv dist app
 
 CMD ["app/handler.getAllNotes"]

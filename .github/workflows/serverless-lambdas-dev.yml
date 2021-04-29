@@ -32,7 +32,7 @@ jobs:
       - name: Deploy 🚀
         run: |
           cd lambda
-          touch .env 
+          touch .env
           echo "DB=${{ secrets.DB_DEV }}" >> .env
           echo "USER_POOL_ID=${{ secrets.USER_POOL_ID }}" >> .env
           echo "USER_POOL_CLIENT_ID=${{ secrets.USER_POOL_CLIENT_ID }}" >> .env
