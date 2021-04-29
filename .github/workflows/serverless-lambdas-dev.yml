@@ -38,20 +38,4 @@ jobs:
           echo "USER_POOL_CLIENT_ID=${{ secrets.USER_POOL_CLIENT_ID }}" >> .env
           serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           serverless deploy
-  docker-deploy:
-    needs: deploy
-    name: Deploy docker
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Install Dependencies and Deploy
-        run: |
-          cd lambda
-          npm install -g serverless
-          npm install
-          touch .env 
-          echo "DB=${{ secrets.DB_DEV }}" >> .env
-          echo "USER_POOL_ID=${{ secrets.USER_POOL_ID }}" >> .env
-          echo "USER_POOL_CLIENT_ID=${{ secrets.USER_POOL_CLIENT_ID }}" >> .env
-          serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           serverless deploy -c serverless.docker.yml
