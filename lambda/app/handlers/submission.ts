@@ -45,7 +45,9 @@ export const getAssignmentSubmissions = lambda(
     const aID = event.pathParameters.id;
     const reqUser = userDoc as User;
     const assignment = await AssignmentModel.findById(aID);
+    console.log('KEDHKGKDHGDHD');
     if (await validateElevatedPrivileges(assignment, reqUser)) {
+      console.log('IBHBFHFHF');
       const subs = await SubmissionModel.find({
         assignID: aID,
       });
@@ -71,6 +73,7 @@ export const submit = lambda(
     sub.submissionDate = new Date(); // Handle sub date on backend -> circumvent frontend canoodling
     sub.grade = 0; // students trying to give themselves a grade? HA! Get dunked on kiddo.
     sub.feedback = '';
+    delete sub.testCaseResults; // CLMS-97
 
     // validate submission date
     const assign = await AssignmentModel.findById(aID);
