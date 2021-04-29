@@ -11,6 +11,7 @@ import useGet from '../../api/data/use-get';
 import { Link } from 'react-router-dom';
 import RequestStatus from '../../components/RequestStatus';
 import useAssociatedCourses from '../../api/data/use-associated-courses';
+import useMe from '../../api/data/use-me';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -46,6 +47,9 @@ export default function EditCoursePage() {
 
   const [editCourse, setEditCourse] = useState<Course>({});
 
+  const { isProf, isAdmin } = useMe();
+  const hasEditAccess = isProf || isAdmin;
+
   const resCourse = { ...course, ...editCourse };
   const history = useHistory();
 
@@ -63,7 +67,7 @@ export default function EditCoursePage() {
 
   return (
     <div className={classes.root}>
-      {course && (
+      {course && hasEditAccess && (
         <>
           <div className={classes.headerContainer}>
             <Typography
