@@ -83,7 +83,11 @@ const TestCases: React.FC<TestCasesProps> = ({
     assignment?.testCases.length > 0 && assignment.testCases[value];
 
   const currResCase =
-    currCase && currCase._id && submission?.testCaseResults[currCase._id];
+    currCase &&
+    currCase._id &&
+    submission &&
+    submission.testCaseResults &&
+    submission.testCaseResults[currCase._id];
 
   const testCasesDep = JSON.stringify(assignment?.testCases);
   const submissionDateDep = JSON.stringify(submission.submissionDate);
@@ -92,7 +96,11 @@ const TestCases: React.FC<TestCasesProps> = ({
     (async () => {
       if (submission && assignment) {
         for (const tCase of assignment.testCases) {
-          const resCase = tCase._id && submission.testCaseResults[tCase._id];
+          const resCase =
+            tCase._id &&
+            submission &&
+            submission.testCaseResults &&
+            submission.testCaseResults[tCase._id];
 
           if (!resCase && tCase._id) {
             const { success, message } = await testsApiPost('getTestResult', {
@@ -120,7 +128,11 @@ const TestCases: React.FC<TestCasesProps> = ({
     for (let tCase of assignment.testCases) {
       resCases.push({
         id: tCase._id,
-        res: tCase._id ? submission.testCaseResults[tCase._id] : null,
+        res: tCase._id
+          ? submission &&
+            submission.testCaseResults &&
+            submission.testCaseResults[tCase._id]
+          : null,
       });
     }
   }

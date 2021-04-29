@@ -9,7 +9,7 @@ export default interface Submission {
   grade: number; // marker assigned grade
   feedback: string; // marker feedback (global to entire submission)
   outputs: string[]; // automat1ed test outputs for this submission
-  testCaseResults: { [key: string]: TestCaseResult };
+  testCaseResults?: { [key: string]: TestCaseResult };
 }
 
 export interface TestCaseResult extends Document {
