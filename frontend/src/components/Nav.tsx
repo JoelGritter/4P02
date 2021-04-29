@@ -112,7 +112,7 @@ export default function Nav(props: Props) {
   const { me } = useMe();
   const isAdmin = me?.roles?.includes('admin');
 
-  const { studentCourses, profCourses } = useAssociatedCourses();
+  const { studentCourses, modCourses, profCourses } = useAssociatedCourses();
 
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
@@ -177,6 +177,26 @@ export default function Nav(props: Props) {
               </ListSubheader>
             )}
             {profCourses?.map((course) => (
+              <ListItem
+                button
+                key={course._id}
+                className={classes.nested}
+                component={Link}
+                selected={pathStartsWith(`/courses/${course._id}`)}
+                to={`/courses/${course._id}`}
+                onClick={() => {
+                  setMobileOpen(false);
+                }}
+              >
+                <ListItemText primary={course.name} />
+              </ListItem>
+            ))}
+            {modCourses && modCourses.length > 0 && (
+              <ListSubheader className={classes.nested}>
+                My TA Courses
+              </ListSubheader>
+            )}
+            {modCourses?.map((course) => (
               <ListItem
                 button
                 key={course._id}

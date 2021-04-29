@@ -27,6 +27,9 @@ export default function useAssociatedCourses(options?: ConfigInterface) {
       courses?.filter((course) =>
         course.currentProfessors?.includes(me.cognitoId)
       ),
+    modCourses:
+      me &&
+      courses?.filter((course) => course.moderators?.includes(me.cognitoId)),
     studentCourses:
       me &&
       courses?.filter((course) => course.students?.includes(me.cognitoId)),

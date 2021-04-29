@@ -3,6 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import ProfCourses from './components/ProfCourses';
+import ModCourses from './components/ModCourses';
 import StudentCourses from './components/StudentCourses';
 import useAssociatedCourses from '../../api/data/use-associated-courses';
 import emptyImage from '../../assets/undraw_empty_xct9.svg';
@@ -93,6 +94,7 @@ export default function HomePage() {
       <Grid container spacing={1}>
         <Grid item xs={12} className={classes.coursesContainer}>
           {isProf && <ProfCourses />}
+          <ModCourses />
           <StudentCourses />
           {nothing && (
             <div className={classes.emptyContainer}>
