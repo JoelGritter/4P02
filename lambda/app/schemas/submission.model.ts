@@ -7,6 +7,7 @@ export interface TestCaseResult extends Document {
   actualOutput: string;
   correct: boolean;
   hidden: boolean;
+  errorMessage: string;
 }
 
 export interface Submission extends Document {

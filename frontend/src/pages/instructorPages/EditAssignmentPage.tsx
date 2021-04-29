@@ -62,6 +62,15 @@ export default function EditCoursePage() {
   const hasEditAccess = isProf || isAdmin;
 
   const updateAssignment = async () => {
+    if (
+      JSON.stringify(assignment?.testCases) !==
+      JSON.stringify(resAssignment?.testCases)
+    ) {
+      for (const cs of resAssignment?.testCases) {
+        delete cs._id;
+      }
+    }
+
     const { success, message, data } = await put(
       `/assign/${id}`,
       resAssignment

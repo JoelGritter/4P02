@@ -85,6 +85,9 @@ const TestCases: React.FC<TestCasesProps> = ({
   const currResCase =
     currCase && currCase._id && submission?.testCaseResults[currCase._id];
 
+  const testCasesDep = JSON.stringify(assignment?.testCases);
+  const submissionDateDep = JSON.stringify(submission.submissionDate);
+
   useEffect(() => {
     (async () => {
       if (submission && assignment) {
@@ -106,7 +109,7 @@ const TestCases: React.FC<TestCasesProps> = ({
       }
     })();
     // eslint-disable-next-line
-  }, [JSON.stringify(assignment), JSON.stringify(submission.submissionDate)]);
+  }, [testCasesDep, submissionDateDep]);
 
   const classes = useStyles();
 

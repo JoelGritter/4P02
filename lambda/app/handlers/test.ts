@@ -21,7 +21,9 @@ function runCode(
   codePath: string,
   testCase: TestCase
 ): Promise<TestCaseResult> {
-  return new Promise((resolve, reject) => {
+  const expectedOutput = testCase.output.trim();
+
+  const codePromise = new Promise<TestCaseResult>((resolve, reject) => {
     // Run stuff
     cd(codePath);
     exec('touch compile_and_run.sh', () => {
@@ -29,7 +31,6 @@ function runCode(
       exec(`chmod +x compile_and_run.sh`);
       echo(testCase.input).exec('env -i sh compile_and_run.sh', (c, s, e) => {
         const actualOutput = cat('out.txt').trim();
-        const expectedOutput = testCase.output.trim();
         resolve({
           input: testCase.input,
           expectedOutput,
@@ -40,6 +41,22 @@ function runCode(
       });
     });
   });
+
+  const timeoutPromise = new Promise<TestCaseResult>((resolve, reject) =>
+    setTimeout(
+      () =>
+        resolve({
+          input: testCase.input,
+          expectedOutput,
+          actualOutput: 'Timeout',
+          correct: false,
+          hidden: testCase.hidden,
+          errorMessage: 'Timeout',
+        } as TestCaseResult),
+      4000
+    )
+  );
+  return Promise.race<TestCaseResult>([codePromise, timeoutPromise]);
 }
 
 export const getTestResult = lambda(
