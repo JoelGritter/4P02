@@ -18,10 +18,10 @@ COPY ./ ./
 RUN npm install && \
 npm run bld && \
 echo "start thing" && \
-ls -R && \
+ls && \
 echo "end thing" && \
 cd dist && \
-ls -R && \
+ls && \
 echo "end thing 2" && \
 cd .. && \
 rm -rf app && \
