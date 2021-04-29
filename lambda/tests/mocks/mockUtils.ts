@@ -1,4 +1,3 @@
-import { Role } from './../../app/schemas/user.model';
 import lambdaTester from 'lambda-tester';
 import { Handler } from 'aws-lambda';
 import { fakeUser } from './user.mock';
@@ -6,10 +5,8 @@ import { LambdaCallback } from '../../app/types/lambdaCallback';
 import * as wrappers from '../../app/util/wrappers';
 import { stub, mock } from 'sinon';
 import * as mongoExports from './../../app/util/mongo';
-import { checkRole } from '../../app/util/wrappers';
-import { unauthorized } from '../../app/util/rest';
 // Emulates a mongodb document
-export function fakeDocument(obj): any {
+export function fakeDocument(obj: any): any {
   return {
     ...obj,
     toObject: () => ({ ...obj }),
@@ -29,24 +26,6 @@ export function mockAuth(user = fakeUser) {
     };
   };
   stub(wrappers, 'auth').callsFake(mockAuthWrapper);
-  // const mockRoleAuthWrapper: (
-  //   roles: Role[],
-  //   c: LambdaCallback
-  // ) => LambdaCallback = (roles, callback) => {
-  //   return async (event, context, options) => {
-  //     // console.log('It get here', { user, check: checkRole(roles, user) });
-  //     if (checkRole(roles, user)) {
-  //       const res = await callback(event, context, {
-  //         ...options,
-  //         userDoc: fakeDocument(user),
-  //       });
-  //       return res;
-  //     } else {
-  //       return unauthorized();
-  //     }
-  //   };
-  // };
-  // stub(wrappers, 'roleAuth').callsFake(mockRoleAuthWrapper);
 }
 
 // returns a promise that resolves to a given object
@@ -79,9 +58,3 @@ export const expectSuccess = async (
     callback(body.data);
   });
 };
-
-export function clearRequireCache() {
-  Object.keys(require.cache).forEach(function (key) {
-    delete require.cache[key];
-  });
-}

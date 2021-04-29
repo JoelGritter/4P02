@@ -1,10 +1,5 @@
 import { fakeUser, fakeAdmin, fakeProf } from './mocks/user.mock';
-import {
-  clearRequireCache,
-  expectSuccess,
-  mockAuth,
-  usesDb,
-} from './mocks/mockUtils';
+import { expectSuccess, mockAuth } from './mocks/mockUtils';
 import sinon, { mock } from 'sinon';
 import { expect } from 'chai';
 import UserModel from '../app/schemas/user.model';
