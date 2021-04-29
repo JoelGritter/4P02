@@ -91,7 +91,7 @@ export const updateCourse = lambda(
       if (newCourse._id) delete newCourse._id;
 
       // prevent professor from removing themselves from course
-      if (!newCourse.currentProfessors.includes(cognitoId)) {
+      if (resCourse.currentProfessors?.includes(cognitoId)) {
         newCourse.currentProfessors.push(cognitoId);
       }
 
