@@ -45,9 +45,7 @@ export const getAssignmentSubmissions = lambda(
     const aID = event.pathParameters.id;
     const reqUser = userDoc as User;
     const assignment = await AssignmentModel.findById(aID);
-    console.log('KEDHKGKDHGDHD');
     if (await validateElevatedPrivileges(assignment, reqUser)) {
-      console.log('IBHBFHFHF');
       const subs = await SubmissionModel.find({
         assignID: aID,
       });
