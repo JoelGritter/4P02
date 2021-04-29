@@ -1,35 +1,30 @@
 import { fakeUser, fakeAdmin, fakeProf } from './mocks/user.mock';
 import {
+  clearRequireCache,
+  expectSuccess,
   mockAuth,
   usesDb,
-  expectSuccess,
-  fakeDocument,
 } from './mocks/mockUtils';
-import { mock } from 'sinon';
-import {
-  me,
-  updateMe,
-  addProf,
-  removeProf,
-  addAdmin,
-  removeAdmin,
-  getPublic,
-  get,
-  getAllProfPublic,
-  getAll,
-  getAllPublic,
-} from './../app/handlers/user';
+import sinon, { mock } from 'sinon';
 import { expect } from 'chai';
 import UserModel from '../app/schemas/user.model';
 
-describe('Logged in user', () => {
+describe('User tests', () => {
+  before(() => {
+    clearRequireCache();
+    usesDb();
+    mockAuth(fakeAdmin);
+  });
+
   it('Get current logged in user', async () => {
+    const { me } = require('../app/handlers/user');
     await expectSuccess(me, (data) => {
       expect(data).deep.equal(fakeAdmin);
     });
   });
 
   it('Add user as prof', async () => {
+    const { addProf } = require('../app/handlers/user');
     const s = mock(UserModel);
     s.expects('findOne').exactly(1).resolves(fakeProf);
     await expectSuccess(
@@ -43,10 +38,11 @@ describe('Logged in user', () => {
   });
 
   it('Remove user as prof', async () => {
+    const { addAdmin } = require('../app/handlers/user');
     const s = mock(UserModel);
     s.expects('findOne').exactly(1).resolves(fakeUser);
     await expectSuccess(
-      removeProf,
+      addAdmin,
       (data) => {
         expect(data).deep.equal(undefined);
       },
@@ -56,6 +52,7 @@ describe('Logged in user', () => {
   });
 
   it('Add user as admin', async () => {
+    const { addAdmin } = require('../app/handlers/user');
     const f = mock(UserModel);
     f.expects('findOne').exactly(1).resolves(fakeAdmin);
     await expectSuccess(
@@ -69,6 +66,7 @@ describe('Logged in user', () => {
   });
 
   it('Remove user as admin', async () => {
+    const { removeAdmin } = require('../app/handlers/user');
     const g = mock(UserModel);
     g.expects('findOne').exactly(1).resolves(fakeUser);
     await expectSuccess(
@@ -82,6 +80,7 @@ describe('Logged in user', () => {
   });
 
   it('Get all profs', async () => {
+    const { getAllProfPublic } = require('../app/handlers/user');
     const s = mock(UserModel);
     s.expects('find').exactly(1).resolves([fakeProf]);
     await expectSuccess(getAllProfPublic, (data) => {
@@ -97,6 +96,7 @@ describe('Logged in user', () => {
   });
 
   it('Get all users', async () => {
+    const { getAll } = require('../app/handlers/user');
     const s = mock(UserModel);
     s.expects('find').exactly(1).resolves([fakeUser, fakeAdmin, fakeProf]);
     await expectSuccess(getAll, (data) => {
@@ -106,6 +106,7 @@ describe('Logged in user', () => {
   });
 
   it('Get all users public', async () => {
+    const { getAllPublic } = require('../app/handlers/user');
     const s = mock(UserModel);
     s.expects('find').exactly(1).resolves([fakeUser, fakeAdmin, fakeProf]);
     await expectSuccess(getAllPublic, (data) => {
@@ -131,6 +132,7 @@ describe('Logged in user', () => {
   });
 
   it('Get user by User Object', async () => {
+    const { get } = require('../app/handlers/user');
     const s = mock(UserModel);
     s.expects('findOne').exactly(1).resolves(fakeAdmin);
     await expectSuccess(
@@ -144,6 +146,7 @@ describe('Logged in user', () => {
   });
 
   it('Get user by cognitoID', async () => {
+    const { getPublic } = require('../app/handlers/user');
     const s = mock(UserModel);
     s.expects('findOne').exactly(1).resolves(fakeAdmin);
     await expectSuccess(
@@ -158,6 +161,7 @@ describe('Logged in user', () => {
   });
 
   it('Update your own profile', async () => {
+    const { updateMe } = require('../app/handlers/user');
     const s = mock(UserModel);
     s.expects('findOneAndUpdate').exactly(1).resolves(fakeAdmin);
     await expectSuccess(
@@ -167,5 +171,9 @@ describe('Logged in user', () => {
       },
       fakeAdmin
     );
+  });
+
+  after(() => {
+    sinon.restore();
   });
 });
