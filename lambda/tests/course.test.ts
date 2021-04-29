@@ -1,24 +1,14 @@
 import { fakeAdmin, fakeProf } from './mocks/user.mock';
 import { fakeCourse } from './mocks/course.mock';
-import {
-  mockAuth,
-  expectSuccess,
-  clearRequireCache,
-  usesDb,
-} from './mocks/mockUtils';
+import { mockAuth, expectSuccess } from './mocks/mockUtils';
 import sinon, { mock } from 'sinon';
 import { expect } from 'chai';
 import CourseModel from '../app/schemas/course.model';
 
 describe('Admin course tests', () => {
   before(() => {
-    // mockAuth(fakeAdmin);
-    clearRequireCache();
-    usesDb();
     mockAuth(fakeAdmin);
   });
-
-  beforeEach(() => {});
 
   it('Course Creation', async () => {
     const { addCourse } = require('../app/handlers/course');
@@ -103,6 +93,31 @@ describe('Admin course tests', () => {
       },
       fakeCourse,
       { id: fakeCourse.id }
+    );
+  });
+
+  after(() => {
+    sinon.restore();
+  });
+});
+
+describe('Prof course tests', () => {
+  before(() => {
+    delete require.cache[require.resolve('../app/handlers/course')];
+    mockAuth(fakeProf);
+  });
+
+  it('Get All Courses Prof', async () => {
+    const { getAllProf } = require('../app/handlers/course');
+
+    sinon.mock(CourseModel).expects('find').resolves([fakeCourse]);
+
+    await expectSuccess(
+      getAllProf,
+      (data) => {
+        expect(data[0]).deep.equal(fakeCourse);
+      },
+      fakeCourse
     );
   });
 

@@ -11,8 +11,6 @@ import UserModel from '../app/schemas/user.model';
 
 describe('User tests', () => {
   before(() => {
-    clearRequireCache();
-    usesDb();
     mockAuth(fakeAdmin);
   });
 

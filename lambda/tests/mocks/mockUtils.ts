@@ -29,24 +29,24 @@ export function mockAuth(user = fakeUser) {
     };
   };
   stub(wrappers, 'auth').callsFake(mockAuthWrapper);
-  const mockRoleAuthWrapper: (
-    roles: Role[],
-    c: LambdaCallback
-  ) => LambdaCallback = (roles, callback) => {
-    return async (event, context, options) => {
-      // console.log('It get here', { user, check: checkRole(roles, user) });
-      if (checkRole(roles, user)) {
-        const res = await callback(event, context, {
-          ...options,
-          userDoc: fakeDocument(user),
-        });
-        return res;
-      } else {
-        return unauthorized();
-      }
-    };
-  };
-  stub(wrappers, 'roleAuth').callsFake(mockRoleAuthWrapper);
+  // const mockRoleAuthWrapper: (
+  //   roles: Role[],
+  //   c: LambdaCallback
+  // ) => LambdaCallback = (roles, callback) => {
+  //   return async (event, context, options) => {
+  //     // console.log('It get here', { user, check: checkRole(roles, user) });
+  //     if (checkRole(roles, user)) {
+  //       const res = await callback(event, context, {
+  //         ...options,
+  //         userDoc: fakeDocument(user),
+  //       });
+  //       return res;
+  //     } else {
+  //       return unauthorized();
+  //     }
+  //   };
+  // };
+  // stub(wrappers, 'roleAuth').callsFake(mockRoleAuthWrapper);
 }
 
 // returns a promise that resolves to a given object
