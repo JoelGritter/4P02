@@ -20,7 +20,7 @@ export interface Submission extends Document {
   grade: number; // marker assigned grade
   feedback: string; // marker feedback (global to entire submission)
   outputs: string[]; // automated test outputs for this submission
-  testCaseResults: { [key: string]: TestCaseResult };
+  testCaseResults?: { [key: string]: TestCaseResult };
 }
 
 export function filterSubmissionForStudent(submission: Submission): Submission {

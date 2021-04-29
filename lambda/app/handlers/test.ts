@@ -124,7 +124,10 @@ export const getTestResult = lambda(
       );
     }
 
-    if (submission.testCaseResults[testCase._id.toString()]) {
+    if (
+      submission.testCaseResults &&
+      submission.testCaseResults[testCase._id.toString()]
+    ) {
       return success(fltr(submission), 'Test run already completed');
     }
 
@@ -150,7 +153,7 @@ export const getTestResult = lambda(
     await execAsync(`unzip -j ${codeZipPath} -d ${codePath}`);
 
     const res = await runCode(codePath, testCase);
-
+    if (!submission.testCaseResults) submission.testCaseResults = {};
     submission.testCaseResults[testCaseId] = res;
     submission.markModified('testCaseResults');
     await submission.save();
