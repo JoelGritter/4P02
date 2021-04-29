@@ -95,12 +95,16 @@ export default function AssignmentPage() {
   const { isProf, isAdmin, me } = useMe();
   const hasEditAccess = isProf || isAdmin;
   const isCourseStudent = course?.students?.includes(me?.cognitoId);
+  const isCourseMod = course?.moderators?.includes(me?.cognitoId);
+
   return (
     <div className={classes.root}>
       {assignment && course && (
         <>
           <Helmet>
-            <title>UAssign - {assignment?.name || 'Assignment Loading...'}</title>
+            <title>
+              UAssign - {assignment?.name || 'Assignment Loading...'}
+            </title>
           </Helmet>
           <div className={classes.header}>
             <Typography
@@ -166,7 +170,7 @@ export default function AssignmentPage() {
             )}
           </div>
           {isCourseStudent && <StudentAssignmentPage />}
-          {hasEditAccess && <ProfAssignmentPage />}
+          {(hasEditAccess || isCourseMod) && <ProfAssignmentPage />}
         </>
       )}
       <RequestStatus
