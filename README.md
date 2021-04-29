@@ -1,4 +1,4 @@
-<p style="text-align:center"><img src="./assets/uassign.png" width="200"></p>
+<p style="text-align:center" align="center"><img src="./assets/uassign.png" width="200"></p>
 
 # UAssign: A Modern Platform for Programming Assignments
 
