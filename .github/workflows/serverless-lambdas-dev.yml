@@ -6,57 +6,34 @@ on:
       - fix-docker-workflow
   workflow_dispatch:
 jobs:
-  # deploy:
-  #   name: Test 🔧 and Deploy 🚀
-  #   runs-on: ubuntu-latest
-  #   strategy:
-  #     matrix:
-  #       node-version: [14.x]
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Use Node.js ${{ matrix.node-version }}
-  #       uses: actions/setup-node@v1
-  #       with:
-  #         node-version: ${{ matrix.node-version }}
-  #     - name: Install Dependencies
-  #       run: |
-  #         cd lambda
-  #         npm install -g serverless
-  #         npm install
-  #     - name: Run tests 🛠️
-  #       run: |
-  #         cd lambda
-  #         npm run test
-  #     - name: Deploy 🚀
-  #       run: |
-  #         cd lambda
-  #         touch .env
-  #         echo "DB=${{ secrets.DB_DEV }}" >> .env
-  #         echo "USER_POOL_ID=${{ secrets.USER_POOL_ID }}" >> .env
-  #         echo "USER_POOL_CLIENT_ID=${{ secrets.USER_POOL_CLIENT_ID }}" >> .env
-  #         serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  #         serverless deploy
-  docker-deploy:
-    # needs: deploy
-    name: Deploy docker
+  deploy:
+    name: Test 🔧 and Deploy 🚀
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [12.x]
+        node-version: [14.x]
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - name: Install Dependencies and Deploy
+      - name: Install Dependencies
         run: |
           cd lambda
           npm install -g serverless
           npm install
-          touch .env 
+      - name: Run tests 🛠️
+        run: |
+          cd lambda
+          npm run test
+      - name: Deploy 🚀
+        run: |
+          cd lambda
+          touch .env
           echo "DB=${{ secrets.DB_DEV }}" >> .env
           echo "USER_POOL_ID=${{ secrets.USER_POOL_ID }}" >> .env
           echo "USER_POOL_CLIENT_ID=${{ secrets.USER_POOL_CLIENT_ID }}" >> .env
           serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          serverless deploy
           serverless deploy -c serverless.docker.yml
