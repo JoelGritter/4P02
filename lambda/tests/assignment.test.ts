@@ -258,6 +258,67 @@ describe('Assignment as normal user', () => {
     a.restore();
   });
 
+  it('Add an assignment as user', async () => {
+    const { addAssignment } = require('../app/handlers/assignment');
+
+    const c = mock(CourseModel);
+    const a = mock(AssignmentModel);
+
+    c.expects('findById').exactly(1).resolves(fakeCourse);
+    a.expects('create').exactly(1).resolves(fakeAssignment);
+
+    await expectSuccess(
+      addAssignment,
+      (data) => {
+        expect(JSON.stringify(data)).equal(JSON.stringify(fakeAssignment));
+      },
+      fakeCourse
+    );
+    c.restore();
+  });
+  it('Update assignment as user', async () => {
+    const { updateAssignment } = require('../app/handlers/assignment');
+
+    const c = mock(CourseModel);
+    const a = mock(AssignmentModel);
+
+    a.expects('findById').exactly(1).resolves(fakeAssignment);
+    c.expects('findById').exactly(1).resolves(fakeCourse);
+    a.expects('findByIdAndUpdate').exactly(1).resolves(fakeAssignment);
+
+    await expectSuccess(
+      updateAssignment,
+      (data) => {
+        expect(JSON.stringify(data)).equal(JSON.stringify(fakeAssignment));
+      },
+      fakeAssignment,
+      { id: fakeAssignment.id }
+    );
+    a.restore();
+    c.restore();
+  });
+  it('Delete assignments as user', async () => {
+    const { deleteAssignment } = require('../app/handlers/assignment');
+
+    const c = mock(CourseModel);
+    const a = mock(AssignmentModel);
+
+    c.expects('findById').exactly(1).resolves(fakeCourse);
+    a.expects('findById').exactly(1).resolves(fakeAssignment);
+    a.expects('findByIdAndDelete').exactly(1).resolves(fakeAssignment);
+
+    await expectSuccess(
+      deleteAssignment,
+      (data) => {
+        expect(JSON.stringify(data)).equal(JSON.stringify(fakeAssignment));
+      },
+      fakeAssignment,
+      { id: fakeAssignment }
+    );
+    c.restore();
+    a.restore();
+  });
+
   afterEach(() => {
     sinon.restore();
   });
