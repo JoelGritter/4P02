@@ -20,3 +20,18 @@ export const fakeAssignment: Assignment = ({
   questions: [],
   testCases: [fakeTest],
 } as any) as Assignment;
+
+export const invalidDateAssignment: Assignment = ({
+  name: 'fakeAssignmentName',
+  description: 'fakeAssignmentDescription',
+  courseID: 'fakeCourseId',
+  createdBy: 'fakeCognitoId',
+  openDate: new Date('January-5-2011'),
+  closeDate: new Date('January-30-2011'),
+  lateDate: new Date('January-20-2011'),
+  maxGrade: 10,
+  weight: 0.05,
+  attachments: [],
+  questions: [],
+  testCases: [fakeTest],
+} as any) as Assignment;

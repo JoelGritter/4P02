@@ -14,6 +14,13 @@ export const fakeProf: User = {
   name: 'fakeprof',
 } as User;
 
+export const fakeProf2: User = {
+  cognitoId: 'fakeProfCognitoId',
+  email: 'fakeProf2@email.com',
+  roles: ['prof'],
+  name: 'fakeprof2',
+} as User;
+
 export const fakeUser: User = {
   cognitoId: 'fakeCognitoId',
   email: 'fakeUser@email.com',
