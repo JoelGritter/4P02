@@ -6,17 +6,17 @@ export const fakeTest: TestCase = {
   hidden: true,
 } as TestCase;
 
-export const fakeAssignment: Assignment = {
-  name: 'fakeAssignment',
-  description: 'fakeDescription',
-  courseID: 'fakeID',
-  createdBy: 'fakeProfessor',
-  openDate: new Date(),
-  closeDate: new Date(),
-  lateDate: new Date(),
-  maxGrade: 50,
-  weight: 0.1,
+export const fakeAssignment: Assignment = ({
+  name: 'fakeAssignmentName',
+  description: 'fakeAssignmentDescription',
+  courseID: 'fakeCourseId',
+  createdBy: 'fakeCognitoId',
+  openDate: new Date('April-5-2021'),
+  closeDate: new Date('April-30-2030'),
+  lateDate: new Date('April-20-2030'),
+  maxGrade: 10,
+  weight: 0.05,
   attachments: [],
-  questions: ['Why?'],
+  questions: [],
   testCases: [fakeTest],
-} as Assignment;
+} as any) as Assignment;

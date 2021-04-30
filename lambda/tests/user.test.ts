@@ -5,7 +5,8 @@ import { expect } from 'chai';
 import UserModel from '../app/schemas/user.model';
 
 describe('User tests', () => {
-  before(() => {
+  beforeEach(() => {
+    delete require.cache[require.resolve('../app/handlers/user')];
     mockAuth(fakeAdmin);
   });
 
@@ -166,7 +167,7 @@ describe('User tests', () => {
     );
   });
 
-  after(() => {
+  afterEach(() => {
     sinon.restore();
   });
 });

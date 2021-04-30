@@ -17,7 +17,6 @@ import {
   Divider,
   Grid,
   Collapse,
-  TextField,
   Link as MatLink,
   IconButton,
   Tooltip,
@@ -136,8 +135,8 @@ export default function AssignmentPage() {
           </div>
           <Divider />
           <div className={classes.dueContainer}>
-            <Grid container>
-              <Grid item xs={12} md={6}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="body1" color="textSecondary">
                   Open Date
                 </Typography>
@@ -145,7 +144,7 @@ export default function AssignmentPage() {
                   {moment(assignment?.openDate).format('LL - h:mm a')}
                 </Typography>
               </Grid>
-              <Grid item xs={12} md={6}>
+              <Grid item xs={12} md={4}>
                 <Typography variant="body1" color="textSecondary">
                   Due Date
                 </Typography>
@@ -155,19 +154,25 @@ export default function AssignmentPage() {
                   )}
                 </Typography>
               </Grid>
-            </Grid>
-            {assignment?.lateDate && (
-              <>
-                <Box marginTop={1}>
+              {assignment?.lateDate && (
+                <Grid item xs={12} md={4}>
                   <Typography variant="body1" color="textSecondary">
                     Late Due
                   </Typography>
-                  <Typography variant="body1">
+                  <Typography variant="body1" gutterBottom>
                     {moment(assignment?.closeDate).format('LL - h:mm a')}
                   </Typography>
-                </Box>
-              </>
-            )}
+                </Grid>
+              )}
+              <Grid item xs={12} md={4}>
+                <Typography variant="body1" color="textSecondary">
+                  Max Grade
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  {assignment?.maxGrade}
+                </Typography>
+              </Grid>
+            </Grid>
           </div>
           {isCourseStudent && <StudentAssignmentPage />}
           {(hasEditAccess || isCourseMod) && <ProfAssignmentPage />}
@@ -366,31 +371,17 @@ function StudentAssignmentPage() {
               <>
                 <Divider className={classes.feedbackDivider} />
                 <CardContent className={classes.feedbackContent}>
-                  <Grid container spacing={2}>
-                    <Grid item xs={12} md={12}>
-                      <TextField
-                        fullWidth
-                        multiline
-                        rows={4}
-                        value={oldSub.feedback}
-                        variant="outlined"
-                        name="feedback"
-                        label="Feedback"
-                        disabled={true}
-                      />
-                    </Grid>
-                    <Grid item xs={12} md={12}>
-                      <TextField
-                        fullWidth
-                        type="number"
-                        variant="outlined"
-                        name="grade"
-                        label="Grade"
-                        value={oldSub.grade}
-                        disabled={true}
-                      />
-                    </Grid>
-                  </Grid>
+                  <Typography variant="h6">Grade</Typography>
+                  <Typography gutterBottom color="textSecondary">
+                    {oldSub.grade} / {assignment.maxGrade} (
+                    {Math.round((oldSub.grade / assignment.maxGrade) * 10000) /
+                      100}
+                    %)
+                  </Typography>
+                  <Typography variant="h6">Feedback</Typography>
+                  <Typography gutterBottom color="textSecondary">
+                    {oldSub.feedback}
+                  </Typography>
                 </CardContent>
               </>
             </Collapse>

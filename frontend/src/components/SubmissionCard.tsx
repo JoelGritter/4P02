@@ -178,6 +178,7 @@ const SubmissionCard: React.FC<SubmissionCardProps> = ({
                   value={newSub.grade}
                   onChange={handleFormChange}
                   disabled={!edit}
+                  helperText={`Grade out of ${assignment?.maxGrade}`}
                 />
               </Grid>
             </Grid>

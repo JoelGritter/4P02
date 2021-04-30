@@ -71,6 +71,7 @@ export const submit = lambda(
     sub.submissionDate = new Date(); // Handle sub date on backend -> circumvent frontend canoodling
     sub.grade = 0; // students trying to give themselves a grade? HA! Get dunked on kiddo.
     sub.feedback = '';
+    sub.testCaseResults = {}; // CLMS-97
 
     // validate submission date
     const assign = await AssignmentModel.findById(aID);
