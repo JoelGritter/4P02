@@ -162,10 +162,11 @@ export default function AssignmentPage() {
     failed: failedCourse,
   } = useGet<Course>(`course/${courseId}`);
 
-  const { isProf, isAdmin, me } = useMe();
+  const { isAdmin, me } = useMe();
   const { enqueueSnackbar } = useSnackbar();
   const history = useHistory();
-  const hasEditAccess = isProf || isAdmin;
+  const hasEditAccess =
+    isAdmin || course?.currentProfessors?.includes(me?.cognitoId);
   const isCourseStudent = course?.students?.includes(me?.cognitoId);
   const isCourseMod = course?.moderators?.includes(me?.cognitoId);
   const [open, setOpen] = React.useState(false);
