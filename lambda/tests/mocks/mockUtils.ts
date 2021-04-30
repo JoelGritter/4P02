@@ -11,6 +11,7 @@ export function fakeDocument(obj: any): any {
   return {
     ...obj,
     toObject: () => ({ ...obj }),
+    save: async () => {},
   };
 }
 

@@ -13,6 +13,10 @@ import CheckIcon from '@material-ui/icons/Check';
 import CloseIcon from '@material-ui/icons/Close';
 import { testsApiPost } from '../api/util';
 import { useSnackbar } from 'notistack';
+import useMe from '../api/data/use-me';
+import Course from '../api/data/models/course.model';
+import useGet from '../api/data/use-get';
+import { useParams } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
   preCls: {
@@ -137,6 +141,16 @@ const TestCases: React.FC<TestCasesProps> = ({
     }
   }
 
+  const { isAdmin, me } = useMe();
+  const { courseId }: { courseId: string; id: string } = useParams();
+  const { data: course } = useGet<Course>(`course/${courseId}`);
+
+  const isCourseMod =
+    course?.moderators?.includes(me?.cognitoId) ||
+    course?.currentProfessors?.includes(me?.cognitoId);
+
+  const hasAccessToHidden = isCourseMod || isAdmin;
+
   return (
     <>
       <Box marginTop={2}>
@@ -167,7 +181,27 @@ const TestCases: React.FC<TestCasesProps> = ({
             {currResCase && (
               <>
                 {currResCase.hidden && (
-                  <Typography variant="body1">Hidden Case</Typography>
+                  <>
+                    {hasAccessToHidden && (
+                      <>
+                        <Typography variant="body1">Input</Typography>
+                        <pre className={classes.preCls}>
+                          {currResCase.input}
+                        </pre>
+                        <Typography variant="body1">Expected Output</Typography>
+                        <pre className={classes.preCls}>
+                          {currResCase.expectedOutput}
+                        </pre>
+                        <Typography variant="body1">Your Output</Typography>
+                        <pre className={classes.preCls}>
+                          {currResCase.actualOutput}
+                        </pre>
+                      </>
+                    )}
+                    {!hasAccessToHidden && (
+                      <Typography variant="body1">Hidden Case</Typography>
+                    )}
+                  </>
                 )}
 
                 {!currResCase.hidden && (

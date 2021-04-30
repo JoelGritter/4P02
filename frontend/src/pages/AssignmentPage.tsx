@@ -30,6 +30,15 @@ import useMe from '../api/data/use-me';
 import TestCases from '../components/TestCases';
 import SubmissionCard from '../components/SubmissionCard';
 import EditIcon from '@material-ui/icons/Edit';
+import { Delete as DeleteIcon } from '@material-ui/icons/';
+import {
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+} from '@material-ui/core/';
+import { useHistory } from 'react-router';
+import { del } from '../api/util';
 
 const useStyles = makeStyles((theme: Theme) => ({
   root: {},
@@ -48,6 +57,10 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   dueContainer: {
     marginTop: theme.spacing(2),
+  },
+  paper: {
+    width: '80%',
+    maxHeight: 435,
   },
   createCourseButton: {
     height: 75,
@@ -75,7 +88,65 @@ const useStyles = makeStyles((theme: Theme) => ({
   icon: {
     backgroundColor: theme.palette.background.paper,
   },
+  deleteAssignButton: {
+    background: theme.palette.background.paper,
+    marginLeft: theme.spacing(1),
+  },
 }));
+
+export interface ConfirmationDialogRawProps {
+  classes: Record<'paper', string>;
+  id: string;
+  keepMounted: boolean;
+  open: boolean;
+  onClose: (value?: boolean) => void;
+}
+
+function ConfirmationDialogRaw(props: ConfirmationDialogRawProps) {
+  const { onClose, open, ...other } = props;
+  const radioGroupRef = React.useRef<HTMLElement>(null);
+
+  const handleEntering = () => {
+    if (radioGroupRef.current != null) {
+      radioGroupRef.current.focus();
+    }
+  };
+
+  const handleCancel = () => {
+    onClose(false);
+  };
+
+  const handleOk = () => {
+    onClose(true);
+  };
+
+  return (
+    <Dialog
+      disableBackdropClick
+      disableEscapeKeyDown
+      maxWidth="xs"
+      onEntering={handleEntering}
+      aria-labelledby="confirmation-dialog-title"
+      open={open}
+      {...other}
+    >
+      <DialogTitle id="confirmation-dialog-title">Confirm Deletion</DialogTitle>
+      <DialogContent dividers>
+        <Typography variant="body1">
+          Please confirm that you want to delete this assignment:
+        </Typography>
+      </DialogContent>
+      <DialogActions>
+        <Button autoFocus onClick={handleCancel} color="primary">
+          Cancel
+        </Button>
+        <Button onClick={handleOk} color="primary">
+          Ok
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
+}
 
 export default function AssignmentPage() {
   const classes = useStyles();
@@ -91,10 +162,45 @@ export default function AssignmentPage() {
     failed: failedCourse,
   } = useGet<Course>(`course/${courseId}`);
 
-  const { isProf, isAdmin, me } = useMe();
-  const hasEditAccess = isProf || isAdmin;
+  const { isAdmin, me } = useMe();
+  const { enqueueSnackbar } = useSnackbar();
+  const history = useHistory();
+  const hasEditAccess =
+    isAdmin || course?.currentProfessors?.includes(me?.cognitoId);
   const isCourseStudent = course?.students?.includes(me?.cognitoId);
   const isCourseMod = course?.moderators?.includes(me?.cognitoId);
+  const [open, setOpen] = React.useState(false);
+
+  const handleDeleteButton = async () => {
+    setOpen(true);
+  };
+
+  const deleteAssignment = async () => {
+    const { successSub } = await del(
+      `/assign/submissions/${assignment._id}`,
+      assignment
+    );
+    const { success, message } = await del(
+      `/assign/${assignment._id}`,
+      assignment
+    );
+    if (!success && !successSub) {
+      enqueueSnackbar(message ?? `Couldn't delete "${assignment.name}"!`);
+    } else {
+      enqueueSnackbar(message ?? `Assignment "${assignment.name}" deleted!`);
+      history.push(`/courses/${course._id}`);
+    }
+  };
+
+  const handleClose = (deleteConfirm?: boolean) => {
+    setOpen(false);
+
+    if (deleteConfirm) {
+      deleteAssignment();
+    } else {
+      enqueueSnackbar(`Deletion cancelled`);
+    }
+  };
 
   return (
     <div className={classes.root}>
@@ -125,6 +231,27 @@ export default function AssignmentPage() {
                     <EditIcon />
                   </IconButton>
                 </Tooltip>
+                <Tooltip title="Delete Assignment">
+                  <IconButton
+                    className={classes.deleteAssignButton}
+                    component={IconButton}
+                    color="primary"
+                    onClick={() => {
+                      handleDeleteButton();
+                    }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+                <ConfirmationDialogRaw
+                  classes={{
+                    paper: classes.paper,
+                  }}
+                  id="delete-confirm-dialog"
+                  keepMounted
+                  open={open}
+                  onClose={handleClose}
+                />
               </div>
             )}
           </div>

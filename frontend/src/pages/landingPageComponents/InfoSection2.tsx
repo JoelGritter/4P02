@@ -82,7 +82,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   },
   img: {
     width: '80%',
-    marign: '0 0 10px 0',
+    margin: '0 0 10px 0',
     backgroundColor: theme.palette.background.paper,
     padding: theme.spacing(4),
     borderRadius: 30,

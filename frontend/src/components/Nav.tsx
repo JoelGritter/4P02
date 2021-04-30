@@ -250,48 +250,50 @@ export default function Nav(props: Props) {
         </ListItem>
 
         {isAdmin && (
-          <ListItem
-            button
-            key="admin"
-            onClick={() => {
-              setAdminOpen((prev) => !prev);
-            }}
-          >
-            <ListItemIcon>
-              <SupervisorAccountIcon />
-            </ListItemIcon>
-            <ListItemText primary={'Admin'} />
-            {adminOpen ? <ExpandLess /> : <ExpandMore />}
-          </ListItem>
+          <>
+            <ListItem
+              button
+              key="admin"
+              onClick={() => {
+                setAdminOpen((prev) => !prev);
+              }}
+            >
+              <ListItemIcon>
+                <SupervisorAccountIcon />
+              </ListItemIcon>
+              <ListItemText primary={'Admin'} />
+              {adminOpen ? <ExpandLess /> : <ExpandMore />}
+            </ListItem>
+            <Collapse in={adminOpen} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem
+                  button
+                  className={classes.nested}
+                  component={Link}
+                  selected={pathStartsWith('/admin/users')}
+                  to="/admin/users"
+                  onClick={() => {
+                    setMobileOpen(false);
+                  }}
+                >
+                  <ListItemText primary="Users" />
+                </ListItem>
+                <ListItem
+                  button
+                  className={classes.nested}
+                  component={Link}
+                  to="/admin/courses"
+                  selected={pathStartsWith('/admin/courses')}
+                  onClick={() => {
+                    setMobileOpen(false);
+                  }}
+                >
+                  <ListItemText primary="Courses" />
+                </ListItem>
+              </List>
+            </Collapse>
+          </>
         )}
-        <Collapse in={adminOpen} timeout="auto" unmountOnExit>
-          <List component="div" disablePadding>
-            <ListItem
-              button
-              className={classes.nested}
-              component={Link}
-              selected={pathStartsWith('/admin/users')}
-              to="/admin/users"
-              onClick={() => {
-                setMobileOpen(false);
-              }}
-            >
-              <ListItemText primary="Users" />
-            </ListItem>
-            <ListItem
-              button
-              className={classes.nested}
-              component={Link}
-              to="/admin/courses"
-              selected={pathStartsWith('/admin/courses')}
-              onClick={() => {
-                setMobileOpen(false);
-              }}
-            >
-              <ListItemText primary="Courses" />
-            </ListItem>
-          </List>
-        </Collapse>
         <ListItem
           button
           key="help"

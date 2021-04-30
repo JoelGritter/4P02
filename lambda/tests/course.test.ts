@@ -1,5 +1,5 @@
-import { fakeAdmin, fakeProf } from './mocks/user.mock';
-import { fakeCourse } from './mocks/course.mock';
+import { fakeAdmin, fakeAdminProf, fakeProf } from './mocks/user.mock';
+import { fakeCourse, emptyCourse } from './mocks/course.mock';
 import { mockAuth, expectSuccess } from './mocks/mockUtils';
 import sinon, { mock } from 'sinon';
 import { expect } from 'chai';
@@ -8,19 +8,19 @@ import CourseModel from '../app/schemas/course.model';
 describe('Admin course tests', () => {
   beforeEach(() => {
     delete require.cache[require.resolve('../app/handlers/course')];
-    mockAuth(fakeAdmin);
+    mockAuth(fakeAdminProf);
   });
 
   it('Course Creation', async () => {
     const { addCourse } = require('../app/handlers/course');
     const s = mock(CourseModel);
-    s.expects('create').exactly(1).resolves(fakeCourse);
+    s.expects('create').exactly(1).resolves(emptyCourse);
     await expectSuccess(
       addCourse,
       (data) => {
-        expect(data).deep.equal(fakeCourse);
+        expect(data).deep.equal(emptyCourse);
       },
-      fakeCourse
+      emptyCourse
     );
     s.restore();
   });
@@ -40,7 +40,6 @@ describe('Admin course tests', () => {
     f.restore();
   });
 
-  //Switch account to Prof?
   it('Get All Associated Courses', async () => {
     const { getAllAssociated } = require('../app/handlers/course');
 

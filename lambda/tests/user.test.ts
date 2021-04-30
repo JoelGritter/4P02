@@ -1,8 +1,10 @@
-import { fakeUser, fakeAdmin, fakeProf } from './mocks/user.mock';
-import { expectSuccess, mockAuth } from './mocks/mockUtils';
+import { fakeUser, fakeAdmin, fakeProf, fakerAdmin } from './mocks/user.mock';
+import { fakeCourse } from './mocks/course.mock';
+import { expectSuccess, mockAuth, fakeDocument } from './mocks/mockUtils';
 import sinon, { mock } from 'sinon';
 import { expect } from 'chai';
 import UserModel from '../app/schemas/user.model';
+import CourseModel from '../app/schemas/course.model';
 
 describe('User tests', () => {
   beforeEach(() => {
@@ -20,9 +22,30 @@ describe('User tests', () => {
   it('Add user as prof', async () => {
     const { addProf } = require('../app/handlers/user');
     const s = mock(UserModel);
-    s.expects('findOne').exactly(1).resolves(fakeProf);
+    const f = mock(fakeDocument(fakeUser));
+    s.expects('findOne').exactly(1).resolves(fakeDocument(fakeUser));
+    f.expects('save').resolves(undefined);
     await expectSuccess(
       addProf,
+      (data) => {
+        expect(data).deep.equal(undefined);
+      },
+      fakeUser
+    );
+    s.restore();
+  });
+
+  it('Remove user as prof', async () => {
+    const { removeProf } = require('../app/handlers/user');
+    const s = mock(UserModel);
+    const c = mock(CourseModel);
+    const f = mock(fakeDocument(fakeProf));
+    s.expects('findOne').exactly(1).resolves(fakeDocument(fakeProf));
+    c.expects('find').exactly(1).resolves([fakeCourse]);
+    c.expects('findByIdAndUpdate').exactly(1).resolves(fakeCourse);
+    f.expects('save').resolves(undefined);
+    await expectSuccess(
+      removeProf,
       (data) => {
         expect(data).deep.equal(undefined);
       },
@@ -31,30 +54,18 @@ describe('User tests', () => {
     s.restore();
   });
 
-  it('Remove user as prof', async () => {
+  it('Add user as admin', async () => {
     const { addAdmin } = require('../app/handlers/user');
-    const s = mock(UserModel);
-    s.expects('findOne').exactly(1).resolves(fakeUser);
+    const g = mock(UserModel);
+    const f = mock(fakeDocument(fakeUser));
+    g.expects('findOne').exactly(1).resolves(fakeDocument(fakeUser));
+    f.expects('save').exactly(1).resolves(undefined);
     await expectSuccess(
       addAdmin,
       (data) => {
         expect(data).deep.equal(undefined);
       },
       fakeUser
-    );
-    s.restore();
-  });
-
-  it('Add user as admin', async () => {
-    const { addAdmin } = require('../app/handlers/user');
-    const f = mock(UserModel);
-    f.expects('findOne').exactly(1).resolves(fakeAdmin);
-    await expectSuccess(
-      addAdmin,
-      (data) => {
-        expect(data).deep.equal(undefined);
-      },
-      fakeAdmin
     );
     f.restore();
   });
@@ -62,13 +73,15 @@ describe('User tests', () => {
   it('Remove user as admin', async () => {
     const { removeAdmin } = require('../app/handlers/user');
     const g = mock(UserModel);
-    g.expects('findOne').exactly(1).resolves(fakeUser);
+    const f = mock(fakeDocument(fakerAdmin));
+    g.expects('findOne').exactly(1).resolves(fakeDocument(fakerAdmin));
+    f.expects('save').exactly(1).resolves(undefined);
     await expectSuccess(
       removeAdmin,
       (data) => {
         expect(data).deep.equal(undefined);
       },
-      fakeUser
+      fakerAdmin
     );
     g.restore();
   });

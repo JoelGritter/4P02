@@ -7,9 +7,16 @@ export const fakeAdmin: User = {
   name: 'fakeadmin',
 } as User;
 
+export const fakerAdmin: User = {
+  cognitoId: 'SuperfakeCognitoId',
+  email: 'SuperFakeAdmin@email.com',
+  roles: ['admin'],
+  name: 'superfakeadmin',
+} as User;
+
 export const fakeProf: User = {
-  cognitoId: 'fakeCognitoId',
-  email: 'fakeProf@email.com',
+  cognitoId: 'proffakeCognitoId',
+  email: 'proffakeProf@email.com',
   roles: ['prof'],
   name: 'fakeprof',
 } as User;
@@ -20,10 +27,17 @@ export const fakeProf2: User = {
   roles: ['prof'],
   name: 'fakeprof2',
 } as User;
+  
+export const fakeAdminProf: User = {
+  cognitoId: 'profadminfakeCognitoId',
+  email: 'profadminfakeProf@email.com',
+  roles: ['prof', 'admin'],
+  name: 'fakeprofadmin',
+} as User;
 
 export const fakeUser: User = {
-  cognitoId: 'fakeCognitoId',
-  email: 'fakeUser@email.com',
+  cognitoId: 'userfakeCognitoId',
+  email: 'userfakeUser@email.com',
   roles: [],
   name: 'fakeuser',
 } as User;

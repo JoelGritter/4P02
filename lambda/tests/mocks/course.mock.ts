@@ -1,9 +1,13 @@
 import { Course } from './../../app/schemas/course.model';
-import { fakeProf, fakeProf2, fakeAdmin } from './user.mock';
+import { fakeProf, fakeProf2, fakeAdmin, fakeAdminProf } from './user.mock';
 
 export const fakeCourse: Course = {
   name: 'testCourse',
-  currentProfessors: [fakeProf.cognitoId],
+  currentProfessors: [fakeAdminProf.cognitoId],
+} as Course;
+
+export const emptyCourse: Course = {
+  name: 'testCourse',
 } as Course;
 
 export const fakeCourse2: Course = {
