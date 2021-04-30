@@ -188,7 +188,7 @@ export default function AssignmentPage() {
       enqueueSnackbar(message ?? `Couldn't delete "${assignment.name}"!`);
     } else {
       enqueueSnackbar(message ?? `Assignment "${assignment.name}" deleted!`);
-      history.push(`/admin/courses`);
+      history.push(`/courses/${course._id}`);
     }
   };
 
@@ -231,31 +231,27 @@ export default function AssignmentPage() {
                     <EditIcon />
                   </IconButton>
                 </Tooltip>
-                {isAdmin && (
-                  <>
-                    <Tooltip title="Delete Assignment">
-                      <IconButton
-                        className={classes.deleteAssignButton}
-                        component={IconButton}
-                        color="primary"
-                        onClick={() => {
-                          handleDeleteButton();
-                        }}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
-                    </Tooltip>
-                    <ConfirmationDialogRaw
-                      classes={{
-                        paper: classes.paper,
-                      }}
-                      id="delete-confirm-dialog"
-                      keepMounted
-                      open={open}
-                      onClose={handleClose}
-                    />
-                  </>
-                )}
+                <Tooltip title="Delete Assignment">
+                  <IconButton
+                    className={classes.deleteAssignButton}
+                    component={IconButton}
+                    color="primary"
+                    onClick={() => {
+                      handleDeleteButton();
+                    }}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </Tooltip>
+                <ConfirmationDialogRaw
+                  classes={{
+                    paper: classes.paper,
+                  }}
+                  id="delete-confirm-dialog"
+                  keepMounted
+                  open={open}
+                  onClose={handleClose}
+                />
               </div>
             )}
           </div>
