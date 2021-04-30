@@ -1,9 +1,9 @@
 import { Assignment, TestCase } from './../../app/schemas/assignment.model';
 
-export const fakeTestCase: TestCase = {
-  input: '2',
-  output: '3',
-  hidden: false,
+export const fakeTest: TestCase = {
+  input: 'fakeInput',
+  output: 'fakeOutput',
+  hidden: true,
 } as TestCase;
 
 export const fakeAssignment: Assignment = ({
@@ -18,5 +18,5 @@ export const fakeAssignment: Assignment = ({
   weight: 0.05,
   attachments: [],
   questions: [],
-  testCases: [fakeTestCase],
+  testCases: [fakeTest],
 } as any) as Assignment;
