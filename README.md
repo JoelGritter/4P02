@@ -18,13 +18,38 @@ UAssign is a web platform designed specifically for programming assignments by f
 - Teaching Assistants: Simplified marking workflow enables teaching assistants to be more efficient while marking assignments
 - Students: Automated execution allows for instant feedback, allowing students to improve their submissions and learn from their mistakes
 
-## 2. Solution Design
+## 2. Local Deployment
 
-## 3. Technologies Used and Rationales
+### 2.1 Prerequisites
 
-## 4. Local Deployment
+You should have the following installed on your machine before starting:
 
-## 5. Credits
+- [Node.js / npm](https://nodejs.org/en/) (npm version 7.11.x or higher)
+
+You will also need the `.env` file with the secret API keys. If wanted, please contact us for the `.env` file.
+
+### 2.2 React Frontend
+
+```
+cd frontend/
+npm install && npm start
+```
+
+### 2.3 Serverless API Backend
+
+```
+cd lambda/
+npm install && npm start
+```
+
+### 2.4 Backend Test Coverage
+
+```
+cd lambda/
+npm run coverage
+```
+
+## 3. Credits
 
 UAssign is the 4P02 project of:
 
