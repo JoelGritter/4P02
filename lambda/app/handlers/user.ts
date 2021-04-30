@@ -213,6 +213,7 @@ export const removeProf = lambda(
     if (email) {
       query.email = email;
     }
+
     const userToUpdate = await UserModel.findOne(query);
 
     if (userToUpdate) {
