@@ -15,7 +15,7 @@ import CourseModel from './../app/schemas/course.model';
 import { fakeCourse } from './mocks/course.mock';
 
 describe('Submission Handlers Tests', () => {
-  before(() => {
+  beforeEach(() => {
     delete require.cache[require.resolve('../app/handlers/submission')];
     mockAuth(fakeAdmin);
   });
@@ -136,7 +136,7 @@ describe('Submission Handlers Tests', () => {
     s.restore();
   });
 
-  after(() => {
+  afterEach(() => {
     sinon.restore();
   });
 });
