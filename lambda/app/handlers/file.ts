@@ -18,9 +18,7 @@ export const submissionPutUrl = lambda(
     const { courseId, assignmentId, objectKey, contentType } = parseBody<any>(
       event
     );
-
     const course = await CourseModel.findById(courseId);
-
     if (course.students.includes(userDoc.cognitoId)) {
       const signedUrl = s3.getSignedUrl('putObject', {
         Bucket: bucket,

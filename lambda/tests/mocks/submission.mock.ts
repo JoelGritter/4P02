@@ -22,3 +22,27 @@ export const fakeSubmission: Submission = ({
   outputs: [],
   testCaseResults: { key: fakeTestCaseResult },
 } as any) as Submission;
+
+export const nullGradeSubmission: Submission = ({
+  owner: 'fakeCognitoId',
+  assignID: 'fakeAssignmentId',
+  submissionDate: new Date('April-15-2021'),
+  codeZip: 'fakeCodeZip',
+  answers: [],
+  grade: null,
+  feedback: '',
+  outputs: [],
+  testCaseResults: { key: fakeTestCaseResult },
+} as any) as Submission;
+
+export const nullOwnerSubmission: Submission = ({
+  owner: null,
+  assignID: 'fakeAssignmentId',
+  submissionDate: new Date('April-15-2021'),
+  codeZip: 'fakeCodeZip',
+  answers: [],
+  grade: null,
+  feedback: '',
+  outputs: [],
+  testCaseResults: { key: fakeTestCaseResult },
+} as any) as Submission;
