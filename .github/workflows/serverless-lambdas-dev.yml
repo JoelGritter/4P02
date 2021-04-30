@@ -22,6 +22,7 @@ jobs:
           node-version: ${{ matrix.node-version }}
       - name: Install Dependencies
         run: |
+          npm install -g npm@7.x
           cd lambda
           npm install -g serverless
           npm install
