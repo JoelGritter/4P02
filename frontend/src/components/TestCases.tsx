@@ -141,13 +141,9 @@ const TestCases: React.FC<TestCasesProps> = ({
     }
   }
 
-  const { isProf, isAdmin, me } = useMe();
-  const { courseId, id }: { courseId: string; id: string } = useParams();
-  const {
-    data: course,
-    loading: loadingCourse,
-    failed: failedCourse,
-  } = useGet<Course>(`course/${courseId}`);
+  const { isAdmin, me } = useMe();
+  const { courseId }: { courseId: string; id: string } = useParams();
+  const { data: course } = useGet<Course>(`course/${courseId}`);
 
   const isCourseMod =
     course?.moderators?.includes(me?.cognitoId) ||
@@ -186,7 +182,7 @@ const TestCases: React.FC<TestCasesProps> = ({
               <>
                 {currResCase.hidden && (
                   <>
-                    {isCourseMod && (
+                    {hasAccessToHidden && (
                       <>
                         <Typography variant="body1">Input</Typography>
                         <pre className={classes.preCls}>
@@ -202,7 +198,7 @@ const TestCases: React.FC<TestCasesProps> = ({
                         </pre>
                       </>
                     )}
-                    {!isCourseMod && (
+                    {!hasAccessToHidden && (
                       <Typography variant="body1">Hidden Case</Typography>
                     )}
                   </>
