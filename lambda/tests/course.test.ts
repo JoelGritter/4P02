@@ -6,7 +6,8 @@ import { expect } from 'chai';
 import CourseModel from '../app/schemas/course.model';
 
 describe('Admin course tests', () => {
-  before(() => {
+  beforeEach(() => {
+    delete require.cache[require.resolve('../app/handlers/course')];
     mockAuth(fakeAdmin);
   });
 
@@ -103,13 +104,13 @@ describe('Admin course tests', () => {
     s.restore();
   });
 
-  after(() => {
+  afterEach(() => {
     sinon.restore();
   });
 });
 
 describe('Prof course tests', () => {
-  before(() => {
+  beforeEach(() => {
     delete require.cache[require.resolve('../app/handlers/course')];
     mockAuth(fakeProf);
   });
@@ -128,7 +129,7 @@ describe('Prof course tests', () => {
     );
   });
 
-  after(() => {
+  afterEach(() => {
     sinon.restore();
   });
 });
