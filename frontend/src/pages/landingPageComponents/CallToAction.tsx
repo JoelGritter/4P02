@@ -10,14 +10,14 @@ const useStyles = makeStyles((theme: Theme) => ({
     justifyContent: 'center',
     alignItems: 'center',
     paddingTop: theme.spacing(4),
-    paddingBottom: theme.spacing(4),
+    paddingBottom: theme.spacing(7),
     paddingRight: theme.spacing(2),
     paddingLeft: theme.spacing(2),
     zIndex: 1,
     minHeight: '500px',
   },
   content: {
-    width: '100%',
+    maxWidth: '1100px',
   },
   mainText: {
     color: '#000',
@@ -76,7 +76,7 @@ const CallToAction = () => {
               UAssign
             </Typography>
           </Box>
-          <Grid container spacing={4}>
+          <Grid container spacing={6}>
             <Grid item xs={12} md={6} className={classes.gridItem}>
               <div className={classes.gridItem}>
                 <div className={classes.subText}>
