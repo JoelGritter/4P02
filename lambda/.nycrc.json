@@ -5,6 +5,10 @@
   "exclude": [
     "app/schemas/**.ts",
     "app/types/**.ts",
+    "app/util/auth.ts",
+    "app/util/env.ts",
+    "app/util/mongo.ts",
+    "app/util/wrappers.ts",
     "app/handler.ts",
     "coverage",
     "tests"
