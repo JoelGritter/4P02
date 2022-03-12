@@ -119,10 +119,10 @@ export default function HelpPage() {
         </p>
         <Button
           component="a"
-          href="mailto:support@uassign.app"
+          href="mailto:uassignapp@gmail.com"
           className={classes.supportButton}
         >
-          Contact support@uassign.app
+          Contact uassignapp@gmail.com
         </Button>
       </div>
     </>
