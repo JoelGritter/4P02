@@ -99,10 +99,10 @@ const CallToAction = () => {
                 </div>
                 <Button
                   component="a"
-                  href="mailto:sales@uassign.app"
+                  href="mailto:uassignapp@gmail.com"
                   className={classes.loginButton}
                 >
-                  Contact sales@uassign.app
+                  Contact uassignapp@gmail.com
                 </Button>
               </div>
             </Grid>
